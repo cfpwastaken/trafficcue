@@ -1,0 +1,39 @@
+{
+  "name": "librenav",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@internationalized/date": "^3.8.1",
+    "@lucide/svelte": "^0.515.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tailwindcss/vite": "^4.0.0",
+    "@tsconfig/svelte": "^5.0.4",
+    "@types/node": "^22.15.24",
+    "bits-ui": "^2.7.0",
+    "clsx": "^2.1.1",
+    "svelte": "^5.28.1",
+    "svelte-check": "^4.1.6",
+    "tailwind-merge": "^3.0.2",
+    "tailwind-variants": "^1.0.0",
+    "tailwindcss": "^4.0.0",
+    "tw-animate-css": "^1.3.2",
+    "typescript": "~5.8.3",
+    "vaul-svelte": "^1.0.0-next.7",
+    "vite": "^6.3.5"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
+  },
+  "type": "module",
+  "dependencies": {
+    "@capacitor/android": "^7.3.0",
+    "@capacitor/cli": "^7.3.0",
+    "@capacitor/core": "^7.3.0",
+    "better-auth": "^1.2.8",
+    "opening_hours": "^3.8.0",
+    "svelte-maplibre-gl": "^0.1.8"
+  }
+}
