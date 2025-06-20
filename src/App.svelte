@@ -5,8 +5,8 @@
 	import { onMount } from "svelte";
 	import Map from "$lib/components/lnv/Map.svelte";
 	import { routing } from "$lib/services/navigation/routing.svelte";
-	import LanesDisplay from "$lib/services/navigation/LanesDisplay.svelte";
 	import { checkWebGL } from "$lib/webgl";
+	import RoutingInfo from "$lib/components/lnv/RoutingInfo.svelte";
 
 	onMount(() => {
 		if(!checkWebGL()) {
@@ -19,11 +19,6 @@
 {#if !routing.currentTrip}
 	<Sidebar></Sidebar>
 {:else}
-	<div class="fixed top-4 left-4 z-50 w-3/4 h-10 bg-background text-white">
-		{routing.currentTripInfo.currentManeuver?.instruction}
-		<LanesDisplay
-			lanes={routing.currentTripInfo.currentManeuver?.lanes}
-		/>
-	</div>
+	<RoutingInfo />
 {/if}
 <Map></Map>

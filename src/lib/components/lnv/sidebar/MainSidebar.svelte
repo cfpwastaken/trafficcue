@@ -5,7 +5,7 @@
 	import { circInOut } from "svelte/easing";
 	import { map, pin } from "../map.svelte";
 	import VehicleSelector from "../VehicleSelector.svelte";
-    import Post from "../Post.svelte";
+	import Post from "../Post.svelte";
 </script>
 
 <div id="saved" class="mt-2 mb-2" in:fly={{ y: 20, duration: 200, easing: circInOut }}>
