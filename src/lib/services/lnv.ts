@@ -1,6 +1,6 @@
 import { LNV_SERVER } from "./hosts";
 
-export type Capabilities = ("auth" | "reviews" | "ai" | "fuel")[];
+export type Capabilities = ("auth" | "reviews" | "ai" | "fuel" | "post")[];
 export let capabilities: Capabilities = [];
 export let oidcConfig: { AUTH_URL: string; CLIENT_ID: string; TOKEN_URL: string } | null = null;
 

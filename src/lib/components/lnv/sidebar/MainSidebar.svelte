@@ -6,6 +6,7 @@
 	import { map, pin } from "../map.svelte";
 	import VehicleSelector from "../VehicleSelector.svelte";
 	import Post from "../Post.svelte";
+    import RequiresCapability from "../RequiresCapability.svelte";
 </script>
 
 <div id="saved" class="mt-2 mb-2" in:fly={{ y: 20, duration: 200, easing: circInOut }}>
@@ -47,11 +48,13 @@
 
 <VehicleSelector />
 
-<div>
-	<h2>In your area</h2>
-
-	<Post />
-</div>
+<RequiresCapability capability="post">
+	<div>
+		<h2>In your area</h2>
+	
+		<Post />
+	</div>
+</RequiresCapability>
 
 <style>
 	#saved {
