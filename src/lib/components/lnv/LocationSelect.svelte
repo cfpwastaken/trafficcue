@@ -6,7 +6,7 @@
 	import * as Popover from "$lib/components/ui/popover/index.js";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { cn } from "$lib/utils.js";
-	
+
 	const frameworks = [
 		{
 			value: "sveltekit",
@@ -29,15 +29,13 @@
 			label: "Astro",
 		},
 	];
-	
+
 	let open = $state(false);
 	let value = $state("");
 	let triggerRef = $state<HTMLButtonElement>(null!);
-	
-	const selectedValue = $derived(
-		value === "location" ? "My Location" : value
-	);
-	
+
+	const selectedValue = $derived(value === "location" ? "My Location" : value);
+
 	// We want to refocus the trigger button when the user selects
 	// an item from the list so users can continue navigating the
 	// rest of the form with the keyboard.
@@ -51,7 +49,7 @@
 
 <Popover.Root bind:open>
 	<Popover.Trigger bind:ref={triggerRef}>
-		{#snippet child({ props }: { props: Record<string, any> })}
+		{#snippet child({ props }: { props: Record<string, unknown> })}
 			<Button
 				variant="outline"
 				class="justify-between"
@@ -66,46 +64,46 @@
 	</Popover.Trigger>
 	<Popover.Content class="w-[200px] p-0">
 		<Command.Root>
-		<Command.Input placeholder="Search..." />
-		<Command.List>
-			<Command.Empty>No location found.</Command.Empty>
-			<Command.Group>
-				<Command.Item
-				value={"location"}
-				onSelect={() => {
-					value = "location";
-					closeAndFocusTrigger();
-				}}
-				>
-				<CheckIcon
-					class={cn(
-					"mr-2 size-4",
-					value !== "location" && "text-transparent"
-					)}
-				/>
-				My Location
-				</Command.Item>
-			</Command.Group>
-			<Command.Group>
-			{#each frameworks as framework}
-				<Command.Item
-				value={framework.value}
-				onSelect={() => {
-					value = framework.value;
-					closeAndFocusTrigger();
-				}}
-				>
-				<CheckIcon
-					class={cn(
-					"mr-2 size-4",
-					value !== framework.value && "text-transparent"
-					)}
-				/>
-				{framework.label}
-				</Command.Item>
-			{/each}
-			</Command.Group>
-		</Command.List>
+			<Command.Input placeholder="Search..." />
+			<Command.List>
+				<Command.Empty>No location found.</Command.Empty>
+				<Command.Group>
+					<Command.Item
+						value="location"
+						onSelect={() => {
+							value = "location";
+							closeAndFocusTrigger();
+						}}
+					>
+						<CheckIcon
+							class={cn(
+								"mr-2 size-4",
+								value !== "location" && "text-transparent",
+							)}
+						/>
+						My Location
+					</Command.Item>
+				</Command.Group>
+				<Command.Group>
+					{#each frameworks as framework (framework.value)}
+						<Command.Item
+							value={framework.value}
+							onSelect={() => {
+								value = framework.value;
+								closeAndFocusTrigger();
+							}}
+						>
+							<CheckIcon
+								class={cn(
+									"mr-2 size-4",
+									value !== framework.value && "text-transparent",
+								)}
+							/>
+							{framework.label}
+						</Command.Item>
+					{/each}
+				</Command.Group>
+			</Command.List>
 		</Command.Root>
 	</Popover.Content>
 </Popover.Root>

@@ -2,7 +2,10 @@
 	import { hasCapability, type Capabilities } from "$lib/services/lnv";
 	import type { Snippet } from "svelte";
 
-	let { capability, children }: {
+	let {
+		capability,
+		children,
+	}: {
 		capability: Capabilities[number];
 		children: Snippet;
 	} = $props();
@@ -12,6 +15,6 @@
 	{#if has}
 		{@render children()}
 	{/if}
-{:catch error}
+{:catch _error}
 	<!-- user is likely offline -->
 {/await}

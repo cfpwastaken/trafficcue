@@ -1,15 +1,18 @@
 type Language = "de-DE" | "en-US";
-type WorldLocation = { lat: number; lon: number };
+interface WorldLocation {
+	lat: number;
+	lon: number;
+}
 type Units = "kilometers" | "miles";
 
-type RouteResult = {
+interface RouteResult {
 	alternates?: {
 		trip: Trip;
 	}[];
 	trip: Trip;
 }
 
-type Trip = {
+interface Trip {
 	language: Language;
 	legs: Leg[];
 	status: number;
@@ -17,16 +20,16 @@ type Trip = {
 	summary: Summary;
 	units: Units;
 	locations: WorldLocation[];
-};
+}
 
-type Leg = {
+interface Leg {
 	maneuvers: Maneuver[];
 	shape: string;
 	summary: Summary;
 	locations: WorldLocation[];
 }
 
-type Summary = {
+interface Summary {
 	cost: number;
 	has_ferry: boolean;
 	has_highway: boolean;
@@ -55,13 +58,13 @@ type Summary = {
  * 512 = MergeToLeft
  * 1024 = MergeToRight
  */
-type Lane = {
+interface Lane {
 	directions: number;
 	valid: number;
 	active: number;
-};
+}
 
-type Maneuver = {
+interface Maneuver {
 	bearing_after: number;
 	begin_shape_index: number;
 	cost: number;
@@ -78,4 +81,4 @@ type Maneuver = {
 	verbal_pre_transition_instruction: string;
 	verbal_succinct_transition_instruction: string;
 	lanes?: Lane[];
-};
+}

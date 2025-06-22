@@ -1,10 +1,10 @@
 import { OVERPASS_SERVER } from "./hosts";
 
-export type OverpassResult = {
+export interface OverpassResult {
 	elements: OverpassElement[];
-};
+}
 
-export type OverpassElement = {
+export interface OverpassElement {
 	type: "node" | "way" | "relation";
 	id: number;
 	tags: Record<string, string>;
@@ -15,7 +15,7 @@ export type OverpassElement = {
 		lat: number; // Only for relations
 		lon: number; // Only for relations
 	};
-};
+}
 
 /**
 [out:json];
@@ -40,11 +40,7 @@ out geom;
 out geom;
  */
 
-export async function fetchPOI(
-	lat: number,
-	lon: number,
-	radius: number,
-) {
+export async function fetchPOI(lat: number, lon: number, radius: number) {
 	return await fetch(OVERPASS_SERVER, {
 		method: "POST",
 		body: `[out:json];
@@ -60,6 +56,6 @@ export async function fetchPOI(
   node(around:${radius}, ${lat}, ${lon})["amenity"="parking"];
   way(around:${radius}, ${lat}, ${lon})["amenity"="parking"];
 );
-out center tags;`
-	}).then(res => res.json() as Promise<OverpassResult>);
+out center tags;`,
+	}).then((res) => res.json() as Promise<OverpassResult>);
 }

@@ -2,26 +2,30 @@
 	let { lane }: { lane: Lane } = $props();
 	const knownDirections = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
 
-  async function fetchImage(bit: number) {
-    if (knownDirections.includes(bit)) {
-      return await fetch(`/img/lanes/${bit}.svg`).then(res => res.text());
-    } else {
-      return `<span>${bit}</span>`;
-    }
-  }
+	async function fetchImage(bit: number) {
+		if (knownDirections.includes(bit)) {
+			return await fetch(`/img/lanes/${bit}.svg`).then((res) => res.text());
+		} else {
+			return `<span>${bit}</span>`;
+		}
+	}
 
-  function loadImage(node: HTMLElement, bit: number) {
-    fetchImage(bit).then(img => {
-      node.innerHTML = img;
-    });
-  }
+	function loadImage(node: HTMLElement, bit: number) {
+		fetchImage(bit).then((img) => {
+			node.innerHTML = img;
+		});
+	}
 </script>
 
 <div class="lane">
-	{#each Array(10).fill(0).map((_, i) => 1 << i) as bit}
+	{#each Array(10)
+		.fill(0)
+		.map((_, i) => 1 << i) as bit (bit)}
 		{#if lane.directions & bit}
 			<div
-				class="lane-image {lane.valid & bit ? 'valid' : ''} {lane.active & bit ? 'active' : ''}"
+				class="lane-image {lane.valid & bit ? 'valid' : ''} {lane.active & bit
+					? 'active'
+					: ''}"
 				use:loadImage={bit}
 			></div>
 		{/if}

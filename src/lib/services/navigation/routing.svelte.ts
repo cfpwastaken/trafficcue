@@ -18,8 +18,8 @@ export const routing = $state({
 		int: null as NodeJS.Timeout | null,
 		isOffRoute: false,
 		currentManeuver: null as Maneuver | null,
-	}
-})
+	},
+});
 
 export function resetRouting() {
 	routing.geojson.route = null;
@@ -30,9 +30,10 @@ export function resetRouting() {
 
 export async function fetchRoute(server: string, request: ValhallaRequest) {
 	try {
-		const res = await fetch(server + "/route?json=" + JSON.stringify(request))
-			.then((res) => res.json());
-		
+		const res = await fetch(
+			server + "/route?json=" + JSON.stringify(request),
+		).then((res) => res.json());
+
 		console.log(res);
 		return res;
 	} catch (error) {
@@ -65,9 +66,9 @@ function geometryToGeoJSON(polyline: WorldLocation[]): GeoJSON.Feature {
 }
 
 export function decodePolyline(encoded: string): WorldLocation[] {
-	let points = [];
+	const points = [];
 	let index = 0;
-	let len = encoded.length;
+	const len = encoded.length;
 	let lat = 0;
 	let lng = 0;
 
@@ -81,7 +82,7 @@ export function decodePolyline(encoded: string): WorldLocation[] {
 			shift += 5;
 		} while (byte >= 0x20);
 
-		let deltaLat = (result & 1) ? ~(result >> 1) : (result >> 1);
+		const deltaLat = result & 1 ? ~(result >> 1) : result >> 1;
 		lat += deltaLat;
 
 		shift = 0;
@@ -92,7 +93,7 @@ export function decodePolyline(encoded: string): WorldLocation[] {
 			shift += 5;
 		} while (byte >= 0x20);
 
-		let deltaLng = (result & 1) ? ~(result >> 1) : (result >> 1);
+		const deltaLng = result & 1 ? ~(result >> 1) : result >> 1;
 		lng += deltaLng;
 
 		// Convert the latitude and longitude to decimal format with six digits of precision
@@ -108,8 +109,8 @@ export function decodePolyline(encoded: string): WorldLocation[] {
 export function drawAllRoutes(trips: Trip[]) {
 	routing.geojson.routePast = null;
 	routing.geojson.route = tripToGeoJSON(trips[0]);
-	if(trips[1]) routing.geojson.al0 = tripToGeoJSON(trips[1]);
-	if(trips[2]) routing.geojson.al1 = tripToGeoJSON(trips[2]);
+	if (trips[1]) routing.geojson.al0 = tripToGeoJSON(trips[1]);
+	if (trips[2]) routing.geojson.al1 = tripToGeoJSON(trips[2]);
 }
 
 export function drawRoute(trip: Trip) {
@@ -119,7 +120,9 @@ export function drawRoute(trip: Trip) {
 function drawCurrentTrip() {
 	if (!routing.currentTrip) return;
 	routing.geojson.route = geometryToGeoJSON(routing.currentTripInfo.route);
-	routing.geojson.routePast = geometryToGeoJSON(routing.currentTripInfo.past.flat());
+	routing.geojson.routePast = geometryToGeoJSON(
+		routing.currentTripInfo.past.flat(),
+	);
 }
 
 export async function startRoute(trip: Trip) {
@@ -131,7 +134,8 @@ export async function startRoute(trip: Trip) {
 	routing.currentTripInfo.isOffRoute = false;
 
 	drawRoute(trip);
-	routing.currentTripInfo.currentManeuver = routing.currentTrip.legs[0].maneuvers[0];
+	routing.currentTripInfo.currentManeuver =
+		routing.currentTrip.legs[0].maneuvers[0];
 
 	routing.currentTripInfo.int = setInterval(tickRoute, 500);
 }
@@ -143,7 +147,8 @@ async function tickRoute() {
 	const info = routing.currentTripInfo;
 	if (!trip) return;
 
-	const currentManeuver = trip.legs[0].maneuvers[routing.currentTripInfo.maneuverIdx];
+	const currentManeuver =
+		trip.legs[0].maneuvers[routing.currentTripInfo.maneuverIdx];
 	if (!currentManeuver) {
 		// No more maneuvers, stop navigation
 		stopNavigation();
@@ -155,14 +160,14 @@ async function tickRoute() {
 	const polyline = decodePolyline(trip.legs[0].shape);
 
 	// Check if the user location is on the last point of the entire route
-	if(isOnPoint(location, polyline[polyline.length - 1])) {
+	if (isOnPoint(location, polyline[polyline.length - 1])) {
 		console.log("Reached destination!");
 		stopNavigation();
 		return;
 	}
 
 	// Check if the user is on the route
-	if(!isOnShape(location, polyline)) {
+	if (!isOnShape(location, polyline)) {
 		console.log("Off route!");
 		info.isOffRoute = true;
 		// TODO: Implement re-routing logic
@@ -171,18 +176,24 @@ async function tickRoute() {
 		info.isOffRoute = false;
 	}
 
-	if (currentManeuver.verbal_pre_transition_instruction && !hasAnnouncedPreInstruction) {
+	if (
+		currentManeuver.verbal_pre_transition_instruction &&
+		!hasAnnouncedPreInstruction
+	) {
 		const distanceToEnd = calculateDistance(location, polyline[bgi]);
 		// console.log("Distance to end of current maneuver: ", distanceToEnd, " meters");
 		if (distanceToEnd <= 100) {
 			hasAnnouncedPreInstruction = true;
-			console.log("[Verbal instruction] ", currentManeuver.verbal_pre_transition_instruction);
+			console.log(
+				"[Verbal instruction] ",
+				currentManeuver.verbal_pre_transition_instruction,
+			);
 		}
 	}
 
 	// Check if the user is past the current maneuver
 	// Checks if the user is still on the current maneuver's polyline
-	if(!isOnShape(location, polyline.slice(bgi))) {
+	if (!isOnShape(location, polyline.slice(bgi))) {
 		return; // User is not on the current maneuver's polyline, do not update
 	}
 
@@ -196,15 +207,25 @@ async function tickRoute() {
 	// announce the "verbal_post_transition_instruction"
 	if (currentManeuver.verbal_post_transition_instruction) {
 		hasAnnouncedPreInstruction = false;
-		const distanceToEnd = calculateDistance(location, polyline[trip.legs[0].maneuvers[routing.currentTripInfo.maneuverIdx + 1].begin_shape_index]);
+		const distanceToEnd = calculateDistance(
+			location,
+			polyline[
+				trip.legs[0].maneuvers[routing.currentTripInfo.maneuverIdx + 1]
+					.begin_shape_index
+			],
+		);
 		if (distanceToEnd >= 200) {
-			console.log("[Verbal instruction] ", currentManeuver.verbal_post_transition_instruction);
+			console.log(
+				"[Verbal instruction] ",
+				currentManeuver.verbal_post_transition_instruction,
+			);
 		}
 	}
 
 	// Advance to the next maneuver
 	info.maneuverIdx++;
-	if(info.maneuverIdx >= trip.legs[0].maneuvers.length) { // No more maneuvers
+	if (info.maneuverIdx >= trip.legs[0].maneuvers.length) {
+		// No more maneuvers
 		stopNavigation();
 		return;
 	}
@@ -228,8 +249,8 @@ function getUserLocation(): WorldLocation {
 	// return geolocate.currentLocation!;
 	return {
 		lat: location.lat,
-		lon: location.lng
-	}
+		lon: location.lng,
+	};
 	// const lnglat = window.geolocate._userLocationDotMarker.getLngLat();
 	// return { lat: lnglat.lat, lon: lnglat.lng };
 	// console.log(map.value!)
@@ -239,7 +260,11 @@ function getUserLocation(): WorldLocation {
 	// }
 }
 
-function isOnLine(location: WorldLocation, from: WorldLocation, to: WorldLocation) {
+function isOnLine(
+	location: WorldLocation,
+	from: WorldLocation,
+	to: WorldLocation,
+) {
 	// Convert the 12-meter tolerance to degrees (approximation)
 	const tolerance = 12 / 111320; // 1 degree latitude ≈ 111.32 km
 
@@ -248,7 +273,9 @@ function isOnLine(location: WorldLocation, from: WorldLocation, to: WorldLocatio
 	const dy = to.lat - from.lat;
 
 	// Calculate the projection of the location onto the line segment
-	const t = ((location.lon - from.lon) * dx + (location.lat - from.lat) * dy) / (dx * dx + dy * dy);
+	const t =
+		((location.lon - from.lon) * dx + (location.lat - from.lat) * dy) /
+		(dx * dx + dy * dy);
 
 	// Clamp t to the range [0, 1] to ensure the projection is on the segment
 	const clampedT = Math.max(0, Math.min(1, t));
@@ -261,7 +288,8 @@ function isOnLine(location: WorldLocation, from: WorldLocation, to: WorldLocatio
 
 	// Calculate the distance from the location to the closest point
 	const distance = Math.sqrt(
-		Math.pow(location.lon - closestPoint.lon, 2) + Math.pow(location.lat - closestPoint.lat, 2)
+		Math.pow(location.lon - closestPoint.lon, 2) +
+			Math.pow(location.lat - closestPoint.lat, 2),
 	);
 
 	// Check if the distance is within the tolerance
@@ -273,7 +301,8 @@ function isOnPoint(location: WorldLocation, point: WorldLocation) {
 	const tolerance = 6 / 111320; // 1 degree latitude ≈ 111.32 km
 	// Calculate the distance from the location to the point
 	const distance = Math.sqrt(
-		Math.pow(location.lon - point.lon, 2) + Math.pow(location.lat - point.lat, 2)
+		Math.pow(location.lon - point.lon, 2) +
+			Math.pow(location.lat - point.lat, 2),
 	);
 	// Check if the distance is within the tolerance
 	return distance <= tolerance;
@@ -289,34 +318,47 @@ function isOnShape(location: WorldLocation, shape: WorldLocation[]) {
 	return false;
 }
 
-function calculateDistance(point1: WorldLocation, point2: WorldLocation): number {
+function calculateDistance(
+	point1: WorldLocation,
+	point2: WorldLocation,
+): number {
 	const R = 6371000; // Earth's radius in meters
 	const lat1 = point1.lat * (Math.PI / 180);
 	const lat2 = point2.lat * (Math.PI / 180);
 	const deltaLat = (point2.lat - point1.lat) * (Math.PI / 180);
 	const deltaLon = (point2.lon - point1.lon) * (Math.PI / 180);
 
-	const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-						Math.cos(lat1) * Math.cos(lat2) *
-						Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+	const a =
+		Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+		Math.cos(lat1) *
+			Math.cos(lat2) *
+			Math.sin(deltaLon / 2) *
+			Math.sin(deltaLon / 2);
 	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 	return R * c; // Distance in meters
 }
 
-export function zoomToPoints(from: WorldLocation, to: WorldLocation, map: maplibregl.Map) {
-	const getBoundingBox = (point1: [number, number], point2: [number, number]): LngLatBoundsLike => {
+export function zoomToPoints(
+	from: WorldLocation,
+	to: WorldLocation,
+	map: maplibregl.Map,
+) {
+	const getBoundingBox = (
+		point1: [number, number],
+		point2: [number, number],
+	): LngLatBoundsLike => {
 		const [lng1, lat1] = point1;
 		const [lng2, lat2] = point2;
-	
+
 		const sw = [Math.min(lng1, lng2), Math.min(lat1, lat2)] as [number, number];
 		const ne = [Math.max(lng1, lng2), Math.max(lat1, lat2)] as [number, number];
-	
+
 		return [sw, ne];
 	};
 
-	map.fitBounds(getBoundingBox([from.lon, from.lat],	[to.lon, to.lat]), {
-		padding: 40
+	map.fitBounds(getBoundingBox([from.lon, from.lat], [to.lon, to.lat]), {
+		padding: 40,
 	});
 }
 

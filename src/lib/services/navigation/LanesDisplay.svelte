@@ -6,7 +6,7 @@
 
 {#if lanes}
 	<div id="lanes">
-		{#each lanes as lane}
+		{#each lanes as lane (lane)}
 			<LaneDisplay {lane} />
 		{/each}
 	</div>

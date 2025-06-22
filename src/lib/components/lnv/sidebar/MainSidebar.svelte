@@ -6,41 +6,53 @@
 	import { map, pin } from "../map.svelte";
 	import VehicleSelector from "../VehicleSelector.svelte";
 	import Post from "../Post.svelte";
-    import RequiresCapability from "../RequiresCapability.svelte";
+	import RequiresCapability from "../RequiresCapability.svelte";
 </script>
 
-<div id="saved" class="mt-2 mb-2" in:fly={{ y: 20, duration: 200, easing: circInOut }}>
-	<Button variant="secondary" class="flex-1" onclick={() => {
-		const home = localStorage.getItem("saved.home");
-		if(!home) {
-			alert("No home location saved.");
-			return;
-		}
-		const {lat, lon} = JSON.parse(home);
-		pin.dropPin(lat, lon);
-		pin.showInfo();
-		map.value?.flyTo({
-			center: [lon, lat],
-			zoom: 19
-		});
-	}}>
+<div
+	id="saved"
+	class="mt-2 mb-2"
+	in:fly={{ y: 20, duration: 200, easing: circInOut }}
+>
+	<Button
+		variant="secondary"
+		class="flex-1"
+		onclick={() => {
+			const home = localStorage.getItem("saved.home");
+			if (!home) {
+				alert("No home location saved.");
+				return;
+			}
+			const { lat, lon } = JSON.parse(home);
+			pin.dropPin(lat, lon);
+			pin.showInfo();
+			map.value?.flyTo({
+				center: [lon, lat],
+				zoom: 19,
+			});
+		}}
+	>
 		<HomeIcon />
 		Home
 	</Button>
-	<Button variant="secondary" class="flex-1" onclick={() => {
-		const work = localStorage.getItem("saved.work");
-		if(!work) {
-			alert("No work location saved.");
-			return;
-		}
-		const {lat, lon} = JSON.parse(work);
-		pin.dropPin(lat, lon);
-		pin.showInfo();
-		map.value?.flyTo({
-			center: [lon, lat],
-			zoom: 19
-		});
-	}}>
+	<Button
+		variant="secondary"
+		class="flex-1"
+		onclick={() => {
+			const work = localStorage.getItem("saved.work");
+			if (!work) {
+				alert("No work location saved.");
+				return;
+			}
+			const { lat, lon } = JSON.parse(work);
+			pin.dropPin(lat, lon);
+			pin.showInfo();
+			map.value?.flyTo({
+				center: [lon, lat],
+				zoom: 19,
+			});
+		}}
+	>
 		<BriefcaseIcon />
 		Work
 	</Button>
@@ -51,7 +63,7 @@
 <RequiresCapability capability="post">
 	<div>
 		<h2>In your area</h2>
-	
+
 		<Post />
 	</div>
 </RequiresCapability>

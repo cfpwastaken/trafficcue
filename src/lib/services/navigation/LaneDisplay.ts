@@ -10,7 +10,7 @@ export async function displayLane(lane: Lane) {
 			// Check if the bit is in the known directions
 			let img = "";
 			if (knownDirections.includes(bit)) {
-				img = await fetch(`/img/lanes/${bit}.svg`).then(res => res.text());
+				img = await fetch(`/img/lanes/${bit}.svg`).then((res) => res.text());
 			} else {
 				img = `<span>${bit}</span>`;
 			}

@@ -2,8 +2,6 @@
 	import { onMount } from "svelte";
 	import {
 		GeoJSONSource,
-		GeolocateControl,
-		Hash,
 		LineLayer,
 		MapLibre,
 		Marker,
@@ -11,13 +9,7 @@
 	} from "svelte-maplibre-gl";
 	import { view } from "./sidebar.svelte";
 	import { map, pin } from "./map.svelte";
-	import {
-		drawAllRoutes,
-		fetchRoute,
-		routing,
-	} from "$lib/services/navigation/routing.svelte";
-	import { createValhallaRequest } from "$lib/vehicles/ValhallaVehicles";
-	import { ROUTING_SERVER } from "$lib/services/hosts";
+	import { routing } from "$lib/services/navigation/routing.svelte";
 	import { location } from "./location.svelte";
 
 	onMount(() => {
@@ -33,7 +25,9 @@
 	scheme="tiles"
 	loadFn={async (params) => {
 		console.log(params.url);
-		const url = params.url.replace("tiles://", "").replace("tiles.openfreemap.org/", "");
+		const url = params.url
+			.replace("tiles://", "")
+			.replace("tiles.openfreemap.org/", "");
 		const path = url.split("/")[0];
 		if (path == "natural_earth") {
 			const t = await fetch("https://tiles.openfreemap.org/" + url);
@@ -73,7 +67,7 @@
 		}
 	}}
 	onmove={(e) => {
-		// @ts-ignore
+		// @ts-expect-error - not typed
 		if (e.reason !== "location") {
 			location.locked = false;
 		}
@@ -191,7 +185,10 @@
 
 	{#if location.available}
 		<div class="maplibregl-user-location-dot" bind:this={locationDot}></div>
-		<div class="maplibregl-user-location-accuracy-circle" bind:this={locationAccuracyCircle}></div>
+		<div
+			class="maplibregl-user-location-accuracy-circle"
+			bind:this={locationAccuracyCircle}
+		></div>
 		<Marker
 			lnglat={{ lat: location.lat, lng: location.lng }}
 			element={locationDot}

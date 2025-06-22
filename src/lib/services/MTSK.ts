@@ -1,7 +1,7 @@
 import { LNV_SERVER } from "./hosts";
 import { hasCapability } from "./lnv";
 
-type Station = {
+interface Station {
 	id: string;
 	name: string;
 	brand: string;
@@ -18,13 +18,13 @@ type Station = {
 	postCode: number;
 }
 
-type StationsResponse = {
+interface StationsResponse {
 	ok: boolean;
-	license: "CC BY 4.0 -  https:\/\/creativecommons.tankerkoenig.de";
+	license: "CC BY 4.0 -  https://creativecommons.tankerkoenig.de";
 	data: "MTS-K";
 	status: string;
 	stations: Station[];
-};
+}
 
 type StationDetails = {
 	openingTimes: StationOpeningTime[];
@@ -32,37 +32,49 @@ type StationDetails = {
 	wholeDay: boolean;
 } & Station;
 
-type StationOpeningTime = {
+interface StationOpeningTime {
 	text: string;
 	start: string;
 	end: string;
-};
+}
 
-type StationDetailsResponse = {
+interface StationDetailsResponse {
 	ok: boolean;
-	license: "CC BY 4.0 -  https:\/\/creativecommons.tankerkoenig.de";
+	license: "CC BY 4.0 -  https://creativecommons.tankerkoenig.de";
 	data: "MTS-K";
 	status: string;
 	station: StationDetails;
-};
-
-export async function getStations(lat: number, lon: number): Promise<StationsResponse> {
-	if(!await hasCapability("fuel")) {
-		throw new Error("Fuel capability is not available");
-	}
-	return await fetch(`${LNV_SERVER}/fuel/list?lat=${lat}&lng=${lon}&rad=1&sort=dist&type=all`).then(res => res.json());
 }
 
-export async function getPrices(id: string) { // TODO: add type
-	if(!await hasCapability("fuel")) {
+export async function getStations(
+	lat: number,
+	lon: number,
+): Promise<StationsResponse> {
+	if (!(await hasCapability("fuel"))) {
 		throw new Error("Fuel capability is not available");
 	}
-	return await fetch(`${LNV_SERVER}/fuel/prices?ids=${id}`).then(res => res.json());
+	return await fetch(
+		`${LNV_SERVER}/fuel/list?lat=${lat}&lng=${lon}&rad=1&sort=dist&type=all`,
+	).then((res) => res.json());
 }
 
-export async function getStationDetails(id: string): Promise<StationDetailsResponse> {
-	if(!await hasCapability("fuel")) {
+export async function getPrices(id: string) {
+	// TODO: add type
+	if (!(await hasCapability("fuel"))) {
 		throw new Error("Fuel capability is not available");
 	}
-	return await fetch(`${LNV_SERVER}/fuel/detail?id=${id}`).then(res => res.json());
+	return await fetch(`${LNV_SERVER}/fuel/prices?ids=${id}`).then((res) =>
+		res.json(),
+	);
+}
+
+export async function getStationDetails(
+	id: string,
+): Promise<StationDetailsResponse> {
+	if (!(await hasCapability("fuel"))) {
+		throw new Error("Fuel capability is not available");
+	}
+	return await fetch(`${LNV_SERVER}/fuel/detail?id=${id}`).then((res) =>
+		res.json(),
+	);
 }

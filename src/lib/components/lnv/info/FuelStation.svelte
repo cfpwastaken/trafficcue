@@ -1,13 +1,13 @@
 <script>
-    import Badge from "$lib/components/ui/badge/badge.svelte";
-    import { getStations } from "$lib/services/MTSK";
+	import Badge from "$lib/components/ui/badge/badge.svelte";
+	import { getStations } from "$lib/services/MTSK";
 
 	let { tags, lat, lng } = $props();
 </script>
 
 <h3 class="text-lg font-bold mt-2">Fuel Types</h3>
 <ul class="flex gap-2 flex-wrap">
-	{#each Object.entries(tags).filter(([key]) => key.startsWith("fuel:")) as [key, tag]}
+	{#each Object.entries(tags).filter( ([key]) => key.startsWith("fuel:"), ) as [key, tag] (key)}
 		<!-- <li>{key.replace("fuel:", "")}: {tag}</li> -->
 		<Badge>
 			{key.replace("fuel:", "")}

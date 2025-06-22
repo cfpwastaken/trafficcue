@@ -1,4 +1,17 @@
-import { BriefcaseMedicalIcon, CarIcon, ChefHatIcon, CroissantIcon, DrillIcon, FlameIcon, FuelIcon, HamburgerIcon, PackageIcon, SchoolIcon, SquareParkingIcon, StoreIcon } from "@lucide/svelte";
+import {
+	BriefcaseMedicalIcon,
+	CarIcon,
+	ChefHatIcon,
+	CroissantIcon,
+	DrillIcon,
+	FlameIcon,
+	FuelIcon,
+	HamburgerIcon,
+	PackageIcon,
+	SchoolIcon,
+	SquareParkingIcon,
+	StoreIcon,
+} from "@lucide/svelte";
 import type { Component } from "svelte";
 
 export const POIIcons: Record<string, Component> = {
@@ -14,5 +27,5 @@ export const POIIcons: Record<string, Component> = {
 	"shop=kiosk": StoreIcon,
 	"amenity=restaurant": ChefHatIcon,
 	"amenity=fast_food": HamburgerIcon,
-	"shop=bakery": CroissantIcon
+	"shop=bakery": CroissantIcon,
 };

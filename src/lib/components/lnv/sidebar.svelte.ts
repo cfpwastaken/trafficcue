@@ -1,6 +1,6 @@
-export type View = {
+export interface View {
 	type: string;
-	props?: Record<string, any>;
+	props?: Record<string, unknown>;
 }
 
 export const view = $state({
@@ -13,14 +13,14 @@ export const view = $state({
 			view.current = { type: "main" } as View; // Reset to main view if history is empty
 		}
 	},
-	switch: (to: string, props?: Record<string, any>) => {
+	switch: (to: string, props?: Record<string, unknown>) => {
 		if (view.current.type !== to) {
 			view.history.push(view.current);
 		}
 		view.current = { type: to, props } as View;
-	}
+	},
 });
 
 export const searchbar = $state({
-	text: ""
-})
+	text: "",
+});

@@ -10,7 +10,7 @@
 **TrafficCue** is a FOSS navigation app built for vehicles that max out at 45 km/h, so mopeds, microcars, LEVs, and the like (but not limited to them!).
 Mainstream navigation often routes these vehicles onto roads they're not legally allowed to use. **We don’t.**
 
-Built with **Svelte + Vite**, powered by **Capacitor** for mobile, and focused on *respectful routing*, **TrafficCue** fills the gap.
+Built with **Svelte + Vite**, powered by **Capacitor** for mobile, and focused on _respectful routing_, **TrafficCue** fills the gap.
 
 ---
 

@@ -3,7 +3,7 @@
 	import * as Select from "../ui/select";
 </script>
 
-{#each EVConnectors as connector}
+{#each EVConnectors as connector (connector)}
 	<Select.Item value={connector}>
 		{connector}
 	</Select.Item>

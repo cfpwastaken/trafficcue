@@ -1,6 +1,6 @@
-import { LNV_SERVER } from "$lib/services/hosts"
-import { routing } from "$lib/services/navigation/routing.svelte"
-import { map } from "./map.svelte"
+import { LNV_SERVER } from "$lib/services/hosts";
+import { routing } from "$lib/services/navigation/routing.svelte";
+import { map } from "./map.svelte";
 
 export const location = $state({
 	available: false,
@@ -12,100 +12,117 @@ export const location = $state({
 	provider: "gps" as "gps" | "remote" | "simulated",
 	locked: true,
 	toggleLock: () => {
-		location.locked = !location.locked
-		console.log("Location lock toggled:", location.locked)
+		location.locked = !location.locked;
+		console.log("Location lock toggled:", location.locked);
 		if (location.locked) {
-			map.value?.flyTo({
-				center: [location.lng, location.lat],
-				zoom: 16,
-				duration: 1000,
-				// bearing: location.heading !== null ? location.heading : undefined
-			}, {
-				reason: "location"
-			})
-		}
-	},
-	advertiser: null as WebSocket | null,
-	code: null as string | null,
-	lastUpdate: null as Date | null
-})
-
-export function watchLocation() {
-	if(navigator.geolocation) {
-		navigator.geolocation.watchPosition((pos) => {
-			if(location.provider !== "gps") return;
-			// console.log("Geolocation update:", pos)
-			location.lat = pos.coords.latitude
-			location.lng = pos.coords.longitude
-			location.accuracy = pos.coords.accuracy
-			location.speed = pos.coords.speed || 0
-			location.available = true
-			location.heading = pos.coords.heading
-			location.lastUpdate = new Date()
-	
-			if (location.locked) {
-				map.value?.flyTo({
+			map.value?.flyTo(
+				{
 					center: [location.lng, location.lat],
 					zoom: 16,
 					duration: 1000,
 					// bearing: location.heading !== null ? location.heading : undefined
-				}, {
-					reason: "location"
-				})
-			}
+				},
+				{
+					reason: "location",
+				},
+			);
+		}
+	},
+	advertiser: null as WebSocket | null,
+	code: null as string | null,
+	lastUpdate: null as Date | null,
+});
 
-			// console.log(location.advertiser);
-	
-			if (location.advertiser) {
-				location.advertiser.send(JSON.stringify({
-					type: "location",
-					location: {
-						lat: location.lat,
-						lng: location.lng,
-						accuracy: location.accuracy,
-						speed: location.speed,
-						heading: location.heading
-					},
-					route: {
-						trip: routing.currentTrip,
-						info: routing.currentTripInfo,
-						geojson: routing.geojson
-					}
-				}))
-			}
-		}, (err) => {
-			console.error("Geolocation error:", err)
-		}, {
-			enableHighAccuracy: true
-		})
+export function watchLocation() {
+	if (navigator.geolocation) {
+		navigator.geolocation.watchPosition(
+			(pos) => {
+				if (location.provider !== "gps") return;
+				// console.log("Geolocation update:", pos)
+				location.lat = pos.coords.latitude;
+				location.lng = pos.coords.longitude;
+				location.accuracy = pos.coords.accuracy;
+				location.speed = pos.coords.speed || 0;
+				location.available = true;
+				location.heading = pos.coords.heading;
+				location.lastUpdate = new Date();
+
+				if (location.locked) {
+					map.value?.flyTo(
+						{
+							center: [location.lng, location.lat],
+							zoom: 16,
+							duration: 1000,
+							// bearing: location.heading !== null ? location.heading : undefined
+						},
+						{
+							reason: "location",
+						},
+					);
+				}
+
+				// console.log(location.advertiser);
+
+				if (location.advertiser) {
+					location.advertiser.send(
+						JSON.stringify({
+							type: "location",
+							location: {
+								lat: location.lat,
+								lng: location.lng,
+								accuracy: location.accuracy,
+								speed: location.speed,
+								heading: location.heading,
+							},
+							route: {
+								trip: routing.currentTrip,
+								info: routing.currentTripInfo,
+								geojson: routing.geojson,
+							},
+						}),
+					);
+				}
+			},
+			(err) => {
+				console.error("Geolocation error:", err);
+			},
+			{
+				enableHighAccuracy: true,
+			},
+		);
 	}
 }
 
 let checkRunning = false;
 
-if(!checkRunning) {
+if (!checkRunning) {
 	setInterval(() => {
 		checkRunning = true;
-		if(location.provider !== "gps") return;
+		if (location.provider !== "gps") return;
 		// If the last update was more than 5 seconds ago, recall watchPosition
 		// console.log("Checking location update status")
-		if (location.lastUpdate && (new Date().getTime() - location.lastUpdate.getTime()) > 10000) {
-			console.warn("Location update is stale, rewatching position")
+		if (
+			location.lastUpdate &&
+			new Date().getTime() - location.lastUpdate.getTime() > 10000
+		) {
+			console.warn("Location update is stale, rewatching position");
 			watchLocation();
 		}
-	}, 1000)
+	}, 1000);
 	checkRunning = true;
 }
 
-watchLocation()
+watchLocation();
 
 export function advertiseRemoteLocation(code?: string) {
 	const ws = new WebSocket(
-		`${LNV_SERVER.replace("https", "wss").replace("http", "ws")}/ws`
+		`${LNV_SERVER.replace("https", "wss").replace("http", "ws")}/ws`,
 	);
 	ws.addEventListener("open", () => {
-		console.log("WebSocket connection established for remote location advertisement")
-		ws.send(JSON.stringify({ type: "advertise", code }))
+		console.log(
+			"WebSocket connection established for remote location advertisement",
+		);
+		ws.send(JSON.stringify({ type: "advertise", code }));
 	});
 	ws.addEventListener("message", (event) => {
 		const data = JSON.parse(event.data);
@@ -127,40 +144,43 @@ export function remoteLocation(code: string) {
 	// Open websocket connection
 	// Use LNV_SERVER, change to ws or wss based on protocol
 	const ws = new WebSocket(
-		`${LNV_SERVER.replace("https", "wss").replace("http", "ws")}/ws`
+		`${LNV_SERVER.replace("https", "wss").replace("http", "ws")}/ws`,
 	);
 	ws.addEventListener("open", () => {
-		console.log("WebSocket connection established for remote location")
-		ws.send(JSON.stringify({ type: "subscribe", code }))
-		location.provider = "remote"
-		location.code = code
-	})
+		console.log("WebSocket connection established for remote location");
+		ws.send(JSON.stringify({ type: "subscribe", code }));
+		location.provider = "remote";
+		location.code = code;
+	});
 	ws.addEventListener("message", (event) => {
-		const data = JSON.parse(event.data)
+		const data = JSON.parse(event.data);
 		if (data.type === "location") {
-			console.log("Remote location update:", data.location)
-			location.lat = data.location.lat
-			location.lng = data.location.lng
-			location.accuracy = data.location.accuracy
-			location.speed = data.location.speed || 0
-			location.available = true
-			location.heading = data.location.heading || null
-			routing.currentTrip = data.route.trip || null
-			routing.currentTripInfo = data.route.info || null
-			routing.geojson = data.route.geojson || null
+			console.log("Remote location update:", data.location);
+			location.lat = data.location.lat;
+			location.lng = data.location.lng;
+			location.accuracy = data.location.accuracy;
+			location.speed = data.location.speed || 0;
+			location.available = true;
+			location.heading = data.location.heading || null;
+			routing.currentTrip = data.route.trip || null;
+			routing.currentTripInfo = data.route.info || null;
+			routing.geojson = data.route.geojson || null;
 
 			if (location.locked) {
-				map.value?.flyTo({
-					center: [location.lng, location.lat],
-					zoom: 16,
-					duration: 1000,
-					// bearing: location.heading !== null ? location.heading : undefined
-				}, {
-					reason: "location"
-				})
+				map.value?.flyTo(
+					{
+						center: [location.lng, location.lat],
+						zoom: 16,
+						duration: 1000,
+						// bearing: location.heading !== null ? location.heading : undefined
+					},
+					{
+						reason: "location",
+					},
+				);
 			}
 		}
-	})
+	});
 }
 
 // setInterval(() => {

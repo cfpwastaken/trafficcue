@@ -2,38 +2,50 @@
 import { SEARCH_SERVER } from "./hosts";
 // import { Capacitor } from "@capacitor/core";
 
-export type Feature = {
-	type: "Feature",
+export interface Feature {
+	type: "Feature";
 	geometry: {
-		coordinates: [number, number],
-		type: "Point"
-	},
+		coordinates: [number, number];
+		type: "Point";
+	};
 	properties: {
 		osm_key: string;
 		osm_value: string;
-		osm_id: number,
-		city: string,
-		country: string,
-		name: string,
-		street: string,
-		housenumber: string,
-		type: string,
+		osm_id: number;
+		city: string;
+		country: string;
+		name: string;
+		street: string;
+		housenumber: string;
+		type: string;
 		// There is more, but not needed atm
-	}
+	};
 }
 
-export async function searchPlaces(query: string, lat: number, lon: number): Promise<Feature[]> {
-	const res = await fetch(SEARCH_SERVER + "/api/?q=" + query + "&lat=" + lat + "&lon=" + lon).then((res) => res.json());
+export async function searchPlaces(
+	query: string,
+	lat: number,
+	lon: number,
+): Promise<Feature[]> {
+	const res = await fetch(
+		SEARCH_SERVER + "/api/?q=" + query + "&lat=" + lat + "&lon=" + lon,
+	).then((res) => res.json());
 	return res.features;
 }
 
 export async function reverseGeocode(coord: WorldLocation): Promise<Feature[]> {
-	const res = await fetch(SEARCH_SERVER + "/reverse?lat=" + coord.lat + "&lon=" + coord.lon).then((res) => res.json());
+	const res = await fetch(
+		SEARCH_SERVER + "/reverse?lat=" + coord.lat + "&lon=" + coord.lon,
+	).then((res) => res.json());
 	return res.features;
 }
 
-export async function search(query: string, lat: number, lon: number): Promise<Feature[]> {
-	if(query.startsWith("@")) {
+export async function search(
+	query: string,
+	lat: number,
+	lon: number,
+): Promise<Feature[]> {
+	if (query.startsWith("@")) {
 		// if(Capacitor.isNativePlatform()) {
 		// 	return await searchContacts(query, lat, lon);
 		// }

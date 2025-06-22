@@ -1,8 +1,22 @@
 <script lang="ts">
-  import * as Drawer from "$lib/components/ui/drawer/index.js";
-	import { BikeIcon, CarIcon, PlusCircleIcon, SaveIcon, TractorIcon, TruckIcon, XIcon } from "@lucide/svelte";
+	import * as Drawer from "$lib/components/ui/drawer/index.js";
+	import {
+		BikeIcon,
+		CarIcon,
+		SaveIcon,
+		TractorIcon,
+		TruckIcon,
+		XIcon,
+	} from "@lucide/svelte";
 	import Button, { buttonVariants } from "../ui/button/button.svelte";
-	import { DefaultVehicle, isValidFuel, selectVehicle, setVehicles, vehicles, type Vehicle, type VehicleType } from "$lib/vehicles/vehicles.svelte";
+	import {
+		isValidFuel,
+		selectVehicle,
+		setVehicles,
+		vehicles,
+		type Vehicle,
+		type VehicleType,
+	} from "$lib/vehicles/vehicles.svelte";
 	import type { Snippet } from "svelte";
 	import * as Select from "../ui/select";
 	import Input from "../ui/input/input.svelte";
@@ -36,25 +50,31 @@
 		actualMaxSpeed: 45,
 		emissionClass: "euro_5",
 		fuelType: "diesel",
-		preferredFuel: "Diesel"
+		preferredFuel: "Diesel",
 	});
 </script>
- 
-<Drawer.Root bind:open={open}>
-  <Drawer.Trigger class={buttonVariants({ variant: "secondary", class: "w-full p-5" })}>
+
+<Drawer.Root bind:open>
+	<Drawer.Trigger
+		class={buttonVariants({ variant: "secondary", class: "w-full p-5" })}
+	>
 		{@render children()}
 	</Drawer.Trigger>
-  <Drawer.Content>
-    <Drawer.Header>
-      <Drawer.Title>Add Vehicle</Drawer.Title>
-    </Drawer.Header>
+	<Drawer.Content>
+		<Drawer.Header>
+			<Drawer.Title>Add Vehicle</Drawer.Title>
+		</Drawer.Header>
 		<div class="p-4 pt-0 flex flex-col gap-2">
 			<div class="flex gap-2">
 				<Select.Root type="single" bind:value={vehicle.type}>
 					<Select.Trigger class="w-[180px]">
 						{@const Icon = getVehicleIcon(vehicle.type)}
 						<Icon />
-						{vehicle.type === "car" ? "Car" : vehicle.type === "motor_scooter" ? "Moped" : "?"}
+						{vehicle.type === "car"
+							? "Car"
+							: vehicle.type === "motor_scooter"
+								? "Moped"
+								: "?"}
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Item value="car">
@@ -110,7 +130,11 @@
 			<div class="flex gap-2">
 				<Select.Root type="single" bind:value={vehicle.fuelType}>
 					<Select.Trigger class="w-full">
-						{vehicle.fuelType === "diesel" ? "Diesel" : vehicle.fuelType === "petrol" ? "Petrol" : "Electric"}
+						{vehicle.fuelType === "diesel"
+							? "Diesel"
+							: vehicle.fuelType === "petrol"
+								? "Petrol"
+								: "Electric"}
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Item value="diesel">Diesel</Select.Item>
@@ -137,33 +161,38 @@
 			</div>
 		</div>
 		<Drawer.Footer>
-			<Button onclick={() => {
-				open = false;
-				if (vehicle.name.trim() === "") {
-					alert("Please enter a vehicle name.");
-					return;
-				}
-				if (vehicle.legalMaxSpeed <= 0 || vehicle.actualMaxSpeed <= 0) {
-					alert("Please enter valid speeds.");
-					return;
-				}
-				if(!isValidFuel(vehicle)) {
-					alert("Please select a valid fuel type and preferred fuel.");
-					return;
-				}
-				setVehicles([...vehicles, vehicle]);
-				selectVehicle(vehicle);
-				location.reload(); // TODO
-			}}>
+			<Button
+				onclick={() => {
+					open = false;
+					if (vehicle.name.trim() === "") {
+						alert("Please enter a vehicle name.");
+						return;
+					}
+					if (vehicle.legalMaxSpeed <= 0 || vehicle.actualMaxSpeed <= 0) {
+						alert("Please enter valid speeds.");
+						return;
+					}
+					if (!isValidFuel(vehicle)) {
+						alert("Please select a valid fuel type and preferred fuel.");
+						return;
+					}
+					setVehicles([...vehicles, vehicle]);
+					selectVehicle(vehicle);
+					location.reload(); // TODO
+				}}
+			>
 				<SaveIcon />
 				Save
 			</Button>
-			<Button variant="secondary" onclick={() => {
-				open = false;
-			}}>
+			<Button
+				variant="secondary"
+				onclick={() => {
+					open = false;
+				}}
+			>
 				<XIcon />
 				Cancel
 			</Button>
 		</Drawer.Footer>
-  </Drawer.Content>
+	</Drawer.Content>
 </Drawer.Root>

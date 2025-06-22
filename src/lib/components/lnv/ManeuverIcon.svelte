@@ -6,7 +6,7 @@
 	let name = $derived(maneuverTypes[maneuver] || "none");
 </script>
 
-<img src="/img/maneuver/{name}.svg" alt={name}>
+<img src="/img/maneuver/{name}.svg" alt={name} />
 
 <style>
 	img {

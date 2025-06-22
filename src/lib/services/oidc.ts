@@ -3,7 +3,7 @@
 import { getOIDCConfig, hasCapability } from "./lnv";
 
 export async function getAuthURL() {
-	if(!await hasCapability("auth")) {
+	if (!(await hasCapability("auth"))) {
 		throw new Error("Server does not support OIDC authentication");
 	}
 	const oidcConfig = await getOIDCConfig();
@@ -17,8 +17,7 @@ export async function getAuthURL() {
 	const state = generateRandomString(16);
 
 	return {
-		url:
-			`${AUTH_URL}?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${window.location.origin}/login/callback&scope=openid%20profile&code_challenge=${pkce.codeChallenge}&code_challenge_method=S256&state=${state}`,
+		url: `${AUTH_URL}?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${window.location.origin}/login/callback&scope=openid%20profile&code_challenge=${pkce.codeChallenge}&code_challenge_method=S256&state=${state}`,
 		codeVerifier: pkce.codeVerifier,
 		state,
 	};
@@ -41,7 +40,9 @@ function generateRandomString(length: number) {
 
 	window.crypto.getRandomValues(array);
 
-	return Array.from(array, (dec) => ("0" + dec.toString(16)).substr(-2)).join("");
+	return Array.from(array, (dec) => ("0" + dec.toString(16)).substr(-2)).join(
+		"",
+	);
 }
 
 // Encodes a string to base64url (no padding)
@@ -60,7 +61,7 @@ async function sha256(input: string | undefined): Promise<ArrayBuffer> {
 }
 
 export async function getOIDCUser(code: string, codeVerifier: string) {
-	if(!await hasCapability("auth")) {
+	if (!(await hasCapability("auth"))) {
 		throw new Error("Server does not support OIDC authentication");
 	}
 	const oidcConfig = await getOIDCConfig();
@@ -81,8 +82,8 @@ export async function getOIDCUser(code: string, codeVerifier: string) {
 		headers: {
 			"Content-Type": "application/x-www-form-urlencoded",
 		},
-		body: params
-	}).then(res => res.json());
+		body: params,
+	}).then((res) => res.json());
 
 	return res;
 	// return JSON.parse(atob(id_token.split(".")[1]));

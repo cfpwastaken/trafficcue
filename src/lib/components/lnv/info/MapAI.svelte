@@ -1,9 +1,8 @@
 <script lang="ts">
 	import Input from "$lib/components/ui/input/input.svelte";
-	import { LNV_SERVER } from "$lib/services/hosts";
 	import { ai } from "$lib/services/lnv";
 	import { SparklesIcon } from "@lucide/svelte";
-	
+
 	let { lat, lon } = $props();
 	let question = $state("");
 
@@ -12,7 +11,7 @@
 		const chunks = res.split("\n");
 		let text = "";
 		for (const chunk of chunks) {
-			if(chunk.startsWith("0:")) {
+			if (chunk.startsWith("0:")) {
 				text += JSON.parse(chunk.substring(2).trim());
 			}
 		}
@@ -33,9 +32,11 @@
 		{/await}
 		<Input
 			type="text"
-			value={""}
-			placeholder="Ask a question about this place..." onchange={(e) => {
-				question = (e.target! as any).value;
-			}} />
+			value=""
+			placeholder="Ask a question about this place..."
+			onchange={(e) => {
+				question = (e.target! as HTMLInputElement).value;
+			}}
+		/>
 	</div>
 </div>

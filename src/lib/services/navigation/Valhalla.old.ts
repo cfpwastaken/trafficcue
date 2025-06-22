@@ -1,19 +1,38 @@
+/* eslint-disable no-empty */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/prefer-for-of */
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 
 import maplibregl from "maplibre-gl";
 // import { maneuverTypes } from "./Maneuver";
-import { hideRouteStatus, updateRouteStatus } from "../../components/routestatus";
-import { NavigationLayer, removeAllNavigationLayers, updateNavigationLayer } from "./NavigationLayers";
+import {
+	hideRouteStatus,
+	updateRouteStatus,
+} from "../../components/routestatus";
+import {
+	NavigationLayer,
+	removeAllNavigationLayers,
+	updateNavigationLayer,
+} from "./NavigationLayers";
 import { updateMapPadding } from "../../main";
 import say from "../TTS";
 import { ROUTING_SERVER } from "../servers";
 import { createValhallaRequest } from "./ValhallaRequest";
 import { Vehicle } from "../../components/vehicles";
 import { KeepAwake } from "@capacitor-community/keep-awake";
-import { getCurrentViewName, getSidebarView } from "../../components/sidebar/SidebarRegistry";
+import {
+	getCurrentViewName,
+	getSidebarView,
+} from "../../components/sidebar/SidebarRegistry";
 // import { displayLane } from "./LaneDisplay";
 
-export async function fetchRoute(vehicle: Vehicle, from: WorldLocation, to: WorldLocation): Promise<RouteResult> {
+export async function fetchRoute(
+	vehicle: Vehicle,
+	from: WorldLocation,
+	to: WorldLocation,
+): Promise<RouteResult> {
 	// const req = {
 	// 	locations: [
 	// 		from,
@@ -35,7 +54,7 @@ export async function fetchRoute(vehicle: Vehicle, from: WorldLocation, to: Worl
 		const res = await fetch(
 			ROUTING_SERVER + "/route?json=" + JSON.stringify(req),
 		).then((res) => res.json());
-		
+
 		console.log(res);
 		return res;
 	} catch (e) {
@@ -65,7 +84,11 @@ function drawRoute(trip: Trip, name: NavigationLayer) {
 	updateNavigationLayer(name, geometry);
 }
 
-export async function findRoute(vehicle: Vehicle, from: WorldLocation, to: WorldLocation): Promise<Trip[]> {
+export async function findRoute(
+	vehicle: Vehicle,
+	from: WorldLocation,
+	to: WorldLocation,
+): Promise<Trip[]> {
 	fromMarker = new maplibregl.Marker()
 		.setLngLat([from.lon, from.lat])
 		.addTo(window.glmap);
@@ -75,10 +98,10 @@ export async function findRoute(vehicle: Vehicle, from: WorldLocation, to: World
 	const route = await fetchRoute(vehicle, from, to);
 
 	let routes = [route.trip];
-	if(route.alternates) {
-		for(let i = 0; i < route.alternates.length; i++) {
+	if (route.alternates) {
+		for (let i = 0; i < route.alternates.length; i++) {
 			routes.push(route.alternates[i].trip);
-		}	
+		}
 	}
 
 	drawAllRoutes(routes);
@@ -117,7 +140,11 @@ function getUserLocation(): WorldLocation {
 let pastRoute: WorldLocation[] = [];
 
 // Check if the location is on the line between from and to (3 meter tolerance)
-function isOnLine(location: WorldLocation, from: WorldLocation, to: WorldLocation) {
+function isOnLine(
+	location: WorldLocation,
+	from: WorldLocation,
+	to: WorldLocation,
+) {
 	// Convert the 6-meter tolerance to degrees (approximation)
 	const tolerance = 6 / 111320; // 1 degree latitude ≈ 111.32 km
 
@@ -126,7 +153,9 @@ function isOnLine(location: WorldLocation, from: WorldLocation, to: WorldLocatio
 	const dy = to.lat - from.lat;
 
 	// Calculate the projection of the location onto the line segment
-	const t = ((location.lon - from.lon) * dx + (location.lat - from.lat) * dy) / (dx * dx + dy * dy);
+	const t =
+		((location.lon - from.lon) * dx + (location.lat - from.lat) * dy) /
+		(dx * dx + dy * dy);
 
 	// Clamp t to the range [0, 1] to ensure the projection is on the segment
 	const clampedT = Math.max(0, Math.min(1, t));
@@ -139,7 +168,8 @@ function isOnLine(location: WorldLocation, from: WorldLocation, to: WorldLocatio
 
 	// Calculate the distance from the location to the closest point
 	const distance = Math.sqrt(
-		Math.pow(location.lon - closestPoint.lon, 2) + Math.pow(location.lat - closestPoint.lat, 2)
+		Math.pow(location.lon - closestPoint.lon, 2) +
+			Math.pow(location.lat - closestPoint.lat, 2),
 	);
 
 	// Check if the distance is within the tolerance
@@ -175,9 +205,9 @@ export async function startNavigation(trip: Trip) {
 
 	// @ts-ignore The types are not correct
 	int = setInterval(() => {
-		if(instructionIdx != 0) {
+		if (instructionIdx != 0) {
 			// Only continue if the user location is at the end shape index of the current maneuver
-			if(currentManeuver == null) {
+			if (currentManeuver == null) {
 				return;
 			}
 			const bgi = currentManeuver.begin_shape_index;
@@ -212,7 +242,7 @@ export async function startNavigation(trip: Trip) {
 				updateRouteStatus({
 					time: trip.summary.time,
 					distance: trip.summary.length,
-					currentManeuver
+					currentManeuver,
 				});
 			}
 
@@ -228,7 +258,7 @@ export async function startNavigation(trip: Trip) {
 			// pastRoute.push(...polyline.slice(0, bgi + 1));
 			pastRoute = polyline.slice(0, bgi + 1);
 
-			updateNavigationLayer("route-past", pastRoute.flat())
+			updateNavigationLayer("route-past", pastRoute.flat());
 
 			// Remove from shape begin to end from the route line
 			const newShape = polyline.slice(bgi);
@@ -242,11 +272,14 @@ export async function startNavigation(trip: Trip) {
 			return;
 		}
 		const maneuver = trip.legs[0].maneuvers[instructionIdx];
-		updateRouteStatus({
-			time: trip.summary.time,
-			distance: trip.summary.length,
-			currentManeuver: trip.legs[0].maneuvers[instructionIdx],
-		}, maneuver.lanes);
+		updateRouteStatus(
+			{
+				time: trip.summary.time,
+				distance: trip.summary.length,
+				currentManeuver: trip.legs[0].maneuvers[instructionIdx],
+			},
+			maneuver.lanes,
+		);
 		currentManeuver = maneuver;
 
 		// document.querySelector<HTMLDivElement>("#lanes")!.innerHTML = "";
@@ -266,22 +299,27 @@ export async function startNavigation(trip: Trip) {
 		if (instructionIdx > 0) {
 			const prevManeuver = trip.legs[0].maneuvers[instructionIdx - 1];
 			if (prevManeuver.verbal_post_transition_instruction) {
-				console.log("Saying: " + prevManeuver.verbal_post_transition_instruction);
+				console.log(
+					"Saying: " + prevManeuver.verbal_post_transition_instruction,
+				);
 				say(prevManeuver.verbal_post_transition_instruction);
 			}
 		}
 	}, 1000);
 
-	updateRouteStatus({
-		time: trip.summary.time,
-		distance: trip.summary.length,
-		currentManeuver: trip.legs[0].maneuvers[0],
-	}, trip.legs[0].maneuvers[0].lanes);
+	updateRouteStatus(
+		{
+			time: trip.summary.time,
+			distance: trip.summary.length,
+			currentManeuver: trip.legs[0].maneuvers[0],
+		},
+		trip.legs[0].maneuvers[0].lanes,
+	);
 	currentTrip = trip;
 }
 
 export async function stopNavigation() {
-	if(int) clearInterval(int);
+	if (int) clearInterval(int);
 	await KeepAwake.allowSleep();
 	hideRouteStatus();
 	document.querySelector<HTMLBodyElement>("body")!.classList.remove("isInTrip");
@@ -320,7 +358,7 @@ export function decodePolyline(encoded: string): WorldLocation[] {
 			shift += 5;
 		} while (byte >= 0x20);
 
-		let deltaLat = (result & 1) ? ~(result >> 1) : (result >> 1);
+		let deltaLat = result & 1 ? ~(result >> 1) : result >> 1;
 		lat += deltaLat;
 
 		shift = 0;
@@ -331,7 +369,7 @@ export function decodePolyline(encoded: string): WorldLocation[] {
 			shift += 5;
 		} while (byte >= 0x20);
 
-		let deltaLng = (result & 1) ? ~(result >> 1) : (result >> 1);
+		let deltaLng = result & 1 ? ~(result >> 1) : result >> 1;
 		lng += deltaLng;
 
 		// Convert the latitude and longitude to decimal format with six digits of precision

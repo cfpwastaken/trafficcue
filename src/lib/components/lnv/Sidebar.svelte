@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, type Component } from "svelte";
+	import { type Component } from "svelte";
 	import InvalidSidebar from "./sidebar/InvalidSidebar.svelte";
 	import { searchbar, view } from "./sidebar.svelte";
 	import MainSidebar from "./sidebar/MainSidebar.svelte";
@@ -8,18 +8,28 @@
 	import { map } from "./map.svelte";
 	import TripSidebar from "./sidebar/TripSidebar.svelte";
 	import Input from "../ui/input/input.svelte";
-	import { EllipsisIcon, HomeIcon, SettingsIcon, UserIcon } from "@lucide/svelte";
+	import {
+		EllipsisIcon,
+		HomeIcon,
+		SettingsIcon,
+		UserIcon,
+	} from "@lucide/svelte";
 	import Button from "../ui/button/button.svelte";
 	import { search, type Feature } from "$lib/services/Search";
 	import SearchSidebar from "./sidebar/SearchSidebar.svelte";
 	import RequiresCapability from "./RequiresCapability.svelte";
 	import UserSidebar from "./sidebar/UserSidebar.svelte";
-	import { advertiseRemoteLocation, location, remoteLocation } from "./location.svelte";
+	import {
+		advertiseRemoteLocation,
+		location,
+		remoteLocation,
+	} from "./location.svelte";
 	import * as Popover from "../ui/popover";
 	import { routing } from "$lib/services/navigation/routing.svelte";
 	import InRouteSidebar from "./sidebar/InRouteSidebar.svelte";
 
-	const views: {[key: string]: Component<any>} = {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const views: Record<string, Component<any>> = {
 		main: MainSidebar,
 		info: InfoSidebar,
 		route: RouteSidebar,
@@ -41,12 +51,14 @@
 		$effect(() => {
 			const newValue = getter(); // read here to subscribe to it
 			clearTimeout(timer);
-			timer = setTimeout(() => value = newValue, delay);
+			timer = setTimeout(() => (value = newValue), delay);
 			return () => clearTimeout(timer);
 		});
 		return () => value;
 	}
 
+	// TODO: implement loading state
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	let loading = $state(false);
 
 	let searchText = $derived.by(debounce(() => searchbar.text, 300));
@@ -54,20 +66,20 @@
 	let mobileView = $derived(window.innerWidth < 768 || routing.currentTrip);
 
 	$effect(() => {
-		if(!searchText) {
+		if (!searchText) {
 			searchResults = [];
-			if(view.current.type == "search") view.switch("main");
+			if (view.current.type == "search") view.switch("main");
 			return;
 		}
 		if (searchText.length > 0) {
 			loading = true;
-			search(searchText, 0, 0).then(results => {
+			search(searchText, 0, 0).then((results) => {
 				searchResults = results;
 				loading = false;
 				view.switch("search", {
 					results: searchResults,
-					query: searchText
-				})
+					query: searchText,
+				});
 			});
 		} else {
 			searchResults = [];
@@ -77,37 +89,48 @@
 
 {#if !routing.currentTrip}
 	<div id="floating-search" class={mobileView ? "mobileView" : ""}>
-		<Input class="h-10"
-			placeholder="Search..." bind:value={searchbar.text} />
+		<Input class="h-10" placeholder="Search..." bind:value={searchbar.text} />
 	</div>
 {/if}
-<div id="sidebar" class={mobileView ? "mobileView" : ""} style={(mobileView ? `height: ${sidebarHeight}px;` : "") + (routing.currentTrip ? "bottom: 0 !important;" : "")}>
+<div
+	id="sidebar"
+	class={mobileView ? "mobileView" : ""}
+	style={(mobileView ? `height: ${sidebarHeight}px;` : "") +
+		(routing.currentTrip ? "bottom: 0 !important;" : "")}
+>
 	{#if mobileView}
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<!-- svelte-ignore a11y_interactive_supports_focus -->
-		<div role="button" id="grabber" style="height: 10px; cursor: grab; display: flex; justify-content: center; align-items: center; touch-action: none;" ontouchstart={(e) => {
-			isDragging = true;
-			startY = e.touches[0].clientY;
-			startHeight = sidebarHeight;
-		}} ontouchmove={(e) => {
-			if(!isDragging) return;
-			e.preventDefault();
-			const deltaY = e.touches[0].clientY - startY;
-			let newHeight = Math.max(100, startHeight - deltaY);
+		<div
+			role="button"
+			id="grabber"
+			style="height: 10px; cursor: grab; display: flex; justify-content: center; align-items: center; touch-action: none;"
+			ontouchstart={(e) => {
+				isDragging = true;
+				startY = e.touches[0].clientY;
+				startHeight = sidebarHeight;
+			}}
+			ontouchmove={(e) => {
+				if (!isDragging) return;
+				e.preventDefault();
+				const deltaY = e.touches[0].clientY - startY;
+				let newHeight = Math.max(100, startHeight - deltaY);
 
-			const snapPoint = 200;
-			const snapThreshold = 20;
-			if (Math.abs(newHeight - snapPoint) < snapThreshold) {
-				newHeight = snapPoint;
-			}
-			sidebarHeight = newHeight;
+				const snapPoint = 200;
+				const snapThreshold = 20;
+				if (Math.abs(newHeight - snapPoint) < snapThreshold) {
+					newHeight = snapPoint;
+				}
+				sidebarHeight = newHeight;
 
-			map.updateMapPadding();
-		}} ontouchend={() => {
-			if(!isDragging) return;
-			isDragging = false;
-		}}>
-			<div style="height: 8px; background-color: #acacac; width: 40%; border-radius: 15px;"></div>
+				map.updateMapPadding();
+			}}
+			ontouchend={() => {
+				if (!isDragging) return;
+				isDragging = false;
+			}}
+		>
+			<div
+				style="height: 8px; background-color: #acacac; width: 40%; border-radius: 15px;"
+			></div>
 		</div>
 	{/if}
 
@@ -123,9 +146,11 @@
 			<HomeIcon />
 		</button>
 		<RequiresCapability capability="auth">
-			<button onclick={async () => {
-				view.switch("user");
-			}}>
+			<button
+				onclick={async () => {
+					view.switch("user");
+				}}
+			>
 				<UserIcon />
 			</button>
 		</RequiresCapability>
@@ -145,22 +170,31 @@
 			</Popover.Trigger>
 			<Popover.Content>
 				<div class="flex flex-col gap-2">
-					<Button variant="outline" onclick={() => {
-						location.toggleLock();
-					}}>
+					<Button
+						variant="outline"
+						onclick={() => {
+							location.toggleLock();
+						}}
+					>
 						{location.locked ? "Unlock Location" : "Lock Location"}
 					</Button>
 					{#if location.code}
 						<span>Advertise code: {location.code}</span>
 					{/if}
-					<Button variant="outline" onclick={() => {
-						advertiseRemoteLocation();
-					}}>
+					<Button
+						variant="outline"
+						onclick={() => {
+							advertiseRemoteLocation();
+						}}
+					>
 						Advertise Location
 					</Button>
-					<Button variant="outline" onclick={() => {
-						remoteLocation(prompt("Code?") || "");
-					}}>
+					<Button
+						variant="outline"
+						onclick={() => {
+							remoteLocation(prompt("Code?") || "");
+						}}
+					>
 						Join Remote Location
 					</Button>
 				</div>

@@ -8,7 +8,7 @@ export type ValhallaCosting =
 	| "motor_scooter"
 	| "multimodal"
 	| "pedestrian";
-export type ValhallaRequest = {
+export interface ValhallaRequest {
 	locations: WorldLocation[];
 	costing: ValhallaCosting;
 	units: "miles" | "kilometers";
@@ -16,8 +16,8 @@ export type ValhallaRequest = {
 	alternates: number;
 	costing_options: ValhallaCostingOptions;
 	turn_lanes: boolean;
-};
-export type GeneralCostingOptions = {
+}
+export interface GeneralCostingOptions {
 	/**
 	 * A penalty applied when transitioning between roads that do not have consistent
 	 * naming - in other words, no road names in common. This penalty can be used to
@@ -59,7 +59,7 @@ export type GeneralCostingOptions = {
 	 * @default 0 for trucks, 15 for cars, buses, motor scooters and motorcycles
 	 */
 	service_penalty?: number;
-};
+}
 export type AutomobileCostingOptions = {
 	/**
 	 * A penalty applied when a gate or bollard with access=private is encountered.
@@ -226,7 +226,7 @@ export type AutomobileCostingOptions = {
 	 */
 	hierarchy_limits?: void;
 } & GeneralCostingOptions;
-export type OtherCostingOptions = {
+export interface OtherCostingOptions {
 	/**
 	 * The height of the vehicle (in meters).
 	 * @default 1.9 for car, bus, taxi and 4.11 for truck
@@ -267,7 +267,7 @@ export type OtherCostingOptions = {
 	 * @default false
 	 */
 	include_hot?: boolean;
-};
+}
 /**
  * The type of the bicycle.
  * Road: a road-style bicycle with narrow tires that is generally lightweight and designed for speed on paved surfaces.
@@ -276,7 +276,7 @@ export type OtherCostingOptions = {
  * Mountain: a mountain bicycle suitable for most surfaces but generally heavier and slower on paved surfaces.
  */
 export type BicycleType = "Road" | "Hybrid" | "City" | "Mountain";
-export type BicycleCostingOptions = {
+export interface BicycleCostingOptions {
 	/**
 	 * @default "Hybrid"
 	 */
@@ -367,9 +367,8 @@ export type BicycleCostingOptions = {
 	 * @default false
 	 */
 	shortest?: boolean;
-
-};
-export type BikeshareCostingOptions = {}; // TODO
+}
+export type BikeshareCostingOptions = unknown; // TODO
 export type MotorScooterCostingOptions = {
 	/**
 	 * A rider's propensity to use primary roads.
@@ -398,9 +397,9 @@ export type MotorScooterCostingOptions = {
 	 */
 	use_hills?: boolean;
 } & AutomobileCostingOptions;
-export type MultimodalCostingOptions = {}; // TODO
-export type PedestrianCostingOptions = {}; // TODO
-export type TruckCostingOptions = {
+export type MultimodalCostingOptions = unknown; // TODO
+export type PedestrianCostingOptions = unknown; // TODO
+export interface TruckCostingOptions {
 	/**
 	 * The length of the truck (in meters).
 	 * @default 21.64
@@ -448,8 +447,8 @@ export type TruckCostingOptions = {
 	 * @default 0
 	 */
 	use_truck_route?: boolean;
-};
-export type ValhallaCostingOptions = {
+}
+export interface ValhallaCostingOptions {
 	auto?: AutomobileCostingOptions & OtherCostingOptions;
 	bicycle?: BicycleCostingOptions;
 	bus?: AutomobileCostingOptions & OtherCostingOptions;
@@ -459,4 +458,4 @@ export type ValhallaCostingOptions = {
 	motor_scooter?: MotorScooterCostingOptions;
 	multimodal?: MultimodalCostingOptions;
 	pedestrian?: PedestrianCostingOptions;
-};
+}
