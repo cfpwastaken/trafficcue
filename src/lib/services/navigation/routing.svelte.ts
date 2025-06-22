@@ -1,4 +1,5 @@
-import { geolocate, map } from "$lib/components/lnv/map.svelte";
+import { location } from "$lib/components/lnv/location.svelte";
+import { map } from "$lib/components/lnv/map.svelte";
 import type { ValhallaRequest } from "./ValhallaRequest";
 import type { LngLatBoundsLike } from "maplibre-gl";
 
@@ -204,7 +205,11 @@ export function stopNavigation() {
 }
 
 function getUserLocation(): WorldLocation {
-	return geolocate.currentLocation!;
+	// return geolocate.currentLocation!;
+	return {
+		lat: location.lat,
+		lon: location.lng
+	}
 	// const lnglat = window.geolocate._userLocationDotMarker.getLngLat();
 	// return { lat: lnglat.lat, lon: lnglat.lng };
 	// console.log(map.value!)

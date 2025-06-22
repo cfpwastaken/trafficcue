@@ -1,9 +1,9 @@
 import { reverseGeocode } from "$lib/services/Search";
 import { view } from "./sidebar.svelte";
 
-export const geolocate = $state({
-	currentLocation: null as WorldLocation | null,
-})
+// export const geolocate = $state({
+// 	currentLocation: null as WorldLocation | null,
+// })
 
 export const map = $state({
 	value: undefined as maplibregl.Map | undefined,

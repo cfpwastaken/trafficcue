@@ -8,10 +8,12 @@
 	import { map } from "./map.svelte";
 	import TripSidebar from "./sidebar/TripSidebar.svelte";
 	import Input from "../ui/input/input.svelte";
-	import { HomeIcon, SettingsIcon, UserIcon } from "@lucide/svelte";
+	import { EllipsisIcon, HomeIcon, SettingsIcon, UserIcon } from "@lucide/svelte";
 	import Button from "../ui/button/button.svelte";
 	import { search, type Feature } from "$lib/services/Search";
 	import SearchSidebar from "./sidebar/SearchSidebar.svelte";
+	import { advertiseRemoteLocation, location, remoteLocation } from "./location.svelte";
+	import * as Popover from "../ui/popover";
 
 	const views: {[key: string]: Component<any>} = {
 		main: MainSidebar,
@@ -112,6 +114,40 @@
 	<button>
 		<SettingsIcon />
 	</button>
+	<!-- <button onclick={() => {
+		location.toggleLock();
+	}}>
+		L
+	</button> -->
+	<Popover.Root>
+		<Popover.Trigger>
+			<button>
+				<EllipsisIcon />
+			</button>
+		</Popover.Trigger>
+		<Popover.Content>
+			<div class="flex flex-col gap-2">
+				<Button variant="outline" onclick={() => {
+					location.toggleLock();
+				}}>
+					{location.locked ? "Unlock Location" : "Lock Location"}
+				</Button>
+				{#if location.code}
+					<span>Advertise code: {location.code}</span>
+				{/if}
+				<Button variant="outline" onclick={() => {
+					advertiseRemoteLocation();
+				}}>
+					Advertise Location
+				</Button>
+				<Button variant="outline" onclick={() => {
+					remoteLocation(prompt("Code?") || "");
+				}}>
+					Join Remote Location
+				</Button>
+			</div>
+		</Popover.Content>
+	</Popover.Root>
 </div>
 
 <style>

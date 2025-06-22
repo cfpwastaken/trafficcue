@@ -10,7 +10,7 @@
 		Protocol,
 	} from "svelte-maplibre-gl";
 	import { view } from "./sidebar.svelte";
-	import { geolocate, map, pin } from "./map.svelte";
+	import { map, pin } from "./map.svelte";
 	import {
 		drawAllRoutes,
 		fetchRoute,
@@ -18,11 +18,15 @@
 	} from "$lib/services/navigation/routing.svelte";
 	import { createValhallaRequest } from "$lib/vehicles/ValhallaVehicles";
 	import { ROUTING_SERVER } from "$lib/services/hosts";
+	import { location } from "./location.svelte";
 
 	onMount(() => {
 		window.addEventListener("resize", map.updateMapPadding);
 		map.updateMapPadding();
 	});
+
+	let locationDot: HTMLDivElement | undefined = $state();
+	let locationAccuracyCircle: HTMLDivElement | undefined = $state();
 </script>
 
 <Protocol
@@ -60,6 +64,7 @@
 	padding={map.padding}
 	onload={async () => {
 		map.updateMapPadding();
+		location.locked = true;
 	}}
 	onclick={(e) => {
 		if (view.current.type == "main" || view.current.type == "info") {
@@ -67,9 +72,15 @@
 			pin.showInfo();
 		}
 	}}
+	onmove={(e) => {
+		// @ts-ignore
+		if (e.reason !== "location") {
+			location.locked = false;
+		}
+	}}
 >
 	<!-- <Hash /> -->
-	<GeolocateControl
+	<!-- <GeolocateControl
 		positionOptions={{
 			enableHighAccuracy: true,
 		}}
@@ -84,7 +95,7 @@
 			};
 			// $inspect(`Geolocation: ${e.coords.latitude}, ${e.coords.longitude} (Speed: ${speed} km/h, Accuracy: ${accuracy} m)`);
 		}}
-	/>
+	/> -->
 	{#if pin.isDropped}
 		<Marker lnglat={{ lat: pin.lat, lng: pin.lng }} />
 	{/if}
@@ -176,5 +187,18 @@
 				}}
 			></LineLayer>
 		</GeoJSONSource>
+	{/if}
+
+	{#if location.available}
+		<div class="maplibregl-user-location-dot" bind:this={locationDot}></div>
+		<div class="maplibregl-user-location-accuracy-circle" bind:this={locationAccuracyCircle}></div>
+		<Marker
+			lnglat={{ lat: location.lat, lng: location.lng }}
+			element={locationDot}
+		/>
+		<Marker
+			lnglat={{ lat: location.lat, lng: location.lng }}
+			element={locationAccuracyCircle}
+		/>
 	{/if}
 </MapLibre>
