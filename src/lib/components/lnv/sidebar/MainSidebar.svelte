@@ -30,7 +30,7 @@
 	<Button variant="secondary" class="flex-1" onclick={() => {
 		const work = localStorage.getItem("saved.work");
 		if(!work) {
-			alert("No home location saved.");
+			alert("No work location saved.");
 			return;
 		}
 		const {lat, lon} = JSON.parse(work);
