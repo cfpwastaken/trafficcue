@@ -1,16 +1,17 @@
 // OIDC Server needs to have redirect url for /login/callback
 
-import { getOIDCConfig } from "./lnv";
-
-const oidcConfig = await getOIDCConfig();
-if (!oidcConfig) {
-	throw new Error("Server does not support OIDC authentication");
-}
-const { AUTH_URL, CLIENT_ID, TOKEN_URL } = oidcConfig;
-
-export { CLIENT_ID, TOKEN_URL };
+import { getOIDCConfig, hasCapability } from "./lnv";
 
 export async function getAuthURL() {
+	if(!await hasCapability("auth")) {
+		throw new Error("Server does not support OIDC authentication");
+	}
+	const oidcConfig = await getOIDCConfig();
+	if (!oidcConfig) {
+		throw new Error("Server does not support OIDC authentication");
+	}
+	const { AUTH_URL, CLIENT_ID } = oidcConfig;
+
 	const pkce = await generatePKCEChallenge();
 
 	const state = generateRandomString(16);
@@ -59,6 +60,15 @@ async function sha256(input: string | undefined): Promise<ArrayBuffer> {
 }
 
 export async function getOIDCUser(code: string, codeVerifier: string) {
+	if(!await hasCapability("auth")) {
+		throw new Error("Server does not support OIDC authentication");
+	}
+	const oidcConfig = await getOIDCConfig();
+	if (!oidcConfig) {
+		throw new Error("Server does not support OIDC authentication");
+	}
+	const { CLIENT_ID, TOKEN_URL } = oidcConfig;
+
 	const params = new URLSearchParams();
 	params.append("grant_type", "authorization_code");
 	params.append("code", code);
