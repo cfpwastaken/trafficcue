@@ -1,47 +1,56 @@
-# Svelte + TS + Vite
+# TrafficCue
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+**FOSS navigation for slow vehicles**  
+⚡ Made for 45km/h rides, mopeds, light electric vehicles, and anything mainstream navigation ignores.
 
-## Recommended IDE Setup
+---
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## 🚗 What is TrafficCue?
 
-## Need an official Svelte framework?
+**TrafficCue** is a FOSS navigation app built for vehicles that max out at 45 km/h, so mopeds, microcars, LEVs, and the like (but not limited to them!).
+Mainstream navigation often routes these vehicles onto roads they're not legally allowed to use. **We don’t.**
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+Built with **Svelte + Vite**, powered by **Capacitor** for mobile, and focused on *respectful routing*, **TrafficCue** fills the gap.
 
-## Technical considerations
+---
 
-**Why use this over SvelteKit?**
+## ✨ Features
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+- ✅ Road-legal routing for 45 km/h vehicles
+- 📱 Android support via Capacitor
+- 🗺️ Offline-first map tiles (OpenStreetMap-based) 🔜
+- 🧭 Turn-by-turn directions and maneuver cues
+- 🚦 Road type filtering (e.g., block highways, tunnels, etc.) 🔜
+- 🔐 No tracking, no ads, fully FOSS
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+---
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+## 📦 Tech Stack
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+- Frontend: [Svelte](https://svelte.dev)
+- Mobile: [Capacitor](https://capacitorjs.com)
+- Maps: OpenStreetMap tiles via MapLibre and OpenFreeMap
+- Search: [Photon](https://photon.komoot.io)
+- Routing: [Valhalla](https://valhalla.github.io/valhalla/)
+- POI Info: Overpass API
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+---
 
-**Why include `.vscode/extensions.json`?**
+## 🛠️ Installation
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+### 📱 Android
 
-**Why enable `allowJs` in the TS template?**
+Grab the latest APK from the Releases section and sideload it. 🔜
 
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
+### Web / PWA
 
-**Why is HMR not preserving my local component state?**
+You can also run TrafficCue as a PWA in your browser. Just visit the [TrafficCue Web App](#) and install it. 🔜
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
+## 🗺️ Smarter Routing, Built Around Your Vehicle
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+TrafficCue doesn't assume you're driving a car. **You** tell it what you're driving.
+You define your vehicle profile: legal max speed, actual max speed, vehicle type, and more.
+Then trafficcue uses the Valhalla routing engine to generate routes that **make sense** for you.
 
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+That means no more being sent down motorroads on a 45 km/h moped, ever.
+Your route, your rules.
