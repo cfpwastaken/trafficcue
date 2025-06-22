@@ -64,7 +64,7 @@ function geometryToGeoJSON(polyline: WorldLocation[]): GeoJSON.Feature {
 	};
 }
 
-function decodePolyline(encoded: string): WorldLocation[] {
+export function decodePolyline(encoded: string): WorldLocation[] {
 	let points = [];
 	let index = 0;
 	let len = encoded.length;

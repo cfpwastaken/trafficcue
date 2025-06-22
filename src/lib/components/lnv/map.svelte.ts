@@ -1,3 +1,4 @@
+import { routing } from "$lib/services/navigation/routing.svelte";
 import { reverseGeocode } from "$lib/services/Search";
 import { view } from "./sidebar.svelte";
 
@@ -18,12 +19,12 @@ export const map = $state({
 			return;
 		}
 		console.log("Updating map padding");
-		if (window.innerWidth < 768) {
+		if (window.innerWidth < 768 || routing.currentTrip) {
 			const calculatedSidebarHeight = document.querySelector<HTMLDivElement>("#sidebar")!.getBoundingClientRect().height;
 			map._setPadding({
-				top: 50,
+				top: routing.currentTrip ? 64 : 0,
 				right: 0,
-				bottom: calculatedSidebarHeight + 50,
+				bottom: calculatedSidebarHeight,
 				left: 0
 			});
 			return;

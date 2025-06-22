@@ -51,19 +51,19 @@
 	}
 
 	:global(.lane-image > span) {
-		font-size: 2rem;
+		font-size: 1rem;
 		font-weight: bold;
 		color: #812020;
 	}
 
 	:global(.lane-image.active > span) {
-		font-size: 2rem;
+		font-size: 1rem;
 		font-weight: bold;
 		color: #ff0000;
 	}
 
 	:global(.lane-image.valid > span) {
-		font-size: 2rem;
+		font-size: 1rem;
 		font-weight: bold;
 		color: #cc2c2c;
 	}

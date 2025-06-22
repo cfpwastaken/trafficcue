@@ -16,9 +16,8 @@
 	});
 </script>
 
-{#if !routing.currentTrip}
-	<Sidebar></Sidebar>
-{:else}
+{#if routing.currentTrip}
 	<RoutingInfo />
 {/if}
+<Sidebar></Sidebar>
 <Map></Map>

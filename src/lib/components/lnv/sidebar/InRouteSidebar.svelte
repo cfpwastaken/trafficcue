@@ -1,8 +1,7 @@
 <script lang="ts">
-	import LanesDisplay from "$lib/services/navigation/LanesDisplay.svelte";
-	import { decodePolyline, routing } from "$lib/services/navigation/routing.svelte";
-	import { location } from "./location.svelte";
-	import ManeuverIcon from "./ManeuverIcon.svelte";
+    import { Button } from "$lib/components/ui/button";
+    import { decodePolyline, routing, stopNavigation } from "$lib/services/navigation/routing.svelte";
+    import { advertiseRemoteLocation, location } from "../location.svelte";
 
 	// Helper: Haversine distance in meters
 	function haversine(a: { lat: number; lon: number }, b: { lat: number; lon: number }) {
@@ -47,24 +46,40 @@
 		};
 	}
 
-	// const point = $derived(decodePolyline(routing.currentTrip?.legs[0].shape || "")[routing.currentTripInfo.currentManeuver?.end_shape_index || 0]);
-	// const distance = $derived(Math.sqrt(Math.pow(point.lat - location.lat, 2) + Math.pow(point.lon - location.lng, 2)) * 111000); // Approximate conversion to meters
 	const shape = $derived(decodePolyline(routing.currentTrip?.legs[0].shape || ""));
 	const maneuver = $derived(routing.currentTripInfo.currentManeuver);
 
-	const distance = $derived.by(() => {
+	const fullDistance = $derived.by(() => {
     const lat = location.lat;
-		const lon = location.lng;
-		if (!shape || shape.length === 0 || !maneuver) return 0;
-		const start = shape[maneuver.begin_shape_index];
-		const end = shape[maneuver.end_shape_index];
-		if (!start || !end) return 0;
-		const projected = projectPointToSegment({ lat, lon }, start, end);
-		return projected.distToUser;
+    const lon = location.lng;
+    if (!shape.length) return 0;
+
+    // 1️⃣ find projection onto any segment of the full shape
+    let best = { idx: 0, proj: shape[0], dist: Infinity };
+    for (let i = 0; i < shape.length - 1; i++) {
+      const a = shape[i];
+      const b = shape[i + 1];
+      const proj = projectPointToSegment({ lat, lon }, a, b);
+      if (proj.distToUser < best.dist) {
+        best = { idx: i, proj: { lat: proj.lat, lon: proj.lon }, dist: proj.distToUser };
+      }
+    }
+
+    // 2️⃣ sum from the projection point to the very last point
+    let total = 0;
+    // from projection → next vertex
+    total += haversine(best.proj, shape[best.idx + 1]);
+
+    // then each remaining segment
+    for (let j = best.idx + 1; j < shape.length - 1; j++) {
+      total += haversine(shape[j], shape[j + 1]);
+    }
+
+    return total;
   });
 
-	const roundDistance = $derived.by(() => {
-		const dist = Math.round(distance);
+	const roundFullDistance = $derived.by(() => {
+		const dist = Math.round(fullDistance);
 		if (dist < 100) {
 			return Math.round(dist / 5) * 5;
 		} else if (dist < 1000) {
@@ -78,22 +93,38 @@
 		}
 	})
 
-	const distanceText = $derived.by(() => {
-		const dist = roundDistance;
+	const fullDistanceText = $derived.by(() => {
+		const dist = roundFullDistance;
 		if (dist < 1000) return `${dist} m`;
 		return `${(dist / 1000)} km`;
 	})
 </script>
 
-<div class="fixed top-4 left-4 z-50 w-[calc(100%-32px)] bg-background/60 text-white rounded-lg overflow-hidden" style="backdrop-filter: blur(5px);">
-	<div class="p-2 flex gap-2">
-		<ManeuverIcon maneuver={routing.currentTripInfo.currentManeuver?.type ?? 0} />
-		<div class="flex gap-1 flex-col">
-			<span class="text-xl font-bold">{distanceText}</span>
-			<span>{routing.currentTripInfo.currentManeuver?.instruction}</span>
-		</div>
-	</div>
-	<LanesDisplay
-		lanes={routing.currentTripInfo.currentManeuver?.lanes}
-	/>
+{fullDistanceText} left
+
+<Button onclick={() => {
+	location.toggleLock();
+}}>LOCK</Button>
+
+<Button onclick={() => {
+	stopNavigation();
+}}>End Trip</Button>
+
+<div class="flex flex-col gap-2 mt-5">
+	{#if location.code}
+		<span>Share Code: {location.code}</span>
+		<Button variant="secondary" onclick={() => {
+			location.advertiser?.close();
+			location.advertiser = null;
+			location.code = null;
+		}}>
+			Stop Sharing Location
+		</Button>
+	{:else}
+		<Button variant="secondary" onclick={() => {
+			advertiseRemoteLocation();
+		}}>
+			Share Trip Status & Location
+		</Button>
+	{/if}
 </div>

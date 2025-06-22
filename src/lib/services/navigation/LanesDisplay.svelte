@@ -14,7 +14,7 @@
 
 <style>
 	#lanes {
-		background-color: #1a1a1a;
+		background-color: hsl(0, 0%, 10%, 0.6);
 		padding: 10px;
 		display: flex;
 		justify-content: space-around;

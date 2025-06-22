@@ -14,6 +14,8 @@
 	import SearchSidebar from "./sidebar/SearchSidebar.svelte";
 	import { advertiseRemoteLocation, location, remoteLocation } from "./location.svelte";
 	import * as Popover from "../ui/popover";
+	import { routing } from "$lib/services/navigation/routing.svelte";
+	import InRouteSidebar from "./sidebar/InRouteSidebar.svelte";
 
 	const views: {[key: string]: Component<any>} = {
 		main: MainSidebar,
@@ -46,6 +48,7 @@
 
 	let searchText = $derived.by(debounce(() => searchbar.text, 300));
 	let searchResults: Feature[] = $state([]);
+	let mobileView = $derived(window.innerWidth < 768 || routing.currentTrip);
 
 	$effect(() => {
 		if(!searchText) {
@@ -69,12 +72,14 @@
 	});
 </script>
 
-<div id="floating-search">
-	<Input class="h-10"
-		placeholder="Search..." bind:value={searchbar.text} />
-</div>
-<div id="sidebar" style={window.innerWidth < 768 ? `height: ${sidebarHeight}px` : ""}>
-	{#if window.innerWidth < 768}
+{#if !routing.currentTrip}
+	<div id="floating-search" class={mobileView ? "mobileView" : ""}>
+		<Input class="h-10"
+			placeholder="Search..." bind:value={searchbar.text} />
+	</div>
+{/if}
+<div id="sidebar" class={mobileView ? "mobileView" : ""} style={(mobileView ? `height: ${sidebarHeight}px;` : "") + (routing.currentTrip ? "bottom: 0 !important;" : "")}>
+	{#if mobileView}
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<!-- svelte-ignore a11y_interactive_supports_focus -->
 		<div role="button" id="grabber" style="height: 10px; cursor: grab; display: flex; justify-content: center; align-items: center; touch-action: none;" ontouchstart={(e) => {
@@ -102,53 +107,64 @@
 			<div style="height: 8px; background-color: #acacac; width: 40%; border-radius: 15px;"></div>
 		</div>
 	{/if}
-	<CurrentView {...view.current.props}></CurrentView>
+
+	{#if routing.currentTrip}
+		<InRouteSidebar />
+	{:else}
+		<CurrentView {...view.current.props}></CurrentView>
+	{/if}
 </div>
-<div id="navigation">
-	<button>
-		<HomeIcon />
-	</button>
-	<button>
-		<UserIcon />
-	</button>
-	<button>
-		<SettingsIcon />
-	</button>
-	<!-- <button onclick={() => {
-		location.toggleLock();
-	}}>
-		L
-	</button> -->
-	<Popover.Root>
-		<Popover.Trigger>
-			<button>
-				<EllipsisIcon />
+{#if !routing.currentTrip}
+	<div id="navigation" class={mobileView ? "mobileView" : ""}>
+		<button onclick={() => view.switch("main")}>
+			<HomeIcon />
+		</button>
+		<RequiresCapability capability="auth">
+			<button onclick={async () => {
+				view.switch("user");
+			}}>
+				<UserIcon />
 			</button>
-		</Popover.Trigger>
-		<Popover.Content>
-			<div class="flex flex-col gap-2">
-				<Button variant="outline" onclick={() => {
-					location.toggleLock();
-				}}>
-					{location.locked ? "Unlock Location" : "Lock Location"}
-				</Button>
-				{#if location.code}
-					<span>Advertise code: {location.code}</span>
-				{/if}
-				<Button variant="outline" onclick={() => {
-					advertiseRemoteLocation();
-				}}>
-					Advertise Location
-				</Button>
-				<Button variant="outline" onclick={() => {
-					remoteLocation(prompt("Code?") || "");
-				}}>
-					Join Remote Location
-				</Button>
-			</div>
-		</Popover.Content>
-	</Popover.Root>
-</div>
+		</RequiresCapability>
+		<button>
+			<SettingsIcon />
+		</button>
+		<!-- <button onclick={() => {
+			location.toggleLock();
+		}}>
+			L
+		</button> -->
+		<Popover.Root>
+			<Popover.Trigger>
+				<button>
+					<EllipsisIcon />
+				</button>
+			</Popover.Trigger>
+			<Popover.Content>
+				<div class="flex flex-col gap-2">
+					<Button variant="outline" onclick={() => {
+						location.toggleLock();
+					}}>
+						{location.locked ? "Unlock Location" : "Lock Location"}
+					</Button>
+					{#if location.code}
+						<span>Advertise code: {location.code}</span>
+					{/if}
+					<Button variant="outline" onclick={() => {
+						advertiseRemoteLocation();
+					}}>
+						Advertise Location
+					</Button>
+					<Button variant="outline" onclick={() => {
+						remoteLocation(prompt("Code?") || "");
+					}}>
+						Join Remote Location
+					</Button>
+				</div>
+			</Popover.Content>
+		</Popover.Root>
+	</div>
+{/if}
 
 <style>
 	#sidebar {
@@ -205,36 +221,35 @@
 		justify-content: space-around;
 	}
 
-	@media (max-width: 768px) {
-		#sidebar {
-			position: fixed;
-			top: unset;
-			bottom: 50px;
-			left: 0;
-			/* min-width: calc(100% - 20px);
-			max-width: calc(100% - 20px); */
-			min-width: calc(100%);
-			max-width: calc(100%);
-			width: calc(100% - 20px);
-			height: 200px;
-			margin: unset;
-			/* margin-left: 10px;
-			margin-right: 10px; */
-			border-radius: 0;
-			border-top-left-radius: 15px;
-			border-top-right-radius: 15px;
-			padding-top: 5px; /* for the grabber */
-		}
+	/* mobile view */
+	#sidebar.mobileView {
+		position: fixed;
+		top: unset;
+		bottom: 50px;
+		left: 0;
+		/* min-width: calc(100% - 20px);
+		max-width: calc(100% - 20px); */
+		min-width: calc(100%);
+		max-width: calc(100%);
+		width: calc(100% - 20px);
+		height: 200px;
+		margin: unset;
+		/* margin-left: 10px;
+		margin-right: 10px; */
+		border-radius: 0;
+		border-top-left-radius: 15px;
+		border-top-right-radius: 15px;
+		padding-top: 5px; /* for the grabber */
+	}
 
-		#floating-search {
-			width: calc(100% - 20px);
-		}
+	#floating-search.mobileView {
+		width: calc(100% - 20px);
+	}
 
-		#navigation {
-			margin: 0;
-			width: calc(100%);
-			border-bottom-left-radius: 0;
-			border-bottom-right-radius: 0;
-		}
+	#navigation.mobileView {
+		margin: 0;
+		width: calc(100%);
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
 	}
 </style>
