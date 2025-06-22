@@ -136,6 +136,8 @@ export async function startRoute(trip: Trip) {
 	routing.currentTripInfo.int = setInterval(tickRoute, 500);
 }
 
+let hasAnnouncedPreInstruction = false;
+
 async function tickRoute() {
 	const trip = routing.currentTrip;
 	const info = routing.currentTripInfo;
@@ -169,6 +171,15 @@ async function tickRoute() {
 		info.isOffRoute = false;
 	}
 
+	if (currentManeuver.verbal_pre_transition_instruction && !hasAnnouncedPreInstruction) {
+		const distanceToEnd = calculateDistance(location, polyline[bgi]);
+		// console.log("Distance to end of current maneuver: ", distanceToEnd, " meters");
+		if (distanceToEnd <= 100) {
+			hasAnnouncedPreInstruction = true;
+			console.log("[Verbal instruction] ", currentManeuver.verbal_pre_transition_instruction);
+		}
+	}
+
 	// Check if the user is past the current maneuver
 	// Checks if the user is still on the current maneuver's polyline
 	if(!isOnShape(location, polyline.slice(bgi))) {
@@ -181,6 +192,15 @@ async function tickRoute() {
 
 	// Update the geojson
 	drawCurrentTrip();
+
+	// announce the "verbal_post_transition_instruction"
+	if (currentManeuver.verbal_post_transition_instruction) {
+		hasAnnouncedPreInstruction = false;
+		const distanceToEnd = calculateDistance(location, polyline[trip.legs[0].maneuvers[routing.currentTripInfo.maneuverIdx + 1].begin_shape_index]);
+		if (distanceToEnd >= 200) {
+			console.log("[Verbal instruction] ", currentManeuver.verbal_post_transition_instruction);
+		}
+	}
 
 	// Advance to the next maneuver
 	info.maneuverIdx++;
@@ -267,6 +287,21 @@ function isOnShape(location: WorldLocation, shape: WorldLocation[]) {
 		}
 	}
 	return false;
+}
+
+function calculateDistance(point1: WorldLocation, point2: WorldLocation): number {
+	const R = 6371000; // Earth's radius in meters
+	const lat1 = point1.lat * (Math.PI / 180);
+	const lat2 = point2.lat * (Math.PI / 180);
+	const deltaLat = (point2.lat - point1.lat) * (Math.PI / 180);
+	const deltaLon = (point2.lon - point1.lon) * (Math.PI / 180);
+
+	const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+						Math.cos(lat1) * Math.cos(lat2) *
+						Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+	return R * c; // Distance in meters
 }
 
 export function zoomToPoints(from: WorldLocation, to: WorldLocation, map: maplibregl.Map) {
