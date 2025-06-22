@@ -69,7 +69,7 @@ export function selectVehicle(vehicle: Vehicle | null) {
 			selectedVehicleIdx.v = null;
 		}
 	}
-	localStorage.setItem("selectedVehicle", selectedVehicleIdx !== null ? selectedVehicleIdx.toString() : "");
+	localStorage.setItem("selectedVehicle", selectedVehicleIdx.v !== null ? selectedVehicleIdx.v.toString() : "");
 }
 
 /**
