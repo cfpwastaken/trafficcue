@@ -1,17 +1,8 @@
-import { createAuthClient } from "better-auth/client";
-import { usernameClient } from "better-auth/client/plugins";
 import { LNV_SERVER } from "./hosts";
-import type { User } from "better-auth";
-
-export const authClient = createAuthClient({
-	baseURL: LNV_SERVER + "/auth",
-	plugins: [
-		usernameClient()
-	]
-})
 
 export type Capabilities = ("auth" | "reviews" | "ai" | "fuel")[];
 export let capabilities: Capabilities = [];
+export let oidcConfig: { AUTH_URL: string; CLIENT_ID: string; TOKEN_URL: string } | null = null;
 
 export async function fetchConfig() {
 	const res = await fetch(LNV_SERVER + "/config");
@@ -19,7 +10,7 @@ export async function fetchConfig() {
 		throw new Error(`Failed to fetch capabilities: ${res.statusText}`);
 	}
 	const data = await res.json();
-	return data as { name: string; version: string; capabilities: Capabilities };
+	return data as { name: string; version: string; capabilities: Capabilities; oidc?: { AUTH_URL: string; CLIENT_ID: string; TOKEN_URL: string } };
 }
 
 export async function getCapabilities() {
@@ -28,6 +19,21 @@ export async function getCapabilities() {
 		capabilities = config.capabilities;
 	}
 	return capabilities;
+}
+
+export async function getOIDCConfig() {
+	if (oidcConfig) {
+		return oidcConfig;
+	}
+	const config = await fetchConfig();
+	if (config.oidc) {
+		oidcConfig = {
+			AUTH_URL: config.oidc.AUTH_URL,
+			CLIENT_ID: config.oidc.CLIENT_ID,
+			TOKEN_URL: config.oidc.TOKEN_URL
+		};
+	}
+	return oidcConfig;
 }
 
 export async function hasCapability(capability: Capabilities[number]): Promise<boolean> {
@@ -57,15 +63,15 @@ export async function postReview(location: WorldLocation, review: Omit<Review, '
 	if(!await hasCapability("reviews")) {
 		throw new Error("Reviews capability is not available");
 	}
-	const session = await authClient.getSession();
-	if (session.error) {
+	const token = localStorage.getItem("lnv-token");
+	if (!token) {
 		throw new Error("User is not authenticated");
 	}
 	const res = await fetch(LNV_SERVER + `/review`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			"Authorization": `Bearer ${session.data?.session.token}`
+			"Authorization": `Bearer ${token}`
 		},
 		body: JSON.stringify({
 			...review,

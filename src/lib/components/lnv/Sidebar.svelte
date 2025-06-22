@@ -12,6 +12,8 @@
 	import Button from "../ui/button/button.svelte";
 	import { search, type Feature } from "$lib/services/Search";
 	import SearchSidebar from "./sidebar/SearchSidebar.svelte";
+	import RequiresCapability from "./RequiresCapability.svelte";
+	import UserSidebar from "./sidebar/UserSidebar.svelte";
 	import { advertiseRemoteLocation, location, remoteLocation } from "./location.svelte";
 	import * as Popover from "../ui/popover";
 	import { routing } from "$lib/services/navigation/routing.svelte";
@@ -22,7 +24,8 @@
 		info: InfoSidebar,
 		route: RouteSidebar,
 		trip: TripSidebar,
-		search: SearchSidebar
+		search: SearchSidebar,
+		user: UserSidebar,
 	};
 
 	let isDragging = false;
