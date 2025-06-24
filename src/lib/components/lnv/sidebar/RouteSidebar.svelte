@@ -112,7 +112,7 @@
 				{#if i == 0}
 					<StarIcon />
 				{/if}
-				{route.summary.length}km - {formatTime(Math.round(route.summary.time))}
+				{Math.round(route.summary.length)}km - {formatTime(Math.round(route.summary.time))}
 			</Button>
 		{/each}
 	</div>
