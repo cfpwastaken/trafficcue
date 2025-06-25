@@ -3,6 +3,7 @@ import { map } from "$lib/components/lnv/map.svelte";
 import say from "./TTS";
 import type { ValhallaRequest } from "./ValhallaRequest";
 import type { LngLatBoundsLike } from "maplibre-gl";
+import { generateVoiceGuidance } from "./VoiceGuidance";
 
 export const routing = $state({
 	geojson: {
@@ -192,11 +193,13 @@ async function tickRoute() {
 		);
 		if (distanceToEnd <= verbalDistance) {
 			hasAnnouncedPreInstruction = true;
+			const instruction = await generateVoiceGuidance(currentManeuver, polyline);
 			console.log(
 				"[Verbal instruction] ",
-				currentManeuver.verbal_pre_transition_instruction,
+				// currentManeuver.verbal_pre_transition_instruction,
+				instruction
 			);
-			say(currentManeuver.verbal_pre_transition_instruction);
+			say(instruction);
 		}
 	}
 
