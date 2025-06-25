@@ -21,16 +21,13 @@ export default async function say(text: string) {
 		await initTTS();
 		// return;
 	}
-	console.log("A");
 	Duck.duck();
-	console.log("B");
 	if(tts !== "web") {
 		try {
 			await tts?.speak({
 				text: text,
 				lang: "deu-default", // TODO: make this configurable
 			});
-			console.log("C");
 		} catch (e) {
 			console.error("Error speaking text", e);
 			alert(e);
@@ -40,7 +37,5 @@ export default async function say(text: string) {
 		utterance.lang = "de-DE";
 		window.speechSynthesis.speak(utterance);
 	}
-	console.log("D");
 	Duck.unduck();
-	console.log("E");
 }
