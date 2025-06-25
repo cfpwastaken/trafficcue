@@ -27,6 +27,7 @@
 	import * as Popover from "../ui/popover";
 	import { routing } from "$lib/services/navigation/routing.svelte";
 	import InRouteSidebar from "./sidebar/InRouteSidebar.svelte";
+	import say from "$lib/services/navigation/TTS";
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const views: Record<string, Component<any>> = {
@@ -196,6 +197,15 @@
 						}}
 					>
 						Join Remote Location
+					</Button>
+					<Button
+						variant="outline"
+						onclick={async () => {
+							// await say("This is a test of the text to speech system.");
+							await say("Dies ist ein Test des Text-zu-Sprache-Systems.");
+						}}
+					>
+						Test TTS
 					</Button>
 				</div>
 			</Popover.Content>

@@ -1,5 +1,6 @@
 import { location } from "$lib/components/lnv/location.svelte";
 import { map } from "$lib/components/lnv/map.svelte";
+import say from "./TTS";
 import type { ValhallaRequest } from "./ValhallaRequest";
 import type { LngLatBoundsLike } from "maplibre-gl";
 
@@ -156,18 +157,21 @@ async function tickRoute() {
 	}
 
 	const bgi = currentManeuver.begin_shape_index;
-	const location = getUserLocation();
+	const loc = {
+		lat: location.lat,
+		lon: location.lng,
+	};
 	const polyline = decodePolyline(trip.legs[0].shape);
 
 	// Check if the user location is on the last point of the entire route
-	if (isOnPoint(location, polyline[polyline.length - 1])) {
+	if (isOnPoint(loc, polyline[polyline.length - 1])) {
 		console.log("Reached destination!");
 		stopNavigation();
 		return;
 	}
 
 	// Check if the user is on the route
-	if (!isOnShape(location, polyline)) {
+	if (!isOnShape(loc, polyline)) {
 		console.log("Off route!");
 		info.isOffRoute = true;
 		// TODO: Implement re-routing logic
@@ -180,20 +184,25 @@ async function tickRoute() {
 		currentManeuver.verbal_pre_transition_instruction &&
 		!hasAnnouncedPreInstruction
 	) {
-		const distanceToEnd = calculateDistance(location, polyline[bgi]);
+		const distanceToEnd = calculateDistance(loc, polyline[bgi]);
 		// console.log("Distance to end of current maneuver: ", distanceToEnd, " meters");
-		if (distanceToEnd <= 100) {
+		console.log("Speed: ", location.speed, " km/h");
+		const verbalDistance = verbalPreInstructionDistance(
+			location.speed || 50, // Assuming location has a speed property
+		);
+		if (distanceToEnd <= verbalDistance) {
 			hasAnnouncedPreInstruction = true;
 			console.log(
 				"[Verbal instruction] ",
 				currentManeuver.verbal_pre_transition_instruction,
 			);
+			say(currentManeuver.verbal_pre_transition_instruction);
 		}
 	}
 
 	// Check if the user is past the current maneuver
 	// Checks if the user is still on the current maneuver's polyline
-	if (!isOnShape(location, polyline.slice(bgi))) {
+	if (!isOnShape(loc, polyline.slice(bgi))) {
 		return; // User is not on the current maneuver's polyline, do not update
 	}
 
@@ -208,7 +217,7 @@ async function tickRoute() {
 	if (currentManeuver.verbal_post_transition_instruction) {
 		hasAnnouncedPreInstruction = false;
 		const distanceToEnd = calculateDistance(
-			location,
+			loc,
 			polyline[
 				trip.legs[0].maneuvers[routing.currentTripInfo.maneuverIdx + 1]
 					.begin_shape_index
@@ -219,6 +228,7 @@ async function tickRoute() {
 				"[Verbal instruction] ",
 				currentManeuver.verbal_post_transition_instruction,
 			);
+			say(currentManeuver.verbal_post_transition_instruction);
 		}
 	}
 
@@ -232,7 +242,14 @@ async function tickRoute() {
 
 	info.currentManeuver = trip.legs[0].maneuvers[info.maneuverIdx];
 
+	// queueSpeech(info.currentManeuver.verbal_pre_transition_instruction || "");
+	// queueSpeech(info.currentManeuver.verbal_post_transition_instruction || "");
+
 	// TODO: verbal instructions
+}
+
+function verbalPreInstructionDistance(speed: number): number {
+	return (speed * 2.222) + 37.144;
 }
 
 export function stopNavigation() {
@@ -245,20 +262,20 @@ export function stopNavigation() {
 	removeAllRoutes();
 }
 
-function getUserLocation(): WorldLocation {
-	// return geolocate.currentLocation!;
-	return {
-		lat: location.lat,
-		lon: location.lng,
-	};
-	// const lnglat = window.geolocate._userLocationDotMarker.getLngLat();
-	// return { lat: lnglat.lat, lon: lnglat.lng };
-	// console.log(map.value!)
-	// return {
-	// 	lat: 0,
-	// 	lon: 0
-	// }
-}
+// function getUserLocation(): WorldLocation {
+// 	// return geolocate.currentLocation!;
+// 	return {
+// 		lat: location.lat,
+// 		lon: location.lng,
+// 	};
+// 	// const lnglat = window.geolocate._userLocationDotMarker.getLngLat();
+// 	// return { lat: lnglat.lat, lon: lnglat.lng };
+// 	// console.log(map.value!)
+// 	// return {
+// 	// 	lat: 0,
+// 	// 	lon: 0
+// 	// }
+// }
 
 function isOnLine(
 	location: WorldLocation,
