@@ -5,7 +5,7 @@ import Duck from "../DuckPlugin";
 export let tts: TextToSpeechPlugin | "web" | null = null;
 
 export async function initTTS() {
-	if(Capacitor.isNativePlatform()) {
+	if (Capacitor.isNativePlatform()) {
 		console.log("Using Capacitor TTS");
 		tts = (await import("@capacitor-community/text-to-speech")).TextToSpeech;
 	} else {
@@ -15,14 +15,14 @@ export async function initTTS() {
 }
 
 export default async function say(text: string) {
-	if(!tts) {
+	if (!tts) {
 		// alert("TTS not initialized");
 		// console.error("TTS not initialized");
 		await initTTS();
 		// return;
 	}
 	Duck.duck();
-	if(tts !== "web") {
+	if (tts !== "web") {
 		try {
 			await tts?.speak({
 				text: text,

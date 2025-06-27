@@ -65,7 +65,9 @@
 		<Input bind:value={toLocation} />
 	</div>
 	<span>
-		You can use <strong>current</strong> for your current location, <strong>home</strong> or <strong>work</strong> for saved locations.
+		You can use <strong>current</strong> for your current location,
+		<strong>home</strong>
+		or <strong>work</strong> for saved locations.
 	</span>
 </div>
 <Button
@@ -98,7 +100,7 @@
 		]);
 		const res = await fetchRoute(ROUTING_SERVER, req);
 		routes = [res.trip];
-		if(res.alternates) {
+		if (res.alternates) {
 			for (const alternate of res.alternates) {
 				if (alternate.trip) {
 					routes.push(alternate.trip);
@@ -122,7 +124,9 @@
 				{#if i == 0}
 					<StarIcon />
 				{/if}
-				{Math.round(route.summary.length)}km - {formatTime(Math.round(route.summary.time))}
+				{Math.round(route.summary.length)}km - {formatTime(
+					Math.round(route.summary.time),
+				)}
 			</Button>
 		{/each}
 	</div>

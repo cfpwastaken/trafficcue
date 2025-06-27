@@ -13,7 +13,7 @@ class DuckWeb extends WebPlugin implements DuckPlugin {
 }
 
 const Duck = registerPlugin<DuckPlugin>("Duck", {
-	web: new DuckWeb()
+	web: new DuckWeb(),
 });
 
 export default Duck;

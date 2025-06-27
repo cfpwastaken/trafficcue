@@ -108,10 +108,15 @@
 >
 	<div class="p-2 flex gap-2">
 		{#if routing.currentTripInfo.currentManeuver?.type === 26 || routing.currentTripInfo.currentManeuver?.type === 27}
-			{@const exit = routing.currentTripInfo.currentManeuver?.type === 26
-				?	routing.currentTripInfo.currentManeuver?.roundabout_exit_count
-				: routing.currentTrip?.legs[0].maneuvers[routing.currentTripInfo.maneuverIdx - 1].roundabout_exit_count}
-			<span class="border-white border-4 rounded-full text-3xl flex items-center justify-center w-12 h-12">
+			{@const exit =
+				routing.currentTripInfo.currentManeuver?.type === 26
+					? routing.currentTripInfo.currentManeuver?.roundabout_exit_count
+					: routing.currentTrip?.legs[0].maneuvers[
+							routing.currentTripInfo.maneuverIdx - 1
+						].roundabout_exit_count}
+			<span
+				class="border-white border-4 rounded-full text-3xl flex items-center justify-center w-12 h-12"
+			>
 				{exit}
 			</span>
 		{:else}

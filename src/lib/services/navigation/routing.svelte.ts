@@ -194,11 +194,13 @@ async function tickRoute() {
 		);
 		if (distanceToEnd <= verbalDistance) {
 			hasAnnouncedPreInstruction = true;
-			const instruction = USE_LANDMARK_INSTRUCTIONS ? await generateVoiceGuidance(currentManeuver, polyline) : currentManeuver.verbal_pre_transition_instruction;
+			const instruction = USE_LANDMARK_INSTRUCTIONS
+				? await generateVoiceGuidance(currentManeuver, polyline)
+				: currentManeuver.verbal_pre_transition_instruction;
 			console.log(
 				"[Verbal instruction] ",
 				// currentManeuver.verbal_pre_transition_instruction,
-				instruction
+				instruction,
 			);
 			say(instruction);
 		}
@@ -253,7 +255,7 @@ async function tickRoute() {
 }
 
 function verbalPreInstructionDistance(speed: number): number {
-	return (speed * 2.222) + 37.144;
+	return speed * 2.222 + 37.144;
 }
 
 export function stopNavigation() {

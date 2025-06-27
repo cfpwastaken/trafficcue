@@ -9,7 +9,10 @@
 	} from "svelte-maplibre-gl";
 	import { view } from "./sidebar.svelte";
 	import { map, pin } from "./map.svelte";
-	import { decodePolyline, routing } from "$lib/services/navigation/routing.svelte";
+	import {
+		decodePolyline,
+		routing,
+	} from "$lib/services/navigation/routing.svelte";
 	import { location } from "./location.svelte";
 
 	onMount(() => {
@@ -84,18 +87,26 @@
 		{/each} -->
 		<Marker
 			lnglat={{
-				lat: decodePolyline(routing.currentTrip!.legs[0].shape)[routing.currentTripInfo.currentManeuver!.begin_shape_index].lat,
-				lng: decodePolyline(routing.currentTrip!.legs[0].shape)[routing.currentTripInfo.currentManeuver!.begin_shape_index].lon
+				lat: decodePolyline(routing.currentTrip!.legs[0].shape)[
+					routing.currentTripInfo.currentManeuver!.begin_shape_index
+				].lat,
+				lng: decodePolyline(routing.currentTrip!.legs[0].shape)[
+					routing.currentTripInfo.currentManeuver!.begin_shape_index
+				].lon,
 			}}
 			color="lime"
-			/>
+		/>
 		<Marker
 			lnglat={{
-				lat: decodePolyline(routing.currentTrip!.legs[0].shape)[routing.currentTripInfo.currentManeuver!.end_shape_index].lat,
-				lng: decodePolyline(routing.currentTrip!.legs[0].shape)[routing.currentTripInfo.currentManeuver!.end_shape_index].lon
+				lat: decodePolyline(routing.currentTrip!.legs[0].shape)[
+					routing.currentTripInfo.currentManeuver!.end_shape_index
+				].lat,
+				lng: decodePolyline(routing.currentTrip!.legs[0].shape)[
+					routing.currentTripInfo.currentManeuver!.end_shape_index
+				].lon,
 			}}
 			color="red"
-			/>
+		/>
 	{/if}
 	<!-- <Hash /> -->
 	<!-- <GeolocateControl
