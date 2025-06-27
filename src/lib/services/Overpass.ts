@@ -51,8 +51,8 @@ export async function fetchPOI(lat: number, lon: number, radius: number) {
   node(around:${radius}, ${lat}, ${lon})["shop"]["name"];
   way(around:${radius}, ${lat}, ${lon})["shop"]["name"];
   relation(around:${radius}, ${lat}, ${lon})["shop"]["name"];
-  node(around:${radius}, ${lat}, ${lon})["building"]["building"!="garage"];
-  way(around:${radius}, ${lat}, ${lon})["building"]["building"!="garage"];
+  node(around:${radius}, ${lat}, ${lon})["building"]["building"!="garage"]["building"!="roof"];
+  way(around:${radius}, ${lat}, ${lon})["building"]["building"!="garage"]["building"!="roof"];
   node(around:${radius}, ${lat}, ${lon})["amenity"="parking"];
   way(around:${radius}, ${lat}, ${lon})["amenity"="parking"];
 );
