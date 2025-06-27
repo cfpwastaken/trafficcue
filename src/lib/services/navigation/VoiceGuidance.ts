@@ -2,12 +2,20 @@ import { OVERPASS_SERVER } from "../hosts";
 import type { OverpassResult } from "../Overpass";
 
 export async function generateVoiceGuidance(maneuver: Maneuver, shape: WorldLocation[]): Promise<string> {
+	if(maneuver.begin_shape_index == 0) {
+		return maneuver.verbal_pre_transition_instruction;
+	}
+
+	if(maneuver.type === 26 || maneuver.type === 27) {
+		return `Im Kreisverkehr die ${maneuver.roundabout_exit_count}te Ausfahrt nehmen${(maneuver.street_names ?? []).length == 0 ? "." : ` auf ${(maneuver.street_names || []).join(", ")}.`}`;
+	}
+
 	const landmarks = await findNearbyLandmarks(shape[maneuver.begin_shape_index]);
 	if(landmarks.length == 0) {
 		return maneuver.verbal_pre_transition_instruction;
 	}
 	console.log("Original instruction:", maneuver.verbal_pre_transition_instruction);
-	return `Hinter ${landmarks[0].tags.name}, ${typeToName(maneuver.type)} auf ${(maneuver.street_names || []).join(", ")}.`;
+	return `Hinter ${landmarks[0].tags.name}, ${typeToName(maneuver.type)}${(maneuver.street_names ?? []).length == 0 ? "." : ` auf ${(maneuver.street_names || []).join(", ")}.`}`;
 }
 
 function typeToName(type: number) {
@@ -47,9 +55,9 @@ function typeToName(type: number) {
 			return "Links halten";
 		case 25:
 			return "Einordnen";
-		case 26:
-		case 27:
-			return "Kreisverkehr";
+		// case 26:
+		// case 27:
+		// 	return "Kreisverkehr";
 		case 37:
 			return "Rechts einordnen";
 		case 38:
@@ -67,6 +75,8 @@ export async function findNearbyLandmarks(location: WorldLocation) {
 			method: "POST",
 			body: `[out:json];
 	(
+		node(around:${radius}, ${lat}, ${lon})["amenity"="fuel"]["name"];
+		way(around:${radius}, ${lat}, ${lon})["amenity"="fuel"]["name"];
 		node(around:${radius}, ${lat}, ${lon})["tourism"="artwork"]["name"];
 		way(around:${radius}, ${lat}, ${lon})["tourism"="artwork"]["name"];
 		node(around:${radius}, ${lat}, ${lon})["shop"]["name"];
