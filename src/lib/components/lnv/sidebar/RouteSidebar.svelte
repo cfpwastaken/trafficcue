@@ -90,9 +90,11 @@
 		]);
 		const res = await fetchRoute(ROUTING_SERVER, req);
 		routes = [res.trip];
-		for (const alternate of res.alternates) {
-			if (alternate.trip) {
-				routes.push(alternate.trip);
+		if(res.alternates) {
+			for (const alternate of res.alternates) {
+				if (alternate.trip) {
+					routes.push(alternate.trip);
+				}
 			}
 		}
 		drawAllRoutes(routes);
