@@ -9,7 +9,7 @@
 	} from "svelte-maplibre-gl";
 	import { view } from "./sidebar.svelte";
 	import { map, pin } from "./map.svelte";
-	import { routing } from "$lib/services/navigation/routing.svelte";
+	import { decodePolyline, routing } from "$lib/services/navigation/routing.svelte";
 	import { location } from "./location.svelte";
 
 	onMount(() => {
@@ -19,6 +19,8 @@
 
 	let locationDot: HTMLDivElement | undefined = $state();
 	let locationAccuracyCircle: HTMLDivElement | undefined = $state();
+
+	const DEBUG_POINTS = false; // Set to true to show debug points on the map
 </script>
 
 <Protocol
@@ -73,6 +75,28 @@
 		}
 	}}
 >
+	{#if routing.currentTrip && DEBUG_POINTS}
+		<!-- {#each decodePolyline(routing.currentTrip!.legs[0].shape) as point (point)}
+			<Marker
+				lnglat={{ lat: point.lat, lng: point.lon }}
+				color="orange"
+			/>
+		{/each} -->
+		<Marker
+			lnglat={{
+				lat: decodePolyline(routing.currentTrip!.legs[0].shape)[routing.currentTripInfo.currentManeuver!.begin_shape_index].lat,
+				lng: decodePolyline(routing.currentTrip!.legs[0].shape)[routing.currentTripInfo.currentManeuver!.begin_shape_index].lon
+			}}
+			color="lime"
+			/>
+		<Marker
+			lnglat={{
+				lat: decodePolyline(routing.currentTrip!.legs[0].shape)[routing.currentTripInfo.currentManeuver!.end_shape_index].lat,
+				lng: decodePolyline(routing.currentTrip!.legs[0].shape)[routing.currentTripInfo.currentManeuver!.end_shape_index].lon
+			}}
+			color="red"
+			/>
+	{/if}
 	<!-- <Hash /> -->
 	<!-- <GeolocateControl
 		positionOptions={{
