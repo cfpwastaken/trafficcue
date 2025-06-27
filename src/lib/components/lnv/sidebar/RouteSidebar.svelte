@@ -17,6 +17,7 @@
 		DefaultVehicle,
 		selectedVehicle,
 	} from "$lib/vehicles/vehicles.svelte";
+	import { location } from "../location.svelte";
 
 	let {
 		from,
@@ -67,23 +68,27 @@
 <Button
 	onclick={async () => {
 		const FROM: WorldLocation =
-			fromLocation == "home"
-				? JSON.parse(localStorage.getItem("saved.home")!)
-				: fromLocation == "work"
-					? JSON.parse(localStorage.getItem("saved.work")!)
-					: {
-							lat: parseFloat(fromLocation.split(",")[0]),
-							lon: parseFloat(fromLocation.split(",")[1]),
-						};
+			fromLocation == "current"
+				? { lat: location.lat, lon: location.lng }
+				: fromLocation == "home"
+					? JSON.parse(localStorage.getItem("saved.home")!)
+					: fromLocation == "work"
+						? JSON.parse(localStorage.getItem("saved.work")!)
+						: {
+								lat: parseFloat(fromLocation.split(",")[0]),
+								lon: parseFloat(fromLocation.split(",")[1]),
+							};
 		const TO: WorldLocation =
-			toLocation == "home"
-				? JSON.parse(localStorage.getItem("saved.home")!)
-				: toLocation == "work"
-					? JSON.parse(localStorage.getItem("saved.work")!)
-					: {
-							lat: parseFloat(toLocation.split(",")[0]),
-							lon: parseFloat(toLocation.split(",")[1]),
-						};
+			toLocation == "current"
+				? { lat: location.lat, lon: location.lng }
+				: toLocation == "home"
+					? JSON.parse(localStorage.getItem("saved.home")!)
+					: toLocation == "work"
+						? JSON.parse(localStorage.getItem("saved.work")!)
+						: {
+								lat: parseFloat(toLocation.split(",")[0]),
+								lon: parseFloat(toLocation.split(",")[1]),
+							};
 		const req = createValhallaRequest(selectedVehicle() ?? DefaultVehicle, [
 			FROM,
 			TO,
