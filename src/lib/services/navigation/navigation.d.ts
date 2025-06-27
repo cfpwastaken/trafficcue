@@ -81,4 +81,5 @@ interface Maneuver {
 	verbal_pre_transition_instruction: string;
 	verbal_succinct_transition_instruction: string;
 	lanes?: Lane[];
+	roundabout_exit_count?: number; // Only for roundabouts
 }
