@@ -64,6 +64,9 @@
 		<CircleDotIcon />
 		<Input bind:value={toLocation} />
 	</div>
+	<span>
+		You can use <strong>current</strong> for your current location, <strong>home</strong> or <strong>work</strong> for saved locations.
+	</span>
 </div>
 <Button
 	onclick={async () => {
