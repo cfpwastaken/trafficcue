@@ -143,6 +143,7 @@ export async function startRoute(trip: Trip) {
 }
 
 let hasAnnouncedPreInstruction = false;
+const USE_LANDMARK_INSTRUCTIONS = false;
 
 async function tickRoute() {
 	const trip = routing.currentTrip;
@@ -187,13 +188,13 @@ async function tickRoute() {
 	) {
 		const distanceToEnd = calculateDistance(loc, polyline[bgi]);
 		// console.log("Distance to end of current maneuver: ", distanceToEnd, " meters");
-		console.log("Speed: ", location.speed, " km/h");
+		// console.log("Speed: ", location.speed, " km/h");
 		const verbalDistance = verbalPreInstructionDistance(
 			location.speed || 50, // Assuming location has a speed property
 		);
 		if (distanceToEnd <= verbalDistance) {
 			hasAnnouncedPreInstruction = true;
-			const instruction = await generateVoiceGuidance(currentManeuver, polyline);
+			const instruction = USE_LANDMARK_INSTRUCTIONS ? await generateVoiceGuidance(currentManeuver, polyline) : currentManeuver.verbal_pre_transition_instruction;
 			console.log(
 				"[Verbal instruction] ",
 				// currentManeuver.verbal_pre_transition_instruction,
