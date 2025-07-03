@@ -14,6 +14,7 @@
 		routing,
 	} from "$lib/services/navigation/routing.svelte";
 	import { location } from "./location.svelte";
+	import { protocol } from "$lib/services/OfflineTiles";
 
 	onMount(() => {
 		window.addEventListener("resize", map.updateMapPadding);
@@ -27,6 +28,10 @@
 </script>
 
 <Protocol
+	scheme="tiles"
+	loadFn={protocol} />
+
+<!-- <Protocol
 	scheme="tiles"
 	loadFn={async (params) => {
 		console.log(params.url);
@@ -54,7 +59,7 @@
 			throw new Error("Invalid tiles protocol path");
 		}
 	}}
-/>
+/> -->
 
 <MapLibre
 	class="w-full h-full"
@@ -64,6 +69,8 @@
 	onload={async () => {
 		map.updateMapPadding();
 		location.locked = true;
+		// @ts-expect-error - not typed
+		window.map = map.value;
 	}}
 	onclick={(e) => {
 		if (view.current.type == "main" || view.current.type == "info") {

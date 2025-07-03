@@ -28,6 +28,7 @@
 	import { routing } from "$lib/services/navigation/routing.svelte";
 	import InRouteSidebar from "./sidebar/InRouteSidebar.svelte";
 	import say from "$lib/services/navigation/TTS";
+	import { test } from "$lib/services/OfflineTiles";
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const views: Record<string, Component<any>> = {
@@ -206,6 +207,16 @@
 						}}
 					>
 						Test TTS
+					</Button>
+					<Button
+						variant="outline"
+						onclick={async () => {
+							const url = prompt("URL?");
+							if(!url) return;
+							await test(url);
+						}}
+					>
+						Test Offline tiles
 					</Button>
 				</div>
 			</Popover.Content>
