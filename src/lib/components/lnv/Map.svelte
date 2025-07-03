@@ -27,9 +27,7 @@
 	const DEBUG_POINTS = false; // Set to true to show debug points on the map
 </script>
 
-<Protocol
-	scheme="tiles"
-	loadFn={protocol} />
+<Protocol scheme="tiles" loadFn={protocol} />
 
 <!-- <Protocol
 	scheme="tiles"

@@ -130,7 +130,7 @@ function drawCurrentTrip() {
 }
 
 export async function startRoute(trip: Trip) {
-	if(Capacitor.isNativePlatform()) {
+	if (Capacitor.isNativePlatform()) {
 		await KeepAwake.keepAwake();
 	}
 	routing.currentTrip = trip;
@@ -271,7 +271,7 @@ export function stopNavigation() {
 	routing.currentTrip = null;
 	map.updateMapPadding(); // TODO: REMOVE
 	removeAllRoutes();
-	if(Capacitor.isNativePlatform()) {
+	if (Capacitor.isNativePlatform()) {
 		KeepAwake.allowSleep();
 	}
 }

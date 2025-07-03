@@ -212,7 +212,7 @@
 						variant="outline"
 						onclick={async () => {
 							const url = prompt("URL?");
-							if(!url) return;
+							if (!url) return;
 							await test(url);
 						}}
 					>

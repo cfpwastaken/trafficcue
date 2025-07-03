@@ -1,4 +1,8 @@
-import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from "@capacitor-community/sqlite";
+import {
+	CapacitorSQLite,
+	SQLiteConnection,
+	SQLiteDBConnection,
+} from "@capacitor-community/sqlite";
 import initSqlJs from "sql.js";
 import { Buffer } from "buffer";
 import { Capacitor } from "@capacitor/core";
@@ -9,8 +13,8 @@ let db: SQLiteDBConnection;
 
 export async function downloadMBTiles(url: string): Promise<Uint8Array> {
 	return fetch(url)
-		.then(res => res.arrayBuffer())
-		.then(ab => new Uint8Array(ab))
+		.then((res) => res.arrayBuffer())
+		.then((ab) => new Uint8Array(ab));
 }
 
 export async function copyMBTiles(data: Uint8Array) {
@@ -37,13 +41,18 @@ export async function copyMBTiles(data: Uint8Array) {
 	const total = res[0].values.length;
 	for (const [idx, row] of res[0].values.entries()) {
 		const [z, x, y, data] = row;
-		await db.run(`INSERT OR REPLACE INTO tiles (z, x, y, data) VALUES (?, ?, ?, ?)`, [
-			z,
-			x,
-			y,
-			Buffer.from(data as Uint8Array) // Convert Uint8Array to Buffer
-		]);
-		console.log(`Inserted tile z=${z}, x=${x}, y=${y}. Item ${idx + 1} of ${total}`);
+		await db.run(
+			`INSERT OR REPLACE INTO tiles (z, x, y, data) VALUES (?, ?, ?, ?)`,
+			[
+				z,
+				x,
+				y,
+				Buffer.from(data as Uint8Array), // Convert Uint8Array to Buffer
+			],
+		);
+		console.log(
+			`Inserted tile z=${z}, x=${x}, y=${y}. Item ${idx + 1} of ${total}`,
+		);
 	}
 	console.log(`Copied ${res[0].values.length} tiles from MBTiles data`);
 }
@@ -55,7 +64,7 @@ export async function test(url: string) {
 }
 
 export async function initDB() {
-	if(!Capacitor.isNativePlatform()) {
+	if (!Capacitor.isNativePlatform()) {
 		throw new Error("initDB is only available on native platforms");
 	}
 	console.log("Initializing SQLite database for tiles");
@@ -69,11 +78,13 @@ export async function initDB() {
 		data BLOB NOT NULL,
 		PRIMARY KEY (z, x, y)
 	)`);
-	await db.execute(`CREATE INDEX IF NOT EXISTS idx_tiles_zxy ON tiles (z, x, y)`);
+	await db.execute(
+		`CREATE INDEX IF NOT EXISTS idx_tiles_zxy ON tiles (z, x, y)`,
+	);
 }
 
 async function deleteDB() {
-	if(!Capacitor.isNativePlatform()) {
+	if (!Capacitor.isNativePlatform()) {
 		throw new Error("deleteDB is only available on native platforms");
 	}
 	await db.execute(`DROP TABLE IF EXISTS tiles`);
@@ -86,8 +97,15 @@ window.deleteDB = deleteDB;
 // @ts-expect-error aaaaa
 window.initDB = initDB;
 
-export async function getTile(z: number, x: number, y: number): Promise<Uint8Array | null> {
-	const res = await db.query(`SELECT data FROM tiles WHERE z = ? AND x = ? AND y = ?`, [z, x, y]);
+export async function getTile(
+	z: number,
+	x: number,
+	y: number,
+): Promise<Uint8Array | null> {
+	const res = await db.query(
+		`SELECT data FROM tiles WHERE z = ? AND x = ? AND y = ?`,
+		[z, x, y],
+	);
 	if (!res.values || res.values.length === 0) {
 		return null;
 	}
@@ -99,22 +117,25 @@ export async function getTile(z: number, x: number, y: number): Promise<Uint8Arr
 window.getTile = getTile;
 
 async function decompressGzip(blob: Uint8Array): Promise<Uint8Array> {
-  // const ds = new DecompressionStream("gzip");
-  // const decompressedStream = new Blob([blob]).stream().pipeThrough(ds);
-  // return new Uint8Array(await new Response(decompressedStream).arrayBuffer());
+	// const ds = new DecompressionStream("gzip");
+	// const decompressedStream = new Blob([blob]).stream().pipeThrough(ds);
+	// return new Uint8Array(await new Response(decompressedStream).arrayBuffer());
 	return ungzip(blob);
 }
 
-
-export async function protocol(params: { url: string }): Promise<{ data: Uint8Array }> {
+export async function protocol(params: {
+	url: string;
+}): Promise<{ data: Uint8Array }> {
 	console.log("Protocol called with params:", params);
 	const url = new URL(params.url);
 	const pathname = url.pathname.replace(/^\//, ""); // Remove leading slash
 	const z = parseInt(pathname.split("/")[0]);
 	const x = parseInt(pathname.split("/")[1]);
 	const y = parseInt(pathname.split("/")[2]);
-	if(!Capacitor.isNativePlatform()) {
-		const t = await fetch(`https://tiles.openfreemap.org/planet/20250528_001001_pt/${z}/${x}/${y}.pbf`);
+	if (!Capacitor.isNativePlatform()) {
+		const t = await fetch(
+			`https://tiles.openfreemap.org/planet/20250528_001001_pt/${z}/${x}/${y}.pbf`,
+		);
 		if (t.status == 200) {
 			const buffer = await t.arrayBuffer();
 			return { data: new Uint8Array(buffer) };
@@ -122,7 +143,7 @@ export async function protocol(params: { url: string }): Promise<{ data: Uint8Ar
 			throw new Error(`Tile fetch error: ${t.statusText}`);
 		}
 	}
-	if(!db) {
+	if (!db) {
 		await initDB();
 	}
 	const tmsY = (1 << z) - 1 - y; // Invert y for TMS
@@ -131,8 +152,8 @@ export async function protocol(params: { url: string }): Promise<{ data: Uint8Ar
 	if (!data) {
 		console.warn(`Tile not found: z=${z}, x=${x}, y=${y}`);
 		return {
-			data: new Uint8Array() // Return empty array if tile not found
-		}
+			data: new Uint8Array(), // Return empty array if tile not found
+		};
 	}
 	// return { data: await fetch("/0.pbf").then(res => res.arrayBuffer()).then(ab => new Uint8Array(ab)) };
 	return { data };
