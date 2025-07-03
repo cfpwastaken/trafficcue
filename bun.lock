@@ -4,6 +4,7 @@
     "": {
       "name": "librenav",
       "dependencies": {
+        "@capacitor-community/keep-awake": "^7.1.0",
         "@capacitor-community/native-audio": "^7.0.0",
         "@capacitor-community/sqlite": "^7.0.0",
         "@capacitor-community/text-to-speech": "^6.0.0",
@@ -53,6 +54,8 @@
     "@ampproject/remapping": ["@ampproject/remapping@2.3.0", "", { "dependencies": { "@jridgewell/gen-mapping": "^0.3.5", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw=="],
 
     "@babel/runtime": ["@babel/runtime@7.27.3", "", {}, "sha512-7EYtGezsdiDMyY80+65EzwiGmcJqpmcZCojSXaRgdrBaGtWTgDZKq69cPIVped6MkIM78cTQ2GOiEYjwOlG4xw=="],
+
+    "@capacitor-community/keep-awake": ["@capacitor-community/keep-awake@7.1.0", "", { "peerDependencies": { "@capacitor/core": ">=7.0.0" } }, "sha512-4Hj6OKnBd/DAOeiMnqBy74tg1rwC+qLYWQbWJmysMZm2e2nptz43hxaKu22Xlyyw5O71CwwskLCM0skDFMPpQQ=="],
 
     "@capacitor-community/native-audio": ["@capacitor-community/native-audio@7.0.0", "", { "peerDependencies": { "@capacitor/core": ">=7.0.0" } }, "sha512-wi2l68tU6KDLJWKL6I0lPUKOdB+hNxlvF7RMe/jfkKOMZnd1eUq7kszmbMqyGFZFIxdNG/GMiZrEztZHDypf8A=="],
 

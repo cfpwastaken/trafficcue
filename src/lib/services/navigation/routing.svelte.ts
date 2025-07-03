@@ -4,6 +4,8 @@ import say from "./TTS";
 import type { ValhallaRequest } from "./ValhallaRequest";
 import type { LngLatBoundsLike } from "maplibre-gl";
 import { generateVoiceGuidance } from "./VoiceGuidance";
+import { Capacitor } from "@capacitor/core";
+import { KeepAwake } from "@capacitor-community/keep-awake";
 
 export const routing = $state({
 	geojson: {
@@ -128,6 +130,9 @@ function drawCurrentTrip() {
 }
 
 export async function startRoute(trip: Trip) {
+	if(Capacitor.isNativePlatform()) {
+		await KeepAwake.keepAwake();
+	}
 	routing.currentTrip = trip;
 	removeAllRoutes();
 	routing.geojson.route = tripToGeoJSON(trip);
@@ -266,6 +271,9 @@ export function stopNavigation() {
 	routing.currentTrip = null;
 	map.updateMapPadding(); // TODO: REMOVE
 	removeAllRoutes();
+	if(Capacitor.isNativePlatform()) {
+		KeepAwake.allowSleep();
+	}
 }
 
 // function getUserLocation(): WorldLocation {
