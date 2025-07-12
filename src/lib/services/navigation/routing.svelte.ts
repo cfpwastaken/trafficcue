@@ -260,7 +260,7 @@ async function tickRoute() {
 }
 
 function verbalPreInstructionDistance(speed: number): number {
-	return speed * 2.222 + 37.144;
+	return Math.min(speed, 30) * 2.222 + 37.144;
 }
 
 export function stopNavigation() {
