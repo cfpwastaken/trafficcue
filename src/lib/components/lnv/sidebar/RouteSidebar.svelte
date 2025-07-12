@@ -18,6 +18,7 @@
 		selectedVehicle,
 	} from "$lib/vehicles/vehicles.svelte";
 	import { location } from "../location.svelte";
+	import { saved } from "$lib/saved.svelte";
 
 	let {
 		from,
@@ -76,9 +77,9 @@
 			fromLocation == "current"
 				? { lat: location.lat, lon: location.lng }
 				: fromLocation == "home"
-					? JSON.parse(localStorage.getItem("saved.home")!)
+					? saved.home
 					: fromLocation == "work"
-						? JSON.parse(localStorage.getItem("saved.work")!)
+						? saved.work
 						: {
 								lat: parseFloat(fromLocation.split(",")[0]),
 								lon: parseFloat(fromLocation.split(",")[1]),
@@ -87,9 +88,9 @@
 			toLocation == "current"
 				? { lat: location.lat, lon: location.lng }
 				: toLocation == "home"
-					? JSON.parse(localStorage.getItem("saved.home")!)
+					? saved.home
 					: toLocation == "work"
-						? JSON.parse(localStorage.getItem("saved.work")!)
+						? saved.work
 						: {
 								lat: parseFloat(toLocation.split(",")[0]),
 								lon: parseFloat(toLocation.split(",")[1]),
