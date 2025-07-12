@@ -7,6 +7,7 @@ import { view } from "./sidebar.svelte";
 
 export const map = $state({
 	value: undefined as maplibregl.Map | undefined,
+	zoom: 0,
 	updateMapPadding: () => {
 		if (document.querySelector<HTMLDivElement>("#sidebar") == null) {
 			map._setPadding({

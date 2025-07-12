@@ -7,6 +7,7 @@
 	import VehicleSelector from "../VehicleSelector.svelte";
 	import Post from "../Post.svelte";
 	import RequiresCapability from "../RequiresCapability.svelte";
+	import { saved } from "$lib/saved.svelte";
 </script>
 
 <div
@@ -18,12 +19,11 @@
 		variant="secondary"
 		class="flex-1"
 		onclick={() => {
-			const home = localStorage.getItem("saved.home");
-			if (!home) {
+			const { lat, lon } = saved.home;
+			if (!lat || !lon) {
 				alert("No home location saved.");
 				return;
 			}
-			const { lat, lon } = JSON.parse(home);
 			pin.dropPin(lat, lon);
 			pin.showInfo();
 			map.value?.flyTo({
@@ -39,12 +39,11 @@
 		variant="secondary"
 		class="flex-1"
 		onclick={() => {
-			const work = localStorage.getItem("saved.work");
-			if (!work) {
+			const { lat, lon } = saved.work;
+			if (!lat || !lon) {
 				alert("No work location saved.");
 				return;
 			}
-			const { lat, lon } = JSON.parse(work);
 			pin.dropPin(lat, lon);
 			pin.showInfo();
 			map.value?.flyTo({

@@ -21,6 +21,7 @@
 	import Reviews from "../info/Reviews.svelte";
 	import MapAi from "../info/MapAI.svelte";
 	import RequiresCapability from "../RequiresCapability.svelte";
+	import { saved, saveLocations } from "$lib/saved.svelte";
 
 	// let { feature }: { feature: Feature } = $props();
 
@@ -170,10 +171,12 @@
 						<Button
 							variant="outline"
 							onclick={() => {
-								localStorage.setItem(
-									"saved.home",
-									JSON.stringify({ lat, lon: lng }),
-								);
+								// localStorage.setItem(
+								// 	"saved.home",
+								// 	JSON.stringify({ lat, lon: lng }),
+								// );
+								saved.home = { lat, lon: lng };
+								saveLocations();
 							}}
 						>
 							<HomeIcon />
@@ -182,10 +185,12 @@
 						<Button
 							variant="outline"
 							onclick={() => {
-								localStorage.setItem(
-									"saved.work",
-									JSON.stringify({ lat, lon: lng }),
-								);
+								// localStorage.setItem(
+								// 	"saved.work",
+								// 	JSON.stringify({ lat, lon: lng }),
+								// );
+								saved.work = { lat, lon: lng };
+								saveLocations();
 							}}
 						>
 							<BriefcaseIcon />

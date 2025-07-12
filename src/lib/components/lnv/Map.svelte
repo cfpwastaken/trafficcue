@@ -15,6 +15,7 @@
 	} from "$lib/services/navigation/routing.svelte";
 	import { location } from "./location.svelte";
 	import { protocol } from "$lib/services/OfflineTiles";
+	import { saved } from "$lib/saved.svelte";
 
 	onMount(() => {
 		window.addEventListener("resize", map.updateMapPadding);
@@ -23,6 +24,8 @@
 
 	let locationDot: HTMLDivElement | undefined = $state();
 	let locationAccuracyCircle: HTMLDivElement | undefined = $state();
+	let homeMarker: HTMLImageElement | undefined = $state();
+	let workMarker: HTMLImageElement | undefined = $state();
 
 	const DEBUG_POINTS = false; // Set to true to show debug points on the map
 </script>
@@ -63,6 +66,7 @@
 	class="w-full h-full"
 	style="/style.json"
 	bind:map={map.value}
+	bind:zoom={map.zoom}
 	padding={map.padding}
 	onload={async () => {
 		map.updateMapPadding();
@@ -119,7 +123,7 @@
 			enableHighAccuracy: true,
 		}}
 		trackUserLocation={true}
-		autoTrigger={true}
+		autoTrigger={true}""
 		ongeolocate={(e: GeolocationPosition) => {
 			const speed = Math.round((e.coords.speed || 0) * 3.6); // In km/h
 			const accuracy = Math.round(e.coords.accuracy);
@@ -132,6 +136,36 @@
 	/> -->
 	{#if pin.isDropped}
 		<Marker lnglat={{ lat: pin.lat, lng: pin.lng }} />
+	{/if}
+	{#if saved.home && map.zoom > 9}
+		<img
+			src="/img/saved/home.png"
+			alt="Home Marker"
+			bind:this={homeMarker}
+			style="width: 32px;"
+		/>
+		<Marker
+			lnglat={{
+				lat: saved.home.lat,
+				lng: saved.home.lon,
+			}}
+			element={homeMarker}
+		/>
+	{/if}
+	{#if saved.work && map.zoom > 9}
+		<img
+			src="/img/saved/work.png"
+			alt="Work Marker"
+			bind:this={workMarker}
+			style="width: 32px;"
+		/>
+		<Marker
+			lnglat={{
+				lat: saved.work.lat,
+				lng: saved.work.lon,
+			}}
+			element={workMarker}
+		/>
 	{/if}
 
 	{#if routing.geojson.routePast}
