@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import {
-		MapLibre,
-		Marker,
-		Protocol,
-	} from "svelte-maplibre-gl";
+	import { MapLibre, Marker, Protocol } from "svelte-maplibre-gl";
 	import { view } from "./sidebar.svelte";
 	import { map, pin } from "./map.svelte";
 	import {
