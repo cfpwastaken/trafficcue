@@ -9,6 +9,7 @@
 		MailIcon,
 		PhoneIcon,
 		RouteIcon,
+		SchoolIcon,
 	} from "@lucide/svelte";
 	import { pin } from "../map.svelte";
 	import SidebarHeader from "./SidebarHeader.svelte";
@@ -181,6 +182,16 @@
 						>
 							<HomeIcon />
 							Set as Home
+						</Button>
+						<Button
+							variant="outline"
+							onclick={() => {
+								saved.school = { lat, lon: lng };
+								saveLocations();
+							}}
+						>
+							<SchoolIcon />
+							Set as School
 						</Button>
 						<Button
 							variant="outline"

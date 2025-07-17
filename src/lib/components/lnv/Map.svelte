@@ -21,6 +21,7 @@
 	let locationAccuracyCircle: HTMLDivElement | undefined = $state();
 	let homeMarker: HTMLImageElement | undefined = $state();
 	let workMarker: HTMLImageElement | undefined = $state();
+	let schoolMarker: HTMLImageElement | undefined = $state();
 
 	const DEBUG_POINTS = false; // Set to true to show debug points on the map
 </script>
@@ -98,6 +99,21 @@
 				lng: saved.home.lon,
 			}}
 			element={homeMarker}
+		/>
+	{/if}
+	{#if saved.school && map.zoom > 9}
+		<img
+			src="/img/saved/school.png"
+			alt="School Marker"
+			bind:this={schoolMarker}
+			style="width: 32px;"
+		/>
+		<Marker
+			lnglat={{
+				lat: saved.school.lat,
+				lng: saved.school.lon,
+			}}
+			element={schoolMarker}
 		/>
 	{/if}
 	{#if saved.work && map.zoom > 9}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BriefcaseIcon, HomeIcon } from "@lucide/svelte";
+	import { BriefcaseIcon, HomeIcon, SchoolIcon } from "@lucide/svelte";
 	import { Button } from "../../ui/button";
 	import { fly } from "svelte/transition";
 	import { circInOut } from "svelte/easing";
@@ -19,7 +19,12 @@
 		variant="secondary"
 		class="flex-1"
 		onclick={() => {
-			const { lat, lon } = saved.home;
+			const loc = saved.home;
+			if (!loc) {
+				alert("No home location saved.");
+				return;
+			}
+			const { lat, lon } = loc;
 			if (!lat || !lon) {
 				alert("No home location saved.");
 				return;
@@ -39,7 +44,38 @@
 		variant="secondary"
 		class="flex-1"
 		onclick={() => {
-			const { lat, lon } = saved.work;
+			console.log(saved);
+			const loc = saved.school;
+			if (!loc) {
+				alert("No school location saved.");
+				return;
+			}
+			const { lat, lon } = loc;
+			if (!lat || !lon) {
+				alert("No school location saved.");
+				return;
+			}
+			pin.dropPin(lat, lon);
+			pin.showInfo();
+			map.value?.flyTo({
+				center: [lon, lat],
+				zoom: 19,
+			});
+		}}
+	>
+		<SchoolIcon />
+		School
+	</Button>
+	<Button
+		variant="secondary"
+		class="flex-1"
+		onclick={() => {
+			const loc = saved.work;
+			if (!loc) {
+				alert("No work location saved.");
+				return;
+			}
+			const { lat, lon } = loc;
 			if (!lat || !lon) {
 				alert("No work location saved.");
 				return;
