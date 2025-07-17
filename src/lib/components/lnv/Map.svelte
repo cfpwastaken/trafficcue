@@ -86,9 +86,9 @@
 	{#if pin.isDropped}
 		<Marker lnglat={{ lat: pin.lat, lng: pin.lng }} />
 	{/if}
-	{#if saved.home && map.zoom > 9}
+	{#if saved.home}
 		<img
-			src="/img/saved/home.png"
+			src={map.zoom > 9 ? "/img/saved/home.png" : "/img/saved/small.png"}
 			alt="Home Marker"
 			bind:this={homeMarker}
 			style="width: 32px;"
@@ -101,9 +101,9 @@
 			element={homeMarker}
 		/>
 	{/if}
-	{#if saved.school && map.zoom > 9}
+	{#if saved.school}
 		<img
-			src="/img/saved/school.png"
+			src={map.zoom > 9 ? "/img/saved/school.png" : "/img/saved/small.png"}
 			alt="School Marker"
 			bind:this={schoolMarker}
 			style="width: 32px;"
@@ -116,9 +116,9 @@
 			element={schoolMarker}
 		/>
 	{/if}
-	{#if saved.work && map.zoom > 9}
+	{#if saved.work}
 		<img
-			src="/img/saved/work.png"
+			src={map.zoom > 9 ? "/img/saved/work.png" : "/img/saved/small.png"}
 			alt="Work Marker"
 			bind:this={workMarker}
 			style="width: 32px;"
