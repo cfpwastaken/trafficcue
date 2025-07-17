@@ -115,7 +115,7 @@
 							routing.currentTripInfo.maneuverIdx - 1
 						].roundabout_exit_count}
 			<span
-				class="border-white border-4 rounded-full text-3xl flex items-center justify-center w-12 h-12"
+				class="border-white border-4 rounded-full text-3xl flex items-center justify-center w-12 h-12 min-w-12"
 			>
 				{exit}
 			</span>
