@@ -101,11 +101,23 @@ export async function getTile(
 	z: number,
 	x: number,
 	y: number,
+	signal?: AbortSignal
 ): Promise<Uint8Array | null> {
-	const res = await db.query(
+	if (signal?.aborted) {
+		throw new DOMException("Aborted", "AbortError");
+	}
+	const abortPromise = new Promise<never>((_, reject) => {
+		if (signal) {
+			signal.addEventListener("abort", () => {
+				reject(new DOMException("Aborted", "AbortError"));
+			}, { once: true });
+		}
+	});
+	const queryPromise = db.query(
 		`SELECT data FROM tiles WHERE z = ? AND x = ? AND y = ?`,
 		[z, x, y],
 	);
+	const res = await Promise.race([queryPromise, abortPromise]);
 	if (!res.values || res.values.length === 0) {
 		return null;
 	}
@@ -125,7 +137,7 @@ async function decompressGzip(blob: Uint8Array): Promise<Uint8Array> {
 
 export async function protocol(params: {
 	url: string;
-}): Promise<{ data: Uint8Array }> {
+}, { signal }: AbortController): Promise<{ data: Uint8Array }> {
 	console.log("Protocol called with params:", params);
 	const url = new URL(params.url);
 	const pathname = url.pathname.replace(/^\//, ""); // Remove leading slash
@@ -135,6 +147,7 @@ export async function protocol(params: {
 	if (!Capacitor.isNativePlatform()) {
 		const t = await fetch(
 			`https://tiles.openfreemap.org/planet/20250528_001001_pt/${z}/${x}/${y}.pbf`,
+			{ signal }
 		);
 		if (t.status == 200) {
 			const buffer = await t.arrayBuffer();
@@ -148,7 +161,7 @@ export async function protocol(params: {
 	}
 	const tmsY = (1 << z) - 1 - y; // Invert y for TMS
 	console.log(`Fetching tile: z=${z}, x=${x}, y=${y}, tmsY=${tmsY}`);
-	const data = await getTile(z, x, tmsY);
+	const data = await getTile(z, x, tmsY, signal);
 	if (!data) {
 		console.warn(`Tile not found: z=${z}, x=${x}, y=${y}`);
 		return {
