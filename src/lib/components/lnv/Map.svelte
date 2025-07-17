@@ -86,6 +86,25 @@
 	{#if pin.isDropped}
 		<Marker lnglat={{ lat: pin.lat, lng: pin.lng }} />
 	{/if}
+
+	<RoutingLayers />
+
+	{#if location.available}
+		<div class="maplibregl-user-location-dot" bind:this={locationDot}></div>
+		<div
+			class="maplibregl-user-location-accuracy-circle"
+			bind:this={locationAccuracyCircle}
+		></div>
+		<Marker
+			lnglat={{ lat: location.lat, lng: location.lng }}
+			element={locationDot}
+		/>
+		<Marker
+			lnglat={{ lat: location.lat, lng: location.lng }}
+			element={locationAccuracyCircle}
+		/>
+	{/if}
+
 	{#if saved.home}
 		<img
 			src={map.zoom > 9 ? "/img/saved/home.png" : "/img/saved/small.png"}
@@ -129,24 +148,6 @@
 				lng: saved.work.lon,
 			}}
 			element={workMarker}
-		/>
-	{/if}
-
-	<RoutingLayers />
-
-	{#if location.available}
-		<div class="maplibregl-user-location-dot" bind:this={locationDot}></div>
-		<div
-			class="maplibregl-user-location-accuracy-circle"
-			bind:this={locationAccuracyCircle}
-		></div>
-		<Marker
-			lnglat={{ lat: location.lat, lng: location.lng }}
-			element={locationDot}
-		/>
-		<Marker
-			lnglat={{ lat: location.lat, lng: location.lng }}
-			element={locationAccuracyCircle}
 		/>
 	{/if}
 </MapLibre>
