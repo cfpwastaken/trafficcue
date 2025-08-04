@@ -59,3 +59,16 @@ export async function fetchPOI(lat: number, lon: number, radius: number) {
 out center tags;`,
 	}).then((res) => res.json() as Promise<OverpassResult>);
 }
+
+export async function fetchNearbyPOI(lat: number, lon: number, tags: string[], radius: number) {
+	return await fetch(OVERPASS_SERVER, {
+		method: "POST",
+		body: `[out:json];
+(
+	node(around:${radius}, ${lat}, ${lon})[${tags.join("][")}];
+	way(around:${radius}, ${lat}, ${lon})[${tags.join("][")}];
+	relation(around:${radius}, ${lat}, ${lon})[${tags.join("][")}];
+);
+out center tags;`,
+	}).then((res) => res.json() as Promise<OverpassResult>);
+}
