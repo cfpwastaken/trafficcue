@@ -6,6 +6,7 @@
 		"@lucide/svelte": "^0.515.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@tailwindcss/vite": "^4.0.0",
+		"@tauri-apps/cli": "^2.7.1",
 		"@tsconfig/svelte": "^5.0.4",
 		"@types/libsodium-wrappers": "^0.7.14",
 		"@types/node": "^22.15.24",
