@@ -4,8 +4,9 @@ import say from "./TTS";
 import type { ValhallaRequest } from "./ValhallaRequest";
 import type { LngLatBoundsLike } from "maplibre-gl";
 import { generateVoiceGuidance } from "./VoiceGuidance";
-import { Capacitor } from "@capacitor/core";
-import { KeepAwake } from "@capacitor-community/keep-awake";
+import { keepScreenOn } from "tauri-plugin-keep-screen-on-api";
+// import { Capacitor } from "@capacitor/core";
+// import { KeepAwake } from "@capacitor-community/keep-awake";
 
 export const routing = $state({
 	geojson: {
@@ -130,8 +131,11 @@ function drawCurrentTrip() {
 }
 
 export async function startRoute(trip: Trip) {
-	if (Capacitor.isNativePlatform()) {
+	/* if (Capacitor.isNativePlatform()) {
 		await KeepAwake.keepAwake();
+	} */
+	if(window.__TAURI__) {
+		await keepScreenOn(true);
 	}
 	routing.currentTrip = trip;
 	removeAllRoutes();
@@ -271,8 +275,11 @@ export function stopNavigation() {
 	routing.currentTrip = null;
 	map.updateMapPadding(); // TODO: REMOVE
 	removeAllRoutes();
-	if (Capacitor.isNativePlatform()) {
-		KeepAwake.allowSleep();
+	//if (Capacitor.isNativePlatform()) {
+	//	KeepAwake.allowSleep();
+	//}
+	if(window.__TAURI__) {
+		keepScreenOn(false);
 	}
 }
 
