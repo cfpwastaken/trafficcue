@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { type Component } from "svelte";
 	import InvalidSidebar from "./sidebar/InvalidSidebar.svelte";
-	import { searchbar, view } from "./sidebar.svelte";
+	import { searchbar, view } from "./view.svelte";
 	import MainSidebar from "./sidebar/MainSidebar.svelte";
 	import InfoSidebar from "./sidebar/InfoSidebar.svelte";
 	import RouteSidebar from "./sidebar/RouteSidebar.svelte";

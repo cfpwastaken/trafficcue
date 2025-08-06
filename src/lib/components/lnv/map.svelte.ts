@@ -1,5 +1,5 @@
 import { routing } from "$lib/services/navigation/routing.svelte";
-import { view } from "./sidebar.svelte";
+import { view } from "./view.svelte";
 
 // export const geolocate = $state({
 // 	currentLocation: null as WorldLocation | null,

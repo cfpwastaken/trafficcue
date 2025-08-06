@@ -2,7 +2,7 @@
 	import "./app.css";
 	import Sidebar from "./lib/components/lnv/Sidebar.svelte";
 	import { onMount } from "svelte";
-	import Map from "$lib/components/lnv/Map.svelte";
+	import Map from "$lib/components/lnv/FullscreenMap.svelte";
 	import { routing } from "$lib/services/navigation/routing.svelte";
 	import { checkWebGL } from "$lib/webgl";
 	import RoutingInfo from "$lib/components/lnv/RoutingInfo.svelte";

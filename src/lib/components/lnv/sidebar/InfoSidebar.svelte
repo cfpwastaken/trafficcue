@@ -17,7 +17,7 @@
 	import OpeningHours from "../info/OpeningHours.svelte";
 	import Badge from "$lib/components/ui/badge/badge.svelte";
 	import FuelStation from "../info/FuelStation.svelte";
-	import { view } from "../sidebar.svelte";
+	import { view } from "../view.svelte";
 	import * as Popover from "$lib/components/ui/popover";
 	import Reviews from "../info/Reviews.svelte";
 	import MapAi from "../info/MapAI.svelte";

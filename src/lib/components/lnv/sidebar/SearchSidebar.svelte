@@ -5,7 +5,7 @@
 	import { map, pin } from "../map.svelte";
 	import type { Feature } from "$lib/services/Search";
 	import SidebarHeader from "./SidebarHeader.svelte";
-	import { searchbar } from "../sidebar.svelte";
+	import { searchbar } from "../view.svelte";
 
 	let {
 		results,

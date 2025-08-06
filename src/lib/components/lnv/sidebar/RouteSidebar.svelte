@@ -12,7 +12,7 @@
 	} from "$lib/services/navigation/routing.svelte";
 	import { ROUTING_SERVER } from "$lib/services/hosts";
 	import { map } from "../map.svelte";
-	import { view } from "../sidebar.svelte";
+	import { view } from "../view.svelte";
 	import {
 		DefaultVehicle,
 		selectedVehicle,

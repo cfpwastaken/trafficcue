@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/button/button.svelte";
 	import type { Snippet } from "svelte";
-	import { view } from "../sidebar.svelte";
+	import { view } from "../view.svelte";
 
 	let {
 		children,
