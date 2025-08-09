@@ -8,9 +8,10 @@
 		routing,
 	} from "$lib/services/navigation/routing.svelte";
 	import { location } from "./location.svelte";
-	import { protocol } from "$lib/services/OfflineTiles";
 	import { saved } from "$lib/saved.svelte";
 	import RoutingLayers from "$lib/services/navigation/RoutingLayers.svelte";
+	import { protocol } from "$lib/services/OfflineTiles";
+	import { layers, worldLayers } from "$lib/mapLayers";
 
 	onMount(() => {
 		window.addEventListener("resize", map.updateMapPadding);
@@ -26,7 +27,9 @@
 	const DEBUG_POINTS = false; // Set to true to show debug points on the map
 </script>
 
-<Protocol scheme="tiles" loadFn={protocol} />
+<!-- <Protocol scheme="tiles" loadFn={protocol} /> -->
+<!-- <PMTilesProtocol /> -->
+<Protocol scheme="pmtiles" loadFn={protocol} />
 
 <MapLibre
 	class="w-full h-full"
@@ -39,6 +42,32 @@
 		location.locked = true;
 		// @ts-expect-error - not typed
 		window.map = map.value;
+    
+    // const worldUrl = await getPMTiles("world");
+    // if(worldUrl) {
+      map.value!.addSource("ne2_shaded", { // TODO: rename to world
+        type: "vector",
+        url: "pmtiles://world",
+        attribution: "Natural Earth",
+//        maxzoom: 6
+      })
+
+			// @ts-expect-error - not typed correctly
+      worldLayers.forEach(l => map.value!.addLayer(l));
+    // }
+
+		// const url = await getPMTiles("tiles");
+    // console.log(url)
+		// if(url) {
+			map.value!.addSource("openmaptiles", {
+				type: "vector",
+				url: "pmtiles://tiles"
+			})
+
+
+			// @ts-expect-error - not typed correctly
+			layers.forEach(l => map.value!.addLayer(l));
+		// }
 	}}
 	onclick={(e) => {
 		if (view.current.type == "main" || view.current.type == "info") {

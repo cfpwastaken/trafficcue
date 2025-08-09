@@ -28,7 +28,7 @@
 	import { routing } from "$lib/services/navigation/routing.svelte";
 	import InRouteSidebar from "./sidebar/InRouteSidebar.svelte";
 	import say from "$lib/services/navigation/TTS";
-	import { test } from "$lib/services/OfflineTiles";
+	import { downloadPMTiles } from "$lib/services/OfflineTiles";
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const views: Record<string, Component<any>> = {
@@ -211,9 +211,11 @@
 					<Button
 						variant="outline"
 						onclick={async () => {
+              const name = prompt("Name?");
+              if(!name) return;
 							const url = prompt("URL?");
 							if (!url) return;
-							await test(url);
+							await downloadPMTiles(url, name);
 						}}
 					>
 						Test Offline tiles
@@ -249,6 +251,7 @@
 	#floating-search {
 		position: fixed;
 		margin: 10px;
+		margin-top: calc(10px + env(safe-area-inset-top));
 		top: 0;
 		left: 0;
 		z-index: 20;
@@ -267,6 +270,7 @@
 		backdrop-filter: blur(5px);
 		margin-bottom: 0;
 		padding: 10px;
+		padding-bottom: calc(10px + env(safe-area-inset-bottom));
 		margin: 10px;
 		width: calc(25% - 20px);
 		/* border-top-left-radius: 15px;
@@ -283,7 +287,7 @@
 	#sidebar.mobileView {
 		position: fixed;
 		top: unset;
-		bottom: 50px;
+		bottom: calc(50px + env(safe-area-inset-bottom));
 		left: 0;
 		/* min-width: calc(100% - 20px);
 		max-width: calc(100% - 20px); */

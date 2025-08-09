@@ -6,6 +6,34 @@
     "main"
   ],
   "permissions": [
-    "core:default"
+    "core:default",
+    "upload:default",
+    "fs:allow-app-read",
+    "fs:allow-app-write",
+		{
+      "identifier": "fs:allow-write-file",
+      "allow": [
+        {
+          "path": "$APPDATA/**/*"
+        }
+      ]
+    },
+    "fs:read-files",
+    "fs:read-dirs",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        {
+          "path": "**"
+        },
+        {
+          "path": "$APPDATA/**/*"
+        },
+        {
+          "path": "$APPDATA/**/.*"
+        }
+      ]
+    },
+		"upload:allow-download"
   ]
 }

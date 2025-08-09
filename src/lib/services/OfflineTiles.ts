@@ -1,173 +1,210 @@
-import {
-	CapacitorSQLite,
-	SQLiteConnection,
-	SQLiteDBConnection,
-} from "@capacitor-community/sqlite";
-import initSqlJs from "sql.js";
-import { Buffer } from "buffer";
-import { Capacitor } from "@capacitor/core";
-import { ungzip } from "pako";
+import { appDataDir, join } from "@tauri-apps/api/path";
+import { BaseDirectory, exists, mkdir, open, remove, SeekMode } from "@tauri-apps/plugin-fs";
+import { download } from "@tauri-apps/plugin-upload";
+import { PMTiles, TileType, type Source } from "pmtiles";
 
-let sqlite: SQLiteConnection;
-let db: SQLiteDBConnection;
+export async function downloadPMTiles(url: string, name: string): Promise<void> {
+//	if(!window.__TAURI__) {
+//		throw new Error("Tauri environment is not available.");
+//	}
 
-export async function downloadMBTiles(url: string): Promise<Uint8Array> {
-	return fetch(url)
-		.then((res) => res.arrayBuffer())
-		.then((ab) => new Uint8Array(ab));
-}
+	const filename = name + ".pmtiles";
+	const baseDir = BaseDirectory.AppData;
+	const appDataDirPath = await appDataDir();
 
-export async function copyMBTiles(data: Uint8Array) {
-	if (!db) {
-		await initDB();
+	if(!await exists(appDataDirPath)) {
+		await mkdir(appDataDirPath, { recursive: true });
 	}
-	const SQL = await initSqlJs();
-	const mdb = new SQL.Database(data);
-	const res = mdb.exec("SELECT * FROM tiles");
-	//// const chunkSize = 10; // Adjust chunk size as needed
-	//// const values = res[0].values;
-	//// for (let i = 0; i < values.length; i += chunkSize) {
-	//// 	const chunk = values.slice(i, i + chunkSize);
-	//// 	const statements = chunk.map(row => {
-	//// 		const [z, x, y, data] = row;
-	//// 		return {
-	//// 			statement: `INSERT OR REPLACE INTO tiles (z, x, y, data) VALUES (?, ?, ?, ?)`,
-	//// 			values: [z, x, y, Buffer.from(data as Uint8Array)]
-	//// 		};
-	//// 	});
-	//// 	await db.executeSet(statements);
-	//// 	console.log(`Inserted chunk ${i / chunkSize + 1} of ${Math.ceil(values.length / chunkSize)}: z=${chunk[0][0]}, x=${chunk[0][1]}, y=${chunk[0][2]}`);
-	//// }
-	const total = res[0].values.length;
-	for (const [idx, row] of res[0].values.entries()) {
-		const [z, x, y, data] = row;
-		await db.run(
-			`INSERT OR REPLACE INTO tiles (z, x, y, data) VALUES (?, ?, ?, ?)`,
-			[
-				z,
-				x,
-				y,
-				Buffer.from(data as Uint8Array), // Convert Uint8Array to Buffer
-			],
-		);
-		console.log(
-			`Inserted tile z=${z}, x=${x}, y=${y}. Item ${idx + 1} of ${total}`,
-		);
+
+	if(await exists(filename, { baseDir })) {
+		console.log(`File ${filename} already exists, deleting it.`);
+		await remove(filename, { baseDir });
 	}
-	console.log(`Copied ${res[0].values.length} tiles from MBTiles data`);
-}
 
-export async function test(url: string) {
-	const res = await downloadMBTiles(url);
-	console.log("Downloaded MBTiles data");
-	await copyMBTiles(res);
-}
+	console.log(`Downloading PMTiles from ${url} to ${filename}`);
+	const res = await fetch(url);
 
-export async function initDB() {
-	if (!Capacitor.isNativePlatform()) {
-		throw new Error("initDB is only available on native platforms");
+	if (!res.ok) {
+		throw new Error(`Failed to download PMTiles: ${res.statusText}`);
 	}
-	console.log("Initializing SQLite database for tiles");
-	sqlite = new SQLiteConnection(CapacitorSQLite);
-	db = await sqlite.createConnection("tiles", false, "no-encryption", 1, false);
-	await db.open();
-	await db.execute(`CREATE TABLE IF NOT EXISTS tiles (
-		z INTEGER NOT NULL,
-		x INTEGER NOT NULL,
-		y INTEGER NOT NULL,
-		data BLOB NOT NULL,
-		PRIMARY KEY (z, x, y)
-	)`);
-	await db.execute(
-		`CREATE INDEX IF NOT EXISTS idx_tiles_zxy ON tiles (z, x, y)`,
-	);
-}
 
-async function deleteDB() {
-	if (!Capacitor.isNativePlatform()) {
-		throw new Error("deleteDB is only available on native platforms");
-	}
-	await db.execute(`DROP TABLE IF EXISTS tiles`);
-	await initDB();
-}
+	const path = await join(appDataDirPath, filename);
 
-// @ts-expect-error aaaaa
-window.deleteDB = deleteDB;
-
-// @ts-expect-error aaaaa
-window.initDB = initDB;
-
-export async function getTile(
-	z: number,
-	x: number,
-	y: number,
-	signal?: AbortSignal
-): Promise<Uint8Array | null> {
-	if (signal?.aborted) {
-		throw new DOMException("Aborted", "AbortError");
-	}
-	const abortPromise = new Promise<never>((_, reject) => {
-		if (signal) {
-			signal.addEventListener("abort", () => {
-				reject(new DOMException("Aborted", "AbortError"));
-			}, { once: true });
-		}
+	await download(url, path, ({ progress, total }) => {
+		console.log(`Download progress: ${Math.round((progress / total) * 100)}% (${progress}\tof ${total} bytes)`);
 	});
-	const queryPromise = db.query(
-		`SELECT data FROM tiles WHERE z = ? AND x = ? AND y = ?`,
-		[z, x, y],
-	);
-	const res = await Promise.race([queryPromise, abortPromise]);
-	if (!res.values || res.values.length === 0) {
-		return null;
+
+	console.log(`Download completed: ${path}`);
+}
+
+export async function getPMTiles(name: string) {
+	const filename = name + ".pmtiles";
+	const baseDir = BaseDirectory.AppData;
+	const appDataDirPath = await appDataDir();
+
+	if(!await exists(appDataDirPath)) {
+		throw new Error("App data directory does not exist.");
 	}
-	console.log(res);
-	return await decompressGzip(res.values[0].data as Uint8Array);
+
+	const filePath = await join(appDataDirPath, filename);
+
+	if(!await exists(filePath, { baseDir })) {
+		throw new Error(`PMTiles file not found: ${filePath}`);
+	}
+  
+  return `asset:/${filename}`;
+	// return convertFileSrc(filePath);
 }
 
-// @ts-expect-error aaaaa
-window.getTile = getTile;
-
-async function decompressGzip(blob: Uint8Array): Promise<Uint8Array> {
-	// const ds = new DecompressionStream("gzip");
-	// const decompressedStream = new Blob([blob]).stream().pipeThrough(ds);
-	// return new Uint8Array(await new Response(decompressedStream).arrayBuffer());
-	return ungzip(blob);
+async function readBytes(name: string, offset: number, length: number): Promise<Uint8Array> {
+	const file = await open(name + ".pmtiles", { read: true, baseDir: BaseDirectory.AppData });
+	const buffer = new Uint8Array(length);
+	await file.seek(offset, SeekMode.Start);
+	await file.read(buffer);
+	await file.close();
+	return buffer;
 }
 
-export async function protocol(params: {
-	url: string;
-}, { signal }: AbortController): Promise<{ data: Uint8Array }> {
-	console.log("Protocol called with params:", params);
-	const url = new URL(params.url);
-	const pathname = url.pathname.replace(/^\//, ""); // Remove leading slash
-	const z = parseInt(pathname.split("/")[0]);
-	const x = parseInt(pathname.split("/")[1]);
-	const y = parseInt(pathname.split("/")[2]);
-	if (!Capacitor.isNativePlatform()) {
-		const t = await fetch(
-			`https://tiles.openfreemap.org/planet/20250528_001001_pt/${z}/${x}/${y}.pbf`,
-			{ signal }
-		);
-		if (t.status == 200) {
-			const buffer = await t.arrayBuffer();
-			return { data: new Uint8Array(buffer) };
-		} else {
-			throw new Error(`Tile fetch error: ${t.statusText}`);
+export class FSSource implements Source {
+	name: string;
+
+	constructor(name: string) {
+		this.name = name;
+	}
+
+	async getBytes(offset: number, length: number, _signal?: AbortSignal, _etag?: string) { // TODO: abort signal
+		const data = await readBytes(this.name, offset, length);
+		return {
+			data: data.buffer as ArrayBuffer,
+			etag: undefined,
+			cacheControl: undefined,
+			expires: undefined
 		}
 	}
-	if (!db) {
-		await initDB();
-	}
-	const tmsY = (1 << z) - 1 - y; // Invert y for TMS
-	console.log(`Fetching tile: z=${z}, x=${x}, y=${y}, tmsY=${tmsY}`);
-	const data = await getTile(z, x, tmsY, signal);
-	if (!data) {
-		console.warn(`Tile not found: z=${z}, x=${x}, y=${y}`);
-		return {
-			data: new Uint8Array(), // Return empty array if tile not found
-		};
-	}
-	// return { data: await fetch("/0.pbf").then(res => res.arrayBuffer()).then(ab => new Uint8Array(ab)) };
-	return { data };
+
+	getKey = () => this.name;
 }
+
+interface RequestParameters {
+  url: string;
+  headers?: unknown;
+  method?: "GET" | "POST" | "PUT";
+  body?: string;
+  type?: "string" | "json" | "arrayBuffer" | "image";
+  credentials?: "same-origin" | "include";
+  collectResourceTiming?: boolean;
+};
+
+export class Protocol {
+  /** @hidden */
+  tiles: Map<string, PMTiles>;
+  metadata: boolean;
+  errorOnMissingTile: boolean;
+
+  /**
+   * Initialize the MapLibre PMTiles protocol.
+   *
+   * * metadata: also load the metadata section of the PMTiles. required for some "inspect" functionality
+   * and to automatically populate the map attribution. Requires an extra HTTP request.
+   * * errorOnMissingTile: When a vector MVT tile is missing from the archive, raise an error instead of
+   * returning the empty array. Not recommended. This is only to reproduce the behavior of ZXY tile APIs
+   * which some applications depend on when overzooming.
+   */
+  constructor(options?: { metadata?: boolean; errorOnMissingTile?: boolean }) {
+    this.tiles = new Map<string, PMTiles>();
+    this.metadata = options?.metadata || false;
+    this.errorOnMissingTile = options?.errorOnMissingTile || false;
+  }
+
+  /**
+   * Add a {@link PMTiles} instance to the global protocol instance.
+   *
+   * For remote fetch sources, references in MapLibre styles like pmtiles://http://...
+   * will resolve to the same instance if the URLs match.
+   */
+  add(p: PMTiles) {
+    this.tiles.set(p.source.getKey(), p);
+  }
+
+  /**
+   * Fetch a {@link PMTiles} instance by URL, for remote PMTiles instances.
+   */
+  get(url: string) {
+    return this.tiles.get(url);
+  }
+
+  /** @hidden */
+  tilev4 = async (
+    params: RequestParameters,
+    abortController: AbortController
+  ) => {
+    if (params.type === "json") {
+      const pmtilesUrl = params.url.substr(10);
+      let instance = this.tiles.get(pmtilesUrl);
+      if (!instance) {
+        instance = new PMTiles(new FSSource(pmtilesUrl));
+        this.tiles.set(pmtilesUrl, instance);
+      }
+
+      if (this.metadata) {
+        return {
+          data: await instance.getTileJson(params.url),
+        };
+      }
+
+      const h = await instance.getHeader();
+
+      if (h.minLon >= h.maxLon || h.minLat >= h.maxLat) {
+        console.error(
+          `Bounds of PMTiles archive ${h.minLon},${h.minLat},${h.maxLon},${h.maxLat} are not valid.`
+        );
+      }
+
+      return {
+        data: {
+          tiles: [`${params.url}/{z}/{x}/{y}`],
+          minzoom: h.minZoom,
+          maxzoom: h.maxZoom,
+          bounds: [h.minLon, h.minLat, h.maxLon, h.maxLat],
+        },
+      };
+    }
+    const re = new RegExp(/pmtiles:\/\/(.+)\/(\d+)\/(\d+)\/(\d+)/);
+    const result = params.url.match(re);
+    if (!result) {
+      throw new Error("Invalid PMTiles protocol URL");
+    }
+    const pmtilesUrl = result[1];
+
+    let instance = this.tiles.get(pmtilesUrl);
+    if (!instance) {
+      instance = new PMTiles(pmtilesUrl);
+      this.tiles.set(pmtilesUrl, instance);
+    }
+    const z = result[2];
+    const x = result[3];
+    const y = result[4];
+
+    const header = await instance.getHeader();
+    const resp = await instance?.getZxy(+z, +x, +y, abortController.signal);
+    if (resp) {
+      return {
+        data: new Uint8Array(resp.data),
+        cacheControl: resp.cacheControl,
+        expires: resp.expires,
+      };
+    }
+    if (header.tileType === TileType.Mvt) {
+      if (this.errorOnMissingTile) {
+        throw new Error("Tile not found.");
+      }
+      return { data: new Uint8Array() };
+    }
+    return { data: null };
+  };
+}
+
+export const protocol = new Protocol({
+	metadata: true,
+	errorOnMissingTile: false,
+}).tilev4;
