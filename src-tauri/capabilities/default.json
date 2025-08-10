@@ -7,6 +7,7 @@
   ],
   "permissions": [
     "core:default",
+		"keep-screen-on:allow-keep-screen-on",
     "upload:default",
     "fs:allow-app-read",
     "fs:allow-app-write",
