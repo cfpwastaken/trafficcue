@@ -29,6 +29,9 @@
 	import InRouteSidebar from "./sidebar/InRouteSidebar.svelte";
 	import say from "$lib/services/navigation/TTS";
 	import { downloadPMTiles } from "$lib/services/OfflineTiles";
+	import SettingsSidebar from "./sidebar/settings/SettingsSidebar.svelte";
+	import AboutSidebar from "./sidebar/settings/AboutSidebar.svelte";
+	import OfflineMapsSidebar from "./sidebar/settings/OfflineMapsSidebar.svelte";
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const views: Record<string, Component<any>> = {
@@ -38,6 +41,9 @@
 		trip: TripSidebar,
 		search: SearchSidebar,
 		user: UserSidebar,
+		settings: SettingsSidebar,
+		about: AboutSidebar,
+		"offline-maps": OfflineMapsSidebar
 	};
 
 	let isDragging = false;
@@ -156,7 +162,9 @@
 				<UserIcon />
 			</button>
 		</RequiresCapability>
-		<button>
+		<button onclick={() => {
+			view.switch("settings");
+		}}>
 			<SettingsIcon />
 		</button>
 		<!-- <button onclick={() => {

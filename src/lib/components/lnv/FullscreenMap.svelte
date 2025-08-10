@@ -10,8 +10,9 @@
 	import { location } from "./location.svelte";
 	import { saved } from "$lib/saved.svelte";
 	import RoutingLayers from "$lib/services/navigation/RoutingLayers.svelte";
-	import { protocol } from "$lib/services/OfflineTiles";
+	import { getPMTilesURL, hasPMTiles, protocol } from "$lib/services/OfflineTiles";
 	import { layers, worldLayers } from "$lib/mapLayers";
+	import { PMTilesProtocol } from "svelte-maplibre-gl/pmtiles";
 
 	onMount(() => {
 		window.addEventListener("resize", map.updateMapPadding);
@@ -28,8 +29,8 @@
 </script>
 
 <!-- <Protocol scheme="tiles" loadFn={protocol} /> -->
-<!-- <PMTilesProtocol /> -->
-<Protocol scheme="pmtiles" loadFn={protocol} />
+<PMTilesProtocol />
+<Protocol scheme="tiles" loadFn={protocol} />
 
 <MapLibre
 	class="w-full h-full"
@@ -47,7 +48,7 @@
     // if(worldUrl) {
       map.value!.addSource("ne2_shaded", { // TODO: rename to world
         type: "vector",
-        url: "pmtiles://world",
+        url: await getPMTilesURL("world"),
         attribution: "Natural Earth",
 //        maxzoom: 6
       })
@@ -61,7 +62,7 @@
 		// if(url) {
 			map.value!.addSource("openmaptiles", {
 				type: "vector",
-				url: "pmtiles://tiles"
+				url: await hasPMTiles("tiles") ? await getPMTilesURL("tiles") : "pmtiles://https://trafficcue-tiles.picoscratch.de/germany.pmtiles"
 			})
 
 

@@ -37,7 +37,15 @@ export async function downloadPMTiles(url: string, name: string): Promise<void> 
 	console.log(`Download completed: ${path}`);
 }
 
+export async function getRemoteList(): Promise<{ name: string, file: string }[]> {
+	return await fetch("https://trafficcue-tiles.picoscratch.de/index.json").then(res => res.json());
+}
+
 export async function hasPMTiles(name: string): Promise<boolean> {
+	if(!window.__TAURI__) {
+		return false; // Tauri environment is not available
+	}
+	
 	const filename = name + ".pmtiles";
 	const baseDir = BaseDirectory.AppData;
 	const appDataDirPath = await appDataDir();
@@ -50,23 +58,27 @@ export async function hasPMTiles(name: string): Promise<boolean> {
 	return await exists(filePath, { baseDir });
 }
 
-export async function getPMTiles(name: string) {
+export async function getPMTilesURL(name: string) {
+	if(!window.__TAURI__) {
+		return `pmtiles://https://trafficcue-tiles.picoscratch.de/${name}.pmtiles`;
+	}
 	const filename = name + ".pmtiles";
 	const baseDir = BaseDirectory.AppData;
 	const appDataDirPath = await appDataDir();
 
 	if(!await exists(appDataDirPath)) {
-		throw new Error("App data directory does not exist.");
+		return `pmtiles://https://trafficcue-tiles.picoscratch.de/${name}.pmtiles`;
+		// throw new Error("App data directory does not exist.");
 	}
 
 	const filePath = await join(appDataDirPath, filename);
 
 	if(!await exists(filePath, { baseDir })) {
-		throw new Error(`PMTiles file not found: ${filePath}`);
+		return `pmtiles://https://trafficcue-tiles.picoscratch.de/${name}.pmtiles`;
+		// throw new Error(`PMTiles file not found: ${filePath}`);
 	}
-  
-  return `asset:/${filename}`;
-	// return convertFileSrc(filePath);
+
+	return `tiles://${name}`;
 }
 
 async function readBytes(name: string, offset: number, length: number): Promise<Uint8Array> {
@@ -152,7 +164,7 @@ export class Protocol {
     abortController: AbortController
   ) => {
     if (params.type === "json") {
-      const pmtilesUrl = params.url.substr(10);
+      const pmtilesUrl = params.url.substr(8);
       let instance = this.tiles.get(pmtilesUrl);
       if (!instance) {
         instance = new PMTiles(new FSSource(pmtilesUrl));
@@ -182,10 +194,10 @@ export class Protocol {
         },
       };
     }
-    const re = new RegExp(/pmtiles:\/\/(.+)\/(\d+)\/(\d+)\/(\d+)/);
+    const re = new RegExp(/tiles:\/\/(.+)/);
     const result = params.url.match(re);
     if (!result) {
-      throw new Error("Invalid PMTiles protocol URL");
+      throw new Error("Invalid Tiles protocol URL");
     }
     const pmtilesUrl = result[1];
 
