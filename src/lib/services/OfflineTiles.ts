@@ -37,6 +37,19 @@ export async function downloadPMTiles(url: string, name: string): Promise<void> 
 	console.log(`Download completed: ${path}`);
 }
 
+export async function hasPMTiles(name: string): Promise<boolean> {
+	const filename = name + ".pmtiles";
+	const baseDir = BaseDirectory.AppData;
+	const appDataDirPath = await appDataDir();
+
+	if(!await exists(appDataDirPath)) {
+		return false;
+	}
+
+	const filePath = await join(appDataDirPath, filename);
+	return await exists(filePath, { baseDir });
+}
+
 export async function getPMTiles(name: string) {
 	const filename = name + ".pmtiles";
 	const baseDir = BaseDirectory.AppData;

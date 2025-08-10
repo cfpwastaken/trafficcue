@@ -313,5 +313,6 @@
 		width: calc(100%);
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
+		padding-bottom: calc(40px + env(safe-area-inset-bottom));
 	}
 </style>
