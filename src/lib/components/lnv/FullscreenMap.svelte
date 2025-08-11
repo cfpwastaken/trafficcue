@@ -10,7 +10,11 @@
 	import { location } from "./location.svelte";
 	import { saved } from "$lib/saved.svelte";
 	import RoutingLayers from "$lib/services/navigation/RoutingLayers.svelte";
-	import { getPMTilesURL, hasPMTiles, protocol } from "$lib/services/OfflineTiles";
+	import {
+		getPMTilesURL,
+		hasPMTiles,
+		protocol,
+	} from "$lib/services/OfflineTiles";
 	import { layers, worldLayers } from "$lib/mapLayers";
 	import { PMTilesProtocol } from "svelte-maplibre-gl/pmtiles";
 
@@ -43,32 +47,26 @@
 		location.locked = true;
 		// @ts-expect-error - not typed
 		window.map = map.value;
-    
-    // const worldUrl = await getPMTiles("world");
-    // if(worldUrl) {
-      map.value!.addSource("ne2_shaded", { // TODO: rename to world
-        type: "vector",
-        url: await getPMTilesURL("world"),
-        attribution: "Natural Earth",
-//        maxzoom: 6
-      })
 
-			// @ts-expect-error - not typed correctly
-      worldLayers.forEach(l => map.value!.addLayer(l));
-    // }
+		map.value!.addSource("ne2_shaded", {
+			// TODO: rename to world
+			type: "vector",
+			url: await getPMTilesURL("world"),
+			attribution: "Natural Earth",
+		});
 
-		// const url = await getPMTiles("tiles");
-    // console.log(url)
-		// if(url) {
-			map.value!.addSource("openmaptiles", {
-				type: "vector",
-				url: await hasPMTiles("tiles") ? await getPMTilesURL("tiles") : "pmtiles://https://trafficcue-tiles.picoscratch.de/germany.pmtiles"
-			})
+		// @ts-expect-error - not typed correctly
+		worldLayers.forEach((l) => map.value!.addLayer(l));
 
+		map.value!.addSource("openmaptiles", {
+			type: "vector",
+			url: (await hasPMTiles("tiles"))
+				? await getPMTilesURL("tiles")
+				: "pmtiles://https://trafficcue-tiles.picoscratch.de/germany.pmtiles",
+		});
 
-			// @ts-expect-error - not typed correctly
-			layers.forEach(l => map.value!.addLayer(l));
-		// }
+		// @ts-expect-error - not typed correctly
+		layers.forEach((l) => map.value!.addLayer(l));
 	}}
 	onclick={(e) => {
 		if (view.current.type == "main" || view.current.type == "info") {

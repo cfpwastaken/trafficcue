@@ -60,7 +60,12 @@ out center tags;`,
 	}).then((res) => res.json() as Promise<OverpassResult>);
 }
 
-export async function fetchNearbyPOI(lat: number, lon: number, tags: string[], radius: number) {
+export async function fetchNearbyPOI(
+	lat: number,
+	lon: number,
+	tags: string[],
+	radius: number,
+) {
 	return await fetch(OVERPASS_SERVER, {
 		method: "POST",
 		body: `[out:json];

@@ -6,16 +6,31 @@
 	import Progress from "$lib/components/ui/progress/progress.svelte";
 
 	const {
-		icon: Icon, text, view: viewName, onclick, disabled, progress
+		icon: Icon,
+		text,
+		view: viewName,
+		onclick,
+		disabled,
+		progress,
 	}: {
-		icon: Component<IconProps>, text: string, view?: string, onclick?: () => void, disabled?: boolean, progress?: number
+		icon: Component<IconProps>;
+		text: string;
+		view?: string;
+		onclick?: () => void;
+		disabled?: boolean;
+		progress?: number;
 	} = $props();
 </script>
 
-<Button variant="secondary" style="width: 100%; height: 40px;" {disabled} onclick={() => {
-	if(viewName) view.switch(viewName)
-	if(onclick) onclick();
-}}>
+<Button
+	variant="secondary"
+	style="width: 100%; height: 40px;"
+	{disabled}
+	onclick={() => {
+		if (viewName) view.switch(viewName);
+		if (onclick) onclick();
+	}}
+>
 	<Icon />
 	{text}
 	{#if progress == -1}

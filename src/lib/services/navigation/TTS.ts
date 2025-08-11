@@ -23,7 +23,7 @@ export default async function say(text: string) {
 	duck();
 	if (tts !== "web") {
 		try {
-			await invoke("plugin:tts|speak", { text })
+			await invoke("plugin:tts|speak", { text });
 		} catch (e) {
 			console.error("Error speaking text", e);
 			alert(e);

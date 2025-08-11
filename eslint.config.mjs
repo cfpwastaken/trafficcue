@@ -26,7 +26,7 @@ export default tseslint.config(
 			],
 		},
 	},
-	[globalIgnores(["./android", "./dist"])],
+	[globalIgnores(["./android", "./dist", "./src-tauri"])],
 	{
 		languageOptions: {
 			globals: {

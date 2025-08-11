@@ -10,31 +10,42 @@
 	const dev = getDeveloperToggle();
 </script>
 
-<SidebarHeader>
-	Developer Settings
-</SidebarHeader>
+<SidebarHeader>Developer Settings</SidebarHeader>
 
 <div id="sections">
 	<section>
 		<h2>Test</h2>
-		<SettingsButton icon={SpeechIcon} text="Test TTS" onclick={async () => {
-			await say("Test")
-		}} />
-		<SettingsButton icon={MapIcon} disabled={!window.__TAURI__} text="Download tiles from URL{window.__TAURI__ ? "" : " (Unavailable)"}" onclick={async () => {
-			const name = prompt("Name?");
-			if(!name) return;
-			const url = prompt("URL?");
-			if(!url) return;
-			await downloadPMTiles(url, name);
-		}} />
+		<SettingsButton
+			icon={SpeechIcon}
+			text="Test TTS"
+			onclick={async () => {
+				await say("Test");
+			}}
+		/>
+		<SettingsButton
+			icon={MapIcon}
+			disabled={!window.__TAURI__}
+			text="Download tiles from URL{window.__TAURI__ ? '' : ' (Unavailable)'}"
+			onclick={async () => {
+				const name = prompt("Name?");
+				if (!name) return;
+				const url = prompt("URL?");
+				if (!url) return;
+				await downloadPMTiles(url, name);
+			}}
+		/>
 	</section>
 
 	<section>
 		<h2>Other</h2>
-		<SettingsButton icon={ToggleLeftIcon} text="Disable Developer Options" onclick={async () => {
-			dev.current = "false";
-			view.back();
-		}} />
+		<SettingsButton
+			icon={ToggleLeftIcon}
+			text="Disable Developer Options"
+			onclick={async () => {
+				dev.current = "false";
+				view.back();
+			}}
+		/>
 	</section>
 </div>
 

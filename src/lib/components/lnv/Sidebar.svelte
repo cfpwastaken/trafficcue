@@ -27,8 +27,6 @@
 	import * as Popover from "../ui/popover";
 	import { routing } from "$lib/services/navigation/routing.svelte";
 	import InRouteSidebar from "./sidebar/InRouteSidebar.svelte";
-	import say from "$lib/services/navigation/TTS";
-	import { downloadPMTiles } from "$lib/services/OfflineTiles";
 	import SettingsSidebar from "./sidebar/settings/SettingsSidebar.svelte";
 	import AboutSidebar from "./sidebar/settings/AboutSidebar.svelte";
 	import OfflineMapsSidebar from "./sidebar/settings/OfflineMapsSidebar.svelte";
@@ -45,7 +43,7 @@
 		settings: SettingsSidebar,
 		about: AboutSidebar,
 		"offline-maps": OfflineMapsSidebar,
-		"dev-options": DeveloperSidebar
+		"dev-options": DeveloperSidebar,
 	};
 
 	let isDragging = false;
@@ -164,9 +162,11 @@
 				<UserIcon />
 			</button>
 		</RequiresCapability>
-		<button onclick={() => {
-			view.switch("settings");
-		}}>
+		<button
+			onclick={() => {
+				view.switch("settings");
+			}}
+		>
 			<SettingsIcon />
 		</button>
 		<!-- <button onclick={() => {

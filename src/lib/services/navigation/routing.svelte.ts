@@ -129,7 +129,7 @@ function drawCurrentTrip() {
 }
 
 export async function startRoute(trip: Trip) {
-	if(window.__TAURI__) {
+	if (window.__TAURI__) {
 		await keepScreenOn(true);
 	}
 	routing.currentTrip = trip;
@@ -270,7 +270,7 @@ export function stopNavigation() {
 	routing.currentTrip = null;
 	map.updateMapPadding(); // TODO: REMOVE
 	removeAllRoutes();
-	if(window.__TAURI__) {
+	if (window.__TAURI__) {
 		keepScreenOn(false);
 	}
 }
