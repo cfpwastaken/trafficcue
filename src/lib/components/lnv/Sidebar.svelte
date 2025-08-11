@@ -32,6 +32,7 @@
 	import SettingsSidebar from "./sidebar/settings/SettingsSidebar.svelte";
 	import AboutSidebar from "./sidebar/settings/AboutSidebar.svelte";
 	import OfflineMapsSidebar from "./sidebar/settings/OfflineMapsSidebar.svelte";
+	import DeveloperSidebar from "./sidebar/settings/DeveloperSidebar.svelte";
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const views: Record<string, Component<any>> = {
@@ -43,7 +44,8 @@
 		user: UserSidebar,
 		settings: SettingsSidebar,
 		about: AboutSidebar,
-		"offline-maps": OfflineMapsSidebar
+		"offline-maps": OfflineMapsSidebar,
+		"dev-options": DeveloperSidebar
 	};
 
 	let isDragging = false;
@@ -206,27 +208,6 @@
 						}}
 					>
 						Join Remote Location
-					</Button>
-					<Button
-						variant="outline"
-						onclick={async () => {
-							// await say("This is a test of the text to speech system.");
-							await say("Dies ist ein Test des Text-zu-Sprache-Systems.");
-						}}
-					>
-						Test TTS
-					</Button>
-					<Button
-						variant="outline"
-						onclick={async () => {
-              const name = prompt("Name?");
-              if(!name) return;
-							const url = prompt("URL?");
-							if (!url) return;
-							await downloadPMTiles(url, name);
-						}}
-					>
-						Test Offline tiles
 					</Button>
 				</div>
 			</Popover.Content>

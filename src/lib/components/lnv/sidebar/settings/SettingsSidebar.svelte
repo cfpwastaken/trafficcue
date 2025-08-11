@@ -22,7 +22,7 @@
 	
 	<section>
 		<h2>About</h2>
-		<SettingsButton icon={CodeIcon} text="Developer Settings" disabled />
+		<SettingsButton icon={CodeIcon} text="Developer Settings" view="dev-options" />
 		<SettingsButton icon={InfoIcon} text="About" view="about" />
 	</section>
 </div>
