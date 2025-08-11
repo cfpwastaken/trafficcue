@@ -195,7 +195,7 @@ export class Protocol {
         },
       };
     }
-    const re = new RegExp(/tiles:\/\/(.+)/);
+    const re = new RegExp(/tiles:\/\/(.+)\/(\d+)\/(\d+)\/(\d+)/);
     const result = params.url.match(re);
     if (!result) {
       throw new Error("Invalid Tiles protocol URL");
