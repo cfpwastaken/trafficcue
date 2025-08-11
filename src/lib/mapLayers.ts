@@ -1,3 +1,5 @@
+import { DARK, layers as pmLayers } from "@protomaps/basemaps";
+
 export const worldLayers = [
   {
     id: "boundary-lines",
@@ -33,7 +35,9 @@ export const worldLayers = [
   }
 ]
 
-export const layers = [
+export const layers = pmLayers("openmaptiles", DARK)
+
+export const deflayers = [
 	{
 		"id": "background",
 		"type": "background",
