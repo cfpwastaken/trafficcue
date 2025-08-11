@@ -11,7 +11,7 @@
 		"@types/libsodium-wrappers": "^0.7.14",
 		"@types/node": "^22.15.24",
 		"@types/pako": "^2.0.3",
-		"bits-ui": "^2.7.0",
+		"bits-ui": "^2.8.6",
 		"clsx": "^2.1.1",
 		"eslint-config-prettier": "^10.1.5",
 		"git-format-staged": "^3.1.1",

@@ -3,7 +3,7 @@ import { BaseDirectory, exists, mkdir, open, remove, SeekMode } from "@tauri-app
 import { download } from "@tauri-apps/plugin-upload";
 import { PMTiles, TileType, type Source } from "pmtiles";
 
-export async function downloadPMTiles(url: string, name: string): Promise<void> {
+export async function downloadPMTiles(url: string, name: string, onprogress?: (progress: number, total: number) => any): Promise<void> {
 //	if(!window.__TAURI__) {
 //		throw new Error("Tauri environment is not available.");
 //	}
@@ -34,6 +34,7 @@ export async function downloadPMTiles(url: string, name: string): Promise<void> 
 	await download(url, path, ({ progress, total }) => {
     totalProgress += progress;
 		console.log(`Download progress: ${Math.round((totalProgress / total) * 100)}% (${totalProgress}\tof ${total} bytes)`);
+    if(onprogress) onprogress(totalProgress, total);
 	});
 
 	console.log(`Download completed: ${path}`);

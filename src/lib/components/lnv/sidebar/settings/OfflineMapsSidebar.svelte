@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
 	import { downloadPMTiles, getRemoteList } from "$lib/services/OfflineTiles";
 	import { DownloadCloudIcon } from "@lucide/svelte";
 	import SettingsButton from "./SettingsButton.svelte";
 	import SidebarHeader from "../SidebarHeader.svelte";
+
+	let progresses: {[key: string]: number} = $state({});
 </script>
 
 <SidebarHeader>
@@ -22,8 +24,10 @@
 		{/if}
 
 		{#each list as item, _index (item.file)}
-			<SettingsButton disabled={!window.__TAURI__} icon={DownloadCloudIcon} text={item.name} onclick={async () => {
-				await downloadPMTiles("https://trafficcue-tiles.picoscratch.de/" + item.file, item.name.includes("World") ? "world": "tiles");
+			<SettingsButton disabled={!window.__TAURI__} icon={DownloadCloudIcon} text={item.name} progress={progresses[item.file] ?? -1} onclick={async () => {
+				await downloadPMTiles("https://trafficcue-tiles.picoscratch.de/" + item.file, item.name.includes("World") ? "world": "tiles", (progress, total) => {
+					progresses[item.file] = (progress / total) * 100;
+				});
 				alert(`Downloaded ${item.name}`);
 				location.reload();
 			}} />
