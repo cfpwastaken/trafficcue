@@ -66,7 +66,7 @@
 			})
 
 
-			// // @ts-expect-error - not typed correctly
+			// @ts-expect-error - not typed correctly
 			layers.forEach(l => map.value!.addLayer(l));
 		// }
 	}}
