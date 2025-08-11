@@ -59,6 +59,7 @@
 		"pmtiles": "^4.3.0",
 		"sql.js": "^1.13.0",
 		"svelte-maplibre-gl": "^0.1.8",
+		"tauri-plugin-duck-api": "^0.1.1",
 		"tauri-plugin-keep-screen-on-api": "^0.1.4",
 		"typescript-eslint": "^8.34.1"
 	}

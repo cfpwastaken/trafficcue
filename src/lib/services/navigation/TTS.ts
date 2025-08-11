@@ -1,6 +1,6 @@
 import type { TextToSpeechPlugin } from "@capacitor-community/text-to-speech";
 import { Capacitor } from "@capacitor/core";
-import Duck from "../DuckPlugin";
+import { duck, unduck } from "tauri-plugin-duck-api";
 
 export let tts: TextToSpeechPlugin | "web" | null = null;
 
@@ -21,7 +21,7 @@ export default async function say(text: string) {
 		await initTTS();
 		// return;
 	}
-	Duck.duck();
+	duck();
 	if (tts !== "web") {
 		try {
 			await tts?.speak({
@@ -37,5 +37,5 @@ export default async function say(text: string) {
 		utterance.lang = "de-DE";
 		window.speechSynthesis.speak(utterance);
 	}
-	Duck.unduck();
+	unduck();
 }

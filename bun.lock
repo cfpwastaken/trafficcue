@@ -26,6 +26,7 @@
         "pmtiles": "^4.3.0",
         "sql.js": "^1.13.0",
         "svelte-maplibre-gl": "^0.1.8",
+        "tauri-plugin-duck-api": "^0.1.1",
         "tauri-plugin-keep-screen-on-api": "^0.1.4",
         "typescript-eslint": "^8.34.1",
       },
@@ -925,6 +926,8 @@
     "tapable": ["tapable@2.2.2", "", {}, "sha512-Re10+NauLTMCudc7T5WLFLAwDhQ0JWdrMK+9B2M8zR5hRExKmsRDCBA7/aV/pNJFltmBFO5BAMlQFi/vq3nKOg=="],
 
     "tar": ["tar@6.2.1", "", { "dependencies": { "chownr": "^2.0.0", "fs-minipass": "^2.0.0", "minipass": "^5.0.0", "minizlib": "^2.1.1", "mkdirp": "^1.0.3", "yallist": "^4.0.0" } }, "sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A=="],
+
+    "tauri-plugin-duck-api": ["tauri-plugin-duck-api@0.1.1", "", { "dependencies": { "@tauri-apps/api": ">=2.0.0-beta.6" } }, "sha512-1mhz1SI2Lu8bHmgF5dmvutHmYpY78qITR0cMQbS5Tbk3NlW+e6WGew6ujUepqQvL6/WdWcPi7XNM0Lfd4haDNQ=="],
 
     "tauri-plugin-keep-screen-on-api": ["tauri-plugin-keep-screen-on-api@0.1.4", "", { "dependencies": { "@tauri-apps/api": ">=2.0.0-beta.6" } }, "sha512-uFY2EKWiKQ3xmwpMYfjaXgYr5USSNS0/Nz8h75lnG0bgttsEcUs4soP0fHPpE7tL3BKbzJdyTycusirkS9aKkA=="],
 
