@@ -20,7 +20,7 @@
 		<SettingsButton icon={SpeechIcon} text="Test TTS" onclick={async () => {
 			await say("Test")
 		}} />
-		<SettingsButton icon={MapIcon} text="Download tiles from URL" onclick={async () => {
+		<SettingsButton icon={MapIcon} disabled={!window.__TAURI__} text="Download tiles from URL{window.__TAURI__ ? "" : " (Unavailable)"}" onclick={async () => {
 			const name = prompt("Name?");
 			if(!name) return;
 			const url = prompt("URL?");
