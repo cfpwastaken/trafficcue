@@ -26,3 +26,4 @@ tauri-plugin-log = "2"
 tauri-plugin-keep-screen-on = "0.1.2"
 tauri-plugin-upload = "2"
 tauri-plugin-fs = "2"
+tauri-plugin-tts = { git = "https://github.com/httpjamesm/tauri-plugin-tts.git" }

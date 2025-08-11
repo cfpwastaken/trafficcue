@@ -35,6 +35,7 @@
         }
       ]
     },
-		"upload:allow-download"
+		"upload:allow-download",
+    "tts:allow-speak"
   ]
 }

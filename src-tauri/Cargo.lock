@@ -102,6 +102,7 @@ dependencies = [
  "tauri-plugin-fs",
  "tauri-plugin-keep-screen-on",
  "tauri-plugin-log",
+ "tauri-plugin-tts",
  "tauri-plugin-upload",
 ]
 
@@ -3873,6 +3874,18 @@ dependencies = [
  "tauri-plugin",
  "thiserror 2.0.12",
  "time",
+]
+
+[[package]]
+name = "tauri-plugin-tts"
+version = "0.2.0"
+source = "git+https://github.com/httpjamesm/tauri-plugin-tts.git#90360c9665a1c1337ed658fcdeccc87053cb1dda"
+dependencies = [
+ "serde",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin",
+ "thiserror 2.0.12",
 ]
 
 [[package]]

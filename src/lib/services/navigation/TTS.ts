@@ -1,13 +1,12 @@
-import type { TextToSpeechPlugin } from "@capacitor-community/text-to-speech";
-import { Capacitor } from "@capacitor/core";
 import { duck, unduck } from "tauri-plugin-duck-api";
+import { invoke } from "@tauri-apps/api/core";
 
-export let tts: TextToSpeechPlugin | "web" | null = null;
+export let tts: "tauri" | "web" | null = null;
 
 export async function initTTS() {
-	if (Capacitor.isNativePlatform()) {
-		console.log("Using Capacitor TTS");
-		tts = (await import("@capacitor-community/text-to-speech")).TextToSpeech;
+	if (window.__TAURI__) {
+		console.log("Using Tauri TTS");
+		tts = "tauri";
 	} else {
 		console.log("Using Web TTS");
 		tts = "web";
@@ -24,10 +23,7 @@ export default async function say(text: string) {
 	duck();
 	if (tts !== "web") {
 		try {
-			await tts?.speak({
-				text: text,
-				lang: "deu-default", // TODO: make this configurable
-			});
+			await invoke("plugin:tts|speak", { text })
 		} catch (e) {
 			console.error("Error speaking text", e);
 			alert(e);
