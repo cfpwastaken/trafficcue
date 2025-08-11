@@ -30,8 +30,10 @@ export async function downloadPMTiles(url: string, name: string): Promise<void> 
 
 	const path = await join(appDataDirPath, filename);
 
+  let totalProgress = 0;
 	await download(url, path, ({ progress, total }) => {
-		console.log(`Download progress: ${Math.round((progress / total) * 100)}% (${progress}\tof ${total} bytes)`);
+    totalProgress += progress;
+		console.log(`Download progress: ${Math.round((totalProgress / total) * 100)}% (${totalProgress}\tof ${total} bytes)`);
 	});
 
 	console.log(`Download completed: ${path}`);
@@ -123,8 +125,7 @@ interface RequestParameters {
 export class Protocol {
   /** @hidden */
   tiles: Map<string, PMTiles>;
-  metadata: boolean;
-  errorOnMissingTile: boolean;
+  metadata: boolean;  errorOnMissingTile: boolean;
 
   /**
    * Initialize the MapLibre PMTiles protocol.
@@ -203,7 +204,7 @@ export class Protocol {
 
     let instance = this.tiles.get(pmtilesUrl);
     if (!instance) {
-      instance = new PMTiles(pmtilesUrl);
+      instance = new PMTiles(new FSSource(pmtilesUrl));
       this.tiles.set(pmtilesUrl, instance);
     }
     const z = result[2];
