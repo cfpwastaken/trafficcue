@@ -1,9 +1,13 @@
 <script>
-	import { MapIcon, SpeechIcon } from "@lucide/svelte";
+	import { MapIcon, SpeechIcon, ToggleLeftIcon } from "@lucide/svelte";
 	import SidebarHeader from "../SidebarHeader.svelte";
 	import SettingsButton from "./SettingsButton.svelte";
 	import say from "$lib/services/navigation/TTS";
 	import { downloadPMTiles } from "$lib/services/OfflineTiles";
+	import { getDeveloperToggle } from "./developer.svelte";
+	import { view } from "../../view.svelte";
+
+	const dev = getDeveloperToggle();
 </script>
 
 <SidebarHeader>
@@ -22,6 +26,14 @@
 			const url = prompt("URL?");
 			if(!url) return;
 			await downloadPMTiles(url, name);
+		}} />
+	</section>
+
+	<section>
+		<h2>Other</h2>
+		<SettingsButton icon={ToggleLeftIcon} text="Disable Developer Options" onclick={async () => {
+			dev.current = "false";
+			view.back();
 		}} />
 	</section>
 </div>

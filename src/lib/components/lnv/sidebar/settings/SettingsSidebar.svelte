@@ -2,6 +2,9 @@
 	import { CodeIcon, InfoIcon, LanguagesIcon, MapIcon, PaintbrushIcon } from "@lucide/svelte";
 	import SidebarHeader from "../SidebarHeader.svelte";
 	import SettingsButton from "./SettingsButton.svelte";
+	import { getDeveloperToggle } from "./developer.svelte";
+
+	const dev = getDeveloperToggle();
 </script>
 
 <SidebarHeader>
@@ -22,7 +25,9 @@
 	
 	<section>
 		<h2>About</h2>
-		<SettingsButton icon={CodeIcon} text="Developer Settings" view="dev-options" />
+		{#if dev.current == "true"}
+			<SettingsButton icon={CodeIcon} text="Developer Settings" view="dev-options" />
+		{/if}
 		<SettingsButton icon={InfoIcon} text="About" view="about" />
 	</section>
 </div>
