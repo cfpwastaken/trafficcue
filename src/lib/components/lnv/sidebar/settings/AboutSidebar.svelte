@@ -26,4 +26,9 @@
 	<li>© OpenStreetMap contributors</li>
 	<li>Natural Earth</li>
 	<li>MapLibre</li>
+	<li>OpenMapTiles</li>
+	<li>Protomaps</li>
+	<li>Valhalla</li>
+	<li>Photon</li>
+	<li>Overpass</li>
 </ul>
