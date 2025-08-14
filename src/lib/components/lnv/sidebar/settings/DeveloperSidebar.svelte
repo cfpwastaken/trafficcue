@@ -1,5 +1,11 @@
 <script>
-	import { HandIcon, MapIcon, SpeechIcon, ToggleLeftIcon } from "@lucide/svelte";
+	import {
+		HandIcon,
+		MapIcon,
+		RefreshCcwIcon,
+		SpeechIcon,
+		ToggleLeftIcon,
+	} from "@lucide/svelte";
 	import SidebarHeader from "../SidebarHeader.svelte";
 	import SettingsButton from "./SettingsButton.svelte";
 	import say from "$lib/services/navigation/TTS";
@@ -7,6 +13,7 @@
 	import { getDeveloperToggle } from "./developer.svelte";
 	import { view } from "../../view.svelte";
 	import { m } from "$lang/messages";
+	import { setOnboardingState } from "$lib/onboarding.svelte";
 
 	const dev = getDeveloperToggle();
 </script>
@@ -39,10 +46,20 @@
 
 	<section>
 		<h2>Open</h2>
+		<SettingsButton icon={HandIcon} text="Start onboarding" view="onboarding" />
 		<SettingsButton
 			icon={HandIcon}
-			text="Start onboarding"
-			view="onboarding"
+			text="Reset onboarding"
+			onclick={() => {
+				setOnboardingState("start");
+			}}
+		/>
+		<SettingsButton
+			icon={RefreshCcwIcon}
+			text="Reload"
+			onclick={() => {
+				location.reload();
+			}}
 		/>
 	</section>
 

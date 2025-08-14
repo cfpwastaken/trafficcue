@@ -1,10 +1,12 @@
+import { getOnboardingView } from "$lib/onboarding.svelte";
+
 export interface View {
 	type: string;
 	props?: Record<string, unknown>;
 }
 
 export const view = $state({
-	current: { type: "main" } as View,
+	current: { type: getOnboardingView("main") } as View,
 	history: [] as View[],
 	back: () => {
 		if (view.history.length > 0) {

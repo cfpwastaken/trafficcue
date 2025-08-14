@@ -5,9 +5,12 @@
 	import SettingsButton from "../settings/SettingsButton.svelte";
 	import { view } from "../../view.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
+	import { setOnboardingState } from "$lib/onboarding.svelte";
 </script>
 
-<h1 style="font-size: 2em; font-weight: bold;">{m["sidebar.onboarding.welcome"]()}</h1>
+<h1 style="font-size: 2em; font-weight: bold;">
+	{m["sidebar.onboarding.welcome"]()}
+</h1>
 <h2>{m["sidebar.onboarding.choose-lang"]()}</h2>
 
 <div id="languages">
@@ -16,19 +19,25 @@
 			text={m.language({}, { locale })}
 			icon={LanguagesIcon}
 			onclick={() => {
-				if(locale != getLocale()) {
+				if (locale != getLocale()) {
 					setLocale(locale);
+				} else {
+					setOnboardingState("vehicles");
+					view.switch("onboarding-vehicles");
 				}
-				view.switch("onboarding-vehicles")
 			}}
 		/>
 	{/each}
 </div>
 
-<Button variant="link" onclick={() => {
-	view.switch("main");
-	view.history = [];
-}}>{m["sidebar.onboarding.skip"]()}</Button>
+<Button
+	variant="link"
+	onclick={() => {
+		setOnboardingState("end");
+		view.switch("main");
+		view.history = [];
+	}}>{m["sidebar.onboarding.skip"]()}</Button
+>
 
 <style>
 	#languages {
