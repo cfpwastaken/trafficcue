@@ -1,5 +1,5 @@
 <script>
-	import { MapIcon, SpeechIcon, ToggleLeftIcon } from "@lucide/svelte";
+	import { HandIcon, MapIcon, SpeechIcon, ToggleLeftIcon } from "@lucide/svelte";
 	import SidebarHeader from "../SidebarHeader.svelte";
 	import SettingsButton from "./SettingsButton.svelte";
 	import say from "$lib/services/navigation/TTS";
@@ -34,6 +34,15 @@
 				if (!url) return;
 				await downloadPMTiles(url, name);
 			}}
+		/>
+	</section>
+
+	<section>
+		<h2>Open</h2>
+		<SettingsButton
+			icon={HandIcon}
+			text="Start onboarding"
+			view="onboarding"
 		/>
 	</section>
 

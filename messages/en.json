@@ -6,6 +6,7 @@
 	"loading": "Loading...",
 	"more": "More",
 	"error": "Error",
+	"next": "Next",
 	"saved": {
 		"home": "Home",
 		"school": "School",
@@ -122,6 +123,12 @@
 		"user": {
 			"header": "User",
 			"login": "Login"
+		},
+		"onboarding": {
+			"welcome": "Welcome!",
+			"skip": "Skip Onboarding",
+			"choose-lang": "Choose your language",
+			"first-vehicle": "Let's create your first vehicle."
 		}
 	}
 }

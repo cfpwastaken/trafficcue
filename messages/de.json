@@ -46,6 +46,7 @@
 	"loading": "Laden...",
 	"more": "Mehr",
 	"error": "Fehler",
+	"next": "Weiter",
 	"sidebar": {
 		"about": {
 			"header": "Über",
@@ -122,6 +123,12 @@
 		"user": {
 			"header": "Benutzer",
 			"login": "Login"
+		},
+		"onboarding": {
+			"welcome": "Willkommen!",
+			"skip": "Onboarding überspringen",
+			"choose-lang": "Wählen Sie Ihre Sprache",
+			"first-vehicle": "Erstellen wir Ihr erstes Fahrzeug."
 		}
 	}
 }

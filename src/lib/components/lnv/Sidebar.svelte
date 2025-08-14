@@ -33,6 +33,8 @@
 	import DeveloperSidebar from "./sidebar/settings/DeveloperSidebar.svelte";
 	import { m } from "$lang/messages";
 	import LanguageSidebar from "./sidebar/settings/LanguageSidebar.svelte";
+	import OnboardingSidebar from "./sidebar/onboarding/OnboardingSidebar.svelte";
+	import OnboardingVehiclesSidebar from "./sidebar/onboarding/OnboardingVehiclesSidebar.svelte";
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const views: Record<string, Component<any>> = {
@@ -47,6 +49,8 @@
 		"offline-maps": OfflineMapsSidebar,
 		"dev-options": DeveloperSidebar,
 		language: LanguageSidebar,
+		onboarding: OnboardingSidebar,
+		"onboarding-vehicles": OnboardingVehiclesSidebar,
 	};
 
 	let isDragging = false;
