@@ -1,127 +1,127 @@
 {
-  "$schema": "https://inlang.com/schema/inlang-message-format",
-  "language": "English",
-  "save": "Save",
-  "cancel": "Cancel",
-  "loading": "Loading...",
-  "more": "More",
-  "error": "Error",
-  "saved": {
-    "home": "Home",
-    "school": "School",
-    "work": "Work",
-    "no-location": "No {name} location saved."
-  },
-  "location": {
-    "unlock": "Unlock Location",
-    "lock": "Lock Location",
-    "code": "Advertise code",
-    "start": "Advertise Location",
-    "join": "Join Remote Location"
-  },
-  "vehicles": {
-    "default": "Default Vehicle",
-    "selector": {
-      "title": "Vehicle Selector",
-      "description": "Select your vehicle to customize routing just for you.",
-      "add": "Add Vehicle"
-    },
-    "types": {
-      "car": "Car",
-      "moped": "Moped"
-    },
-    "add": {
-      "name": "Vehicle Name",
-      "legal-speed": "Legal Speed",
-      "actual-speed": "Actual Speed",
-      "fuel": "Fuel Type",
-      "preferred-fuel": "Preferred Fuel",
-      "diesel": "Diesel",
-      "petrol": "Petrol",
-      "electric": "Electric",
-      "errors": {
-        "enter-name": "Please enter a vehicle name.",
-        "enter-speeds": "Please enter valid speeds.",
-        "select-fuel": "Please select a valid fuel type and preferred fuel."
-      }
-    }
-  },
-  "sidebar": {
-    "about": {
-      "header": "About",
-      "powered-by": "Powered by",
-      "contributors": "contributors"
-    },
-    "developer": {
-      "header": "Developer Settings"
-    },
-    "offline-maps": {
-      "header": "Offline Maps",
-      "not-available": "No offline maps available.",
-      "only-mobile": "Offline maps are only available on mobile.",
-      "downloaded": "Downloaded {name}"
-    },
-    "language": {
-      "header": "Language"
-    },
-    "map-style": {
-      "header": "Map Style"
-    },
-    "settings": {
-      "header": "Settings",
-      "general": "General",
-      "map": "Map"
-    },
-    "info": {
-      "dropped": "Dropped Pin",
-      "route": "Route",
-      "email": "Email",
-      "website": "Website",
-      "call": "Call",
-      "set-as": "Set as {name}",
-      "payment-methods": "Payment Methods",
-      "fuel-types": "Fuel Types",
-      "prices": "Fuel Prices",
-      "no-prices": "No fuel prices available.",
-      "error-loading-prices": "Error loading fuel prices",
-      "internet-access": "Internet Access",
-      "fee": "Fee",
-      "opening-hours": "Opening Hours",
-      "open": "Open",
-      "closed": "Closed",
-      "restaurant": "Restaurant",
-      "reviews": "Reviews",
-      "no-reviews": "No reviews.",
-      "write-review": "Write a review"
-    },
-    "mapai": {
-      "ask-question": "Ask a question about this place..."
-    },
-    "in-route": {
-      "left": "left",
-      "end-trip": "End Trip",
-      "share-code": "Share Code",
-      "stop-sharing": "Stop Sharing Location",
-      "share-location": "Share Trip Status & Location"
-    },
-    "route": {
-      "header": "Route",
-      "driving-with": "Driving with",
-      "help": "You can use <strong>current</strong> for your current location, <strong>home</strong>, <strong>school</strong> or <strong>work</strong> for saved locations.",
-      "calculate": "Calculate"
-    },
-    "search": {
-      "header": "Search Results for"
-    },
-    "trip": {
-      "header": "Trip Details",
-      "start": "Start Navigation",
-      "save": "Save",
-      "send": "Send"
-    },
-    "user": {
-      "header": "User",
-      "login": "Login"
-    }
-  }
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"language": "English",
+	"save": "Save",
+	"cancel": "Cancel",
+	"loading": "Loading...",
+	"more": "More",
+	"error": "Error",
+	"saved": {
+		"home": "Home",
+		"school": "School",
+		"work": "Work",
+		"no-location": "No {name} location saved."
+	},
+	"location": {
+		"unlock": "Unlock Location",
+		"lock": "Lock Location",
+		"code": "Advertise code",
+		"start": "Advertise Location",
+		"join": "Join Remote Location"
+	},
+	"vehicles": {
+		"default": "Default Vehicle",
+		"selector": {
+			"title": "Vehicle Selector",
+			"description": "Select your vehicle to customize routing just for you.",
+			"add": "Add Vehicle"
+		},
+		"types": {
+			"car": "Car",
+			"moped": "Moped"
+		},
+		"add": {
+			"name": "Vehicle Name",
+			"legal-speed": "Legal Speed",
+			"actual-speed": "Actual Speed",
+			"fuel": "Fuel Type",
+			"preferred-fuel": "Preferred Fuel",
+			"diesel": "Diesel",
+			"petrol": "Petrol",
+			"electric": "Electric",
+			"errors": {
+				"enter-name": "Please enter a vehicle name.",
+				"enter-speeds": "Please enter valid speeds.",
+				"select-fuel": "Please select a valid fuel type and preferred fuel."
+			}
+		}
+	},
+	"sidebar": {
+		"about": {
+			"header": "About",
+			"powered-by": "Powered by",
+			"contributors": "contributors"
+		},
+		"developer": {
+			"header": "Developer Settings"
+		},
+		"offline-maps": {
+			"header": "Offline Maps",
+			"not-available": "No offline maps available.",
+			"only-mobile": "Offline maps are only available on mobile.",
+			"downloaded": "Downloaded {name}"
+		},
+		"language": {
+			"header": "Language"
+		},
+		"map-style": {
+			"header": "Map Style"
+		},
+		"settings": {
+			"header": "Settings",
+			"general": "General",
+			"map": "Map"
+		},
+		"info": {
+			"dropped": "Dropped Pin",
+			"route": "Route",
+			"email": "Email",
+			"website": "Website",
+			"call": "Call",
+			"set-as": "Set as {name}",
+			"payment-methods": "Payment Methods",
+			"fuel-types": "Fuel Types",
+			"prices": "Fuel Prices",
+			"no-prices": "No fuel prices available.",
+			"error-loading-prices": "Error loading fuel prices",
+			"internet-access": "Internet Access",
+			"fee": "Fee",
+			"opening-hours": "Opening Hours",
+			"open": "Open",
+			"closed": "Closed",
+			"restaurant": "Restaurant",
+			"reviews": "Reviews",
+			"no-reviews": "No reviews.",
+			"write-review": "Write a review"
+		},
+		"mapai": {
+			"ask-question": "Ask a question about this place..."
+		},
+		"in-route": {
+			"left": "left",
+			"end-trip": "End Trip",
+			"share-code": "Share Code",
+			"stop-sharing": "Stop Sharing Location",
+			"share-location": "Share Trip Status & Location"
+		},
+		"route": {
+			"header": "Route",
+			"driving-with": "Driving with",
+			"help": "You can use <strong>current</strong> for your current location, <strong>home</strong>, <strong>school</strong> or <strong>work</strong> for saved locations.",
+			"calculate": "Calculate"
+		},
+		"search": {
+			"header": "Search Results for"
+		},
+		"trip": {
+			"header": "Trip Details",
+			"start": "Start Navigation",
+			"save": "Save",
+			"send": "Send"
+		},
+		"user": {
+			"header": "User",
+			"login": "Login"
+		}
+	}
 }

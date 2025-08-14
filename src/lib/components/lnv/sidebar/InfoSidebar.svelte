@@ -256,7 +256,9 @@
 
 		<!-- any payment:* tag -->
 		{#if Object.keys(tags).some((key) => key.startsWith("payment:"))}
-			<h3 class="text-lg font-bold mt-2">{m["sidebar.info.payment-methods"]()}</h3>
+			<h3 class="text-lg font-bold mt-2">
+				{m["sidebar.info.payment-methods"]()}
+			</h3>
 			<ul style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
 				{#each Object.entries(tags).filter( ([key]) => key.startsWith("payment:"), ) as [key, value] (key)}
 					<Badge

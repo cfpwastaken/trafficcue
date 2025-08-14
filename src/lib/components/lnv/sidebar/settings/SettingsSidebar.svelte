@@ -19,13 +19,25 @@
 <div id="sections">
 	<section>
 		<h2>{m["sidebar.settings.general"]()}</h2>
-		<SettingsButton icon={LanguagesIcon} text={m["sidebar.language.header"]()} view="language" />
+		<SettingsButton
+			icon={LanguagesIcon}
+			text={m["sidebar.language.header"]()}
+			view="language"
+		/>
 	</section>
 
 	<section>
 		<h2>{m["sidebar.settings.map"]()}</h2>
-		<SettingsButton icon={MapIcon} text={m["sidebar.offline-maps.header"]()} view="offline-maps" />
-		<SettingsButton icon={PaintbrushIcon} text={m["sidebar.map-style.header"]()} disabled />
+		<SettingsButton
+			icon={MapIcon}
+			text={m["sidebar.offline-maps.header"]()}
+			view="offline-maps"
+		/>
+		<SettingsButton
+			icon={PaintbrushIcon}
+			text={m["sidebar.map-style.header"]()}
+			disabled
+		/>
 	</section>
 
 	<section>
@@ -37,7 +49,11 @@
 				view="dev-options"
 			/>
 		{/if}
-		<SettingsButton icon={InfoIcon} text={m["sidebar.about.header"]()} view="about" />
+		<SettingsButton
+			icon={InfoIcon}
+			text={m["sidebar.about.header"]()}
+			view="about"
+		/>
 	</section>
 </div>
 

@@ -46,7 +46,7 @@
 		about: AboutSidebar,
 		"offline-maps": OfflineMapsSidebar,
 		"dev-options": DeveloperSidebar,
-		language: LanguageSidebar
+		language: LanguageSidebar,
 	};
 
 	let isDragging = false;

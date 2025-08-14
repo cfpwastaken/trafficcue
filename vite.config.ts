@@ -1,4 +1,4 @@
-import { paraglideVitePlugin } from '@inlang/paraglide-js'
+import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
@@ -7,7 +7,14 @@ import path from "path";
 const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig({
-	plugins: [paraglideVitePlugin({ project: './project.inlang', outdir: './src/paraglide' }),tailwindcss(), svelte()],
+	plugins: [
+		paraglideVitePlugin({
+			project: "./project.inlang",
+			outdir: "./src/paraglide",
+		}),
+		tailwindcss(),
+		svelte(),
+	],
 	clearScreen: false,
 	server: {
 		port: 5173,

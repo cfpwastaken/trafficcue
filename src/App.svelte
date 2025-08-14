@@ -6,7 +6,6 @@
 	import { routing } from "$lib/services/navigation/routing.svelte";
 	import { checkWebGL } from "$lib/webgl";
 	import RoutingInfo from "$lib/components/lnv/RoutingInfo.svelte";
-	import { setLocale } from "./paraglide/runtime";
 
 	onMount(() => {
 		if (!checkWebGL()) {
@@ -15,9 +14,6 @@
 			);
 			return;
 		}
-
-		// @ts-expect-error
-		window.setLocale = setLocale;
 	});
 </script>
 

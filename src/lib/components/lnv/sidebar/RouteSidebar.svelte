@@ -51,8 +51,8 @@
 </SidebarHeader>
 
 <span
-	>{m["sidebar.route.driving-with"]()} <strong>{(selectedVehicle() ?? DefaultVehicle).name}</strong
-	></span
+	>{m["sidebar.route.driving-with"]()}
+	<strong>{(selectedVehicle() ?? DefaultVehicle).name}</strong></span
 >
 <div class="flex flex-col gap-2 w-full mb-2">
 	<div class="flex gap-2 items-center w-full">
@@ -67,6 +67,7 @@
 		<Input bind:value={toLocation} />
 	</div>
 	<span>
+		<!-- eslint-disable-next-line -->
 		{@html m["sidebar.route.help"]()}
 	</span>
 </div>

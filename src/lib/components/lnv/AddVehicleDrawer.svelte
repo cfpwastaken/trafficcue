@@ -138,9 +138,15 @@
 								: m["vehicles.add.electric"]()}
 					</Select.Trigger>
 					<Select.Content>
-						<Select.Item value="diesel">{m["vehicles.add.diesel"]()}</Select.Item>
-						<Select.Item value="petrol">{m["vehicles.add.petrol"]()}</Select.Item>
-						<Select.Item value="electric">{m["vehicles.add.electric"]()}</Select.Item>
+						<Select.Item value="diesel"
+							>{m["vehicles.add.diesel"]()}</Select.Item
+						>
+						<Select.Item value="petrol"
+							>{m["vehicles.add.petrol"]()}</Select.Item
+						>
+						<Select.Item value="electric"
+							>{m["vehicles.add.electric"]()}</Select.Item
+						>
 					</Select.Content>
 				</Select.Root>
 

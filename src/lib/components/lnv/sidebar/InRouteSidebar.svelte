@@ -123,7 +123,8 @@
 	});
 </script>
 
-{fullDistanceText} {m["sidebar.in-route.left"]()}
+{fullDistanceText}
+{m["sidebar.in-route.left"]()}
 
 <Button
 	onclick={() => {

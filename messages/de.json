@@ -1,127 +1,127 @@
 {
-  "$schema": "https://inlang.com/schema/inlang-message-format",
-  "language": "Deutsch - German",
-  "saved": {
-    "home": "Heim",
-    "school": "Schule",
-    "work": "Arbeit",
-    "no-location": "Kein {name} Speicherort gespeichert."
-  },
-  "location": {
-    "unlock": "Standort entsperren",
-    "lock": "Standort sperren",
-    "code": "Standortcode",
-    "start": "Standort teilen",
-    "join": "Remote-Standort beitreten"
-  },
-  "vehicles": {
-    "selector": {
-      "title": "Fahrzeugauswahl",
-      "description": "Wählen Sie Ihr Fahrzeug aus, um die Route individuell auf Sie abzustimmen.",
-      "add": "Fahrzeug hinzufügen"
-    },
-    "types": {
-      "car": "Auto",
-      "moped": "Moped"
-    },
-    "add": {
-      "name": "Fahrzeugname",
-      "legal-speed": "Legale Geschwindigkeit",
-      "actual-speed": "Tatsächliche Geschwindigkeit",
-      "fuel": "Kraftstoffart",
-      "preferred-fuel": "Bevorzugter Kraftstoff",
-      "diesel": "Diesel",
-      "petrol": "Benzin",
-      "electric": "Elektrisch",
-      "errors": {
-        "enter-name": "Bitte geben Sie einen Fahrzeugnamen ein.",
-        "enter-speeds": "Bitte geben Sie gültige Geschwindigkeiten ein.",
-        "select-fuel": "Bitte wählen Sie eine gültige Kraftstoffart und den bevorzugten Kraftstoff aus."
-      }
-    },
-    "default": "Standardfahrzeug"
-  },
-  "save": "Speichern",
-  "cancel": "Abbrechen",
-  "loading": "Laden...",
-  "more": "Mehr",
-  "error": "Fehler",
-  "sidebar": {
-    "about": {
-      "header": "Über",
-      "powered-by": "Angetrieben von",
-      "contributors": "Mitwirkende"
-    },
-    "developer": {
-      "header": "Entwicklereinstellungen"
-    },
-    "offline-maps": {
-      "header": "Offline-Karten",
-      "not-available": "Keine Offline-Karten verfügbar.",
-      "only-mobile": "Offline-Karten sind nur auf Mobilgeräten verfügbar.",
-      "downloaded": "{name} wurde heruntergeladen"
-    },
-    "language": {
-      "header": "Sprache"
-    },
-    "map-style": {
-      "header": "Kartenstil"
-    },
-    "settings": {
-      "header": "Einstellungen",
-      "general": "Allgemein",
-      "map": "Karte"
-    },
-    "info": {
-      "dropped": "Pin",
-      "route": "Route",
-      "email": "E-Mail",
-      "website": "Webseite",
-      "call": "Anrufen",
-      "set-as": "Speichern als {name}",
-      "payment-methods": "Zahlungsarten",
-      "fuel-types": "Kraftstoffarten",
-      "prices": "Kraftstoffpreise",
-      "no-prices": "Keine Kraftstoffpreise verfügbar.",
-      "error-loading-prices": "Fehler beim Laden der Kraftstoffpreise",
-      "internet-access": "Internetzugang",
-      "fee": "Gebühr",
-      "opening-hours": "Öffnungszeiten",
-      "open": "Offen",
-      "closed": "Geschlossen",
-      "restaurant": "Restaurant",
-      "reviews": "Bewertungen",
-      "no-reviews": "Keine Bewertungen.",
-      "write-review": "Eigene Bewertung schreiben"
-    },
-    "mapai": {
-      "ask-question": "Stellen Sie eine Frage zu diesem Ort ..."
-    },
-    "in-route": {
-      "left": "links",
-      "end-trip": "Route beenden",
-      "share-code": "Code teilen",
-      "stop-sharing": "Standortfreigabe beenden",
-      "share-location": "Routenstatus und Standort teilen"
-    },
-    "route": {
-      "header": "Route",
-      "driving-with": "Fahren mit",
-      "help": "Sie können <strong>aktuell</strong> für Ihren aktuellen Standort und <strong>home</strong>, <strong>school</strong> oder <strong>work</strong> für gespeicherte Standorte verwenden.",
-      "calculate": "Berechnen"
-    },
-    "search": {
-      "header": "Suchergebnisse für"
-    },
-    "trip": {
-      "header": "Routendetails",
-      "start": "Start",
-      "save": "Speichern",
-      "send": "Senden"
-    },
-    "user": {
-      "header": "Benutzer",
-      "login": "Login"
-    }
-  }
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"language": "Deutsch - German",
+	"saved": {
+		"home": "Heim",
+		"school": "Schule",
+		"work": "Arbeit",
+		"no-location": "Kein {name} Speicherort gespeichert."
+	},
+	"location": {
+		"unlock": "Standort entsperren",
+		"lock": "Standort sperren",
+		"code": "Standortcode",
+		"start": "Standort teilen",
+		"join": "Remote-Standort beitreten"
+	},
+	"vehicles": {
+		"selector": {
+			"title": "Fahrzeugauswahl",
+			"description": "Wählen Sie Ihr Fahrzeug aus, um die Route individuell auf Sie abzustimmen.",
+			"add": "Fahrzeug hinzufügen"
+		},
+		"types": {
+			"car": "Auto",
+			"moped": "Moped"
+		},
+		"add": {
+			"name": "Fahrzeugname",
+			"legal-speed": "Legale Geschwindigkeit",
+			"actual-speed": "Tatsächliche Geschwindigkeit",
+			"fuel": "Kraftstoffart",
+			"preferred-fuel": "Bevorzugter Kraftstoff",
+			"diesel": "Diesel",
+			"petrol": "Benzin",
+			"electric": "Elektrisch",
+			"errors": {
+				"enter-name": "Bitte geben Sie einen Fahrzeugnamen ein.",
+				"enter-speeds": "Bitte geben Sie gültige Geschwindigkeiten ein.",
+				"select-fuel": "Bitte wählen Sie eine gültige Kraftstoffart und den bevorzugten Kraftstoff aus."
+			}
+		},
+		"default": "Standardfahrzeug"
+	},
+	"save": "Speichern",
+	"cancel": "Abbrechen",
+	"loading": "Laden...",
+	"more": "Mehr",
+	"error": "Fehler",
+	"sidebar": {
+		"about": {
+			"header": "Über",
+			"powered-by": "Angetrieben von",
+			"contributors": "Mitwirkende"
+		},
+		"developer": {
+			"header": "Entwicklereinstellungen"
+		},
+		"offline-maps": {
+			"header": "Offline-Karten",
+			"not-available": "Keine Offline-Karten verfügbar.",
+			"only-mobile": "Offline-Karten sind nur auf Mobilgeräten verfügbar.",
+			"downloaded": "{name} wurde heruntergeladen"
+		},
+		"language": {
+			"header": "Sprache"
+		},
+		"map-style": {
+			"header": "Kartenstil"
+		},
+		"settings": {
+			"header": "Einstellungen",
+			"general": "Allgemein",
+			"map": "Karte"
+		},
+		"info": {
+			"dropped": "Pin",
+			"route": "Route",
+			"email": "E-Mail",
+			"website": "Webseite",
+			"call": "Anrufen",
+			"set-as": "Speichern als {name}",
+			"payment-methods": "Zahlungsarten",
+			"fuel-types": "Kraftstoffarten",
+			"prices": "Kraftstoffpreise",
+			"no-prices": "Keine Kraftstoffpreise verfügbar.",
+			"error-loading-prices": "Fehler beim Laden der Kraftstoffpreise",
+			"internet-access": "Internetzugang",
+			"fee": "Gebühr",
+			"opening-hours": "Öffnungszeiten",
+			"open": "Offen",
+			"closed": "Geschlossen",
+			"restaurant": "Restaurant",
+			"reviews": "Bewertungen",
+			"no-reviews": "Keine Bewertungen.",
+			"write-review": "Eigene Bewertung schreiben"
+		},
+		"mapai": {
+			"ask-question": "Stellen Sie eine Frage zu diesem Ort ..."
+		},
+		"in-route": {
+			"left": "links",
+			"end-trip": "Route beenden",
+			"share-code": "Code teilen",
+			"stop-sharing": "Standortfreigabe beenden",
+			"share-location": "Routenstatus und Standort teilen"
+		},
+		"route": {
+			"header": "Route",
+			"driving-with": "Fahren mit",
+			"help": "Sie können <strong>aktuell</strong> für Ihren aktuellen Standort und <strong>home</strong>, <strong>school</strong> oder <strong>work</strong> für gespeicherte Standorte verwenden.",
+			"calculate": "Berechnen"
+		},
+		"search": {
+			"header": "Suchergebnisse für"
+		},
+		"trip": {
+			"header": "Routendetails",
+			"start": "Start",
+			"save": "Speichern",
+			"send": "Senden"
+		},
+		"user": {
+			"header": "Benutzer",
+			"login": "Login"
+		}
+	}
 }

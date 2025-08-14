@@ -11,13 +11,17 @@
 </SidebarHeader>
 
 <div id="languages">
-	{#each locales as locale}
+	{#each locales as locale, _index (locale)}
 		{#if locale == getLocale()}
 			<SettingsButton text={m.language()} icon={CheckIcon} disabled />
 		{:else}
-			<SettingsButton text={m.language({}, { locale })} icon={LanguagesIcon} onclick={() => {
-				setLocale(locale)
-			}} />
+			<SettingsButton
+				text={m.language({}, { locale })}
+				icon={LanguagesIcon}
+				onclick={() => {
+					setLocale(locale);
+				}}
+			/>
 		{/if}
 	{/each}
 </div>
