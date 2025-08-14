@@ -23,12 +23,16 @@
 	import MapAi from "../info/MapAI.svelte";
 	import RequiresCapability from "../RequiresCapability.svelte";
 	import { saved, saveLocations } from "$lib/saved.svelte";
+	import { getDeveloperToggle } from "./settings/developer.svelte";
+	import InternetAccess from "../info/InternetAccess.svelte";
+	import RestaurantInfo from "../info/RestaurantInfo.svelte";
 
 	// let { feature }: { feature: Feature } = $props();
 
 	// let Icon = $derived(POIIcons[feature.properties.osm_key + "=" + feature.properties.osm_value]);
 
 	let { lat, lng }: { lat: number; lng: number } = $props();
+	const dev = getDeveloperToggle();
 
 	function getIcon(
 		tags: Record<string, string>,
@@ -207,6 +211,16 @@
 							<BriefcaseIcon />
 							Set as Work
 						</Button>
+						{#if dev.current}
+							<Button
+								variant="outline"
+								onclick={() => {
+									alert(JSON.stringify(elements, null, 3))
+									console.log(elements);
+								}}>
+								Show raw data
+							</Button>
+						{/if}
 					</div>
 				</Popover.Content>
 			</Popover.Root>
@@ -228,10 +242,14 @@
 			<OpeningHours hours={tags.opening_hours} {lat} lon={lng} />
 		{/if}
 
+		{#if tags.internet_access}
+			<InternetAccess {tags} />
+		{/if}
+
+		<RestaurantInfo {tags} />
+
 		{#if tags.amenity == "fuel"}
-			<RequiresCapability capability="fuel">
-				<FuelStation {tags} {lat} {lng} />
-			</RequiresCapability>
+			<FuelStation {tags} {lat} {lng} />
 		{/if}
 
 		<!-- any payment:* tag -->
@@ -239,7 +257,7 @@
 			<h3 class="text-lg font-bold mt-2">Payment Methods</h3>
 			<ul style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
 				{#each Object.entries(tags).filter( ([key]) => key.startsWith("payment:"), ) as [key, value] (key)}
-					<Badge>{key.replace("payment:", "")}: {value}</Badge>
+					<Badge>{key.replace("payment:", "")}{value == "yes" ? "" : ": " + value}</Badge>
 				{/each}
 			</ul>
 		{/if}
@@ -249,8 +267,6 @@
 		</RequiresCapability>
 
 		<span style="color: #acacac;">&copy; OpenStreetMap</span>
-
-		<pre>{JSON.stringify(elements, null, 2)}</pre>
 	{/if}
 {:catch err}
 	<SidebarHeader
