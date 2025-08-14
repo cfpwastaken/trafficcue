@@ -215,9 +215,10 @@
 							<Button
 								variant="outline"
 								onclick={() => {
-									alert(JSON.stringify(elements, null, 3))
+									alert(JSON.stringify(elements, null, 3));
 									console.log(elements);
-								}}>
+								}}
+							>
 								Show raw data
 							</Button>
 						{/if}
@@ -257,7 +258,11 @@
 			<h3 class="text-lg font-bold mt-2">Payment Methods</h3>
 			<ul style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
 				{#each Object.entries(tags).filter( ([key]) => key.startsWith("payment:"), ) as [key, value] (key)}
-					<Badge>{key.replace("payment:", "")}{value == "yes" ? "" : ": " + value}</Badge>
+					<Badge
+						>{key.replace("payment:", "")}{value == "yes"
+							? ""
+							: ": " + value}</Badge
+					>
 				{/each}
 			</ul>
 		{/if}
