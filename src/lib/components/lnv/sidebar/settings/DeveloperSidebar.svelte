@@ -6,11 +6,12 @@
 	import { downloadPMTiles } from "$lib/services/OfflineTiles";
 	import { getDeveloperToggle } from "./developer.svelte";
 	import { view } from "../../view.svelte";
+	import { m } from "$lang/messages";
 
 	const dev = getDeveloperToggle();
 </script>
 
-<SidebarHeader>Developer Settings</SidebarHeader>
+<SidebarHeader>{m["sidebar.developer.header"]()}</SidebarHeader>
 
 <div id="sections">
 	<section>

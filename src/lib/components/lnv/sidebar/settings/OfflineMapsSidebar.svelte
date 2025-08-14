@@ -3,22 +3,23 @@
 	import { DownloadCloudIcon } from "@lucide/svelte";
 	import SettingsButton from "./SettingsButton.svelte";
 	import SidebarHeader from "../SidebarHeader.svelte";
+	import { m } from "$lang/messages";
 
 	let progresses: Record<string, number> = $state({});
 </script>
 
-<SidebarHeader>Offline Maps</SidebarHeader>
+<SidebarHeader>{m["sidebar.offline-maps.header"]()}</SidebarHeader>
 
 {#await getRemoteList()}
-	<p>Loading...</p>
+	<p>{m.loading()}</p>
 {:then list}
 	<div style="display: flex; flex-direction: column; gap: 0.5rem;">
 		{#if list.length === 0}
-			<p>No offline maps available.</p>
+			<p>{m["sidebar.offline-maps.not-available"]()}</p>
 		{/if}
 
 		{#if !window.__TAURI__}
-			<p>Offline maps are only available on mobile.</p>
+			<p>{m["sidebar.offline-maps.only-mobile"]()}</p>
 		{/if}
 
 		{#each list as item, _index (item.file)}
@@ -35,7 +36,7 @@
 							progresses[item.file] = (progress / total) * 100;
 						},
 					);
-					alert(`Downloaded ${item.name}`);
+					alert(m["sidebar.offline-maps.downloaded"]({ name: item.name }));
 					location.reload();
 				}}
 			/>

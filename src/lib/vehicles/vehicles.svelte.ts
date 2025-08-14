@@ -1,3 +1,5 @@
+import { m } from "$lang/messages";
+
 /*
 Valhalla costing:
 auto, prioritizes motorways = car, (truck), motorcycle
@@ -57,7 +59,7 @@ export interface Vehicle {
 }
 
 export const DefaultVehicle: Vehicle = {
-	name: "Default Vehicle",
+	name: m["vehicles.default"](),
 	legalMaxSpeed: 45,
 	actualMaxSpeed: 45,
 	type: "motor_scooter",

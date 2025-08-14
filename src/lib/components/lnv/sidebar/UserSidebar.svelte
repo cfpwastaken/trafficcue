@@ -4,6 +4,7 @@
 	import Button from "$lib/components/ui/button/button.svelte";
 	import { getAuthURL, getOIDCUser } from "$lib/services/oidc";
 	import * as Avatar from "$lib/components/ui/avatar";
+	import { m } from "$lang/messages";
 
 	interface OIDCUser {
 		sub: string;
@@ -26,7 +27,7 @@
 </script>
 
 {#if !user}
-	<SidebarHeader>User</SidebarHeader>
+	<SidebarHeader>{m["sidebar.user.header"]()}</SidebarHeader>
 
 	<Button
 		onclick={async () => {
@@ -57,7 +58,7 @@
 					atob((localStorage.getItem("lnv-id") || "").split(".")[1]),
 				);
 			});
-		}}>Login</Button
+		}}>{m["sidebar.user.login"]()}</Button
 	>
 {:else}
 	<SidebarHeader>

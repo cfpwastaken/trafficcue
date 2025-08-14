@@ -9,6 +9,7 @@
 	import { Button } from "$lib/components/ui/button";
 	import { RouteIcon, SaveIcon, SendIcon } from "@lucide/svelte";
 	import { map } from "../map.svelte";
+	import { m } from "$lang/messages";
 
 	let {
 		route,
@@ -27,7 +28,7 @@
 		removeAllRoutes();
 	}}
 >
-	Trip Details
+	{m["sidebar.trip.header"]()}
 </SidebarHeader>
 
 <div id="actions" class="flex gap-2">
@@ -40,15 +41,15 @@
 		}}
 	>
 		<RouteIcon />
-		Start Navigation
+		{m["sidebar.trip.start"]()}
 	</Button>
 	<Button variant="secondary" disabled>
 		<SaveIcon />
-		Save
+		{m["sidebar.trip.save"]()}
 	</Button>
 	<Button variant="secondary" disabled>
 		<SendIcon />
-		Send
+		{m["sidebar.trip.send"]()}
 	</Button>
 </div>
 

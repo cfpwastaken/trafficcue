@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { m } from "$lang/messages";
 	import Input from "$lib/components/ui/input/input.svelte";
 	import { ai } from "$lib/services/lnv";
 	import { SparklesIcon } from "@lucide/svelte";
@@ -23,17 +24,17 @@
 	<SparklesIcon />
 	<div class="flex gap-2 flex-col w-full">
 		{#await ai(question, { lat, lon })}
-			<p>Loading...</p>
+			<p>{m.loading()}</p>
 		{:then data}
 			{@const text = getText(data)}
 			<p>{text}</p>
 		{:catch error}
-			<p>Error: {error.message}</p>
+			<p>{m.error()}: {error.message}</p>
 		{/await}
 		<Input
 			type="text"
 			value=""
-			placeholder="Ask a question about this place..."
+			placeholder={m["sidebar.mapai.ask-question"]()}
 			onchange={(e) => {
 				question = (e.target! as HTMLInputElement).value;
 			}}

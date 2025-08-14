@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { m } from "$lang/messages";
 	import * as Avatar from "$lib/components/ui/avatar";
 	import { Button } from "$lib/components/ui/button";
 	import { getReviews, postReview } from "$lib/services/lnv";
@@ -7,7 +8,7 @@
 	let { lat, lng }: { lat: number; lng: number } = $props();
 </script>
 
-<h3 class="text-lg font-bold mt-2">Reviews</h3>
+<h3 class="text-lg font-bold mt-2">{m["sidebar.info.reviews"]()}</h3>
 {#await getReviews({ lat, lon: lng }) then reviews}
 	{#if reviews.length > 0}
 		<ul class="list-disc pl-5">
@@ -25,7 +26,7 @@
 			{/each}
 		</ul>
 	{:else}
-		<p>No reviews available.</p>
+		<p>{m["sidebar.info.no-reviews"]()}</p>
 	{/if}
 	<Button
 		variant="secondary"
@@ -46,8 +47,8 @@
 				alert("Review submission cancelled.");
 			}
 		}}
-		disabled>Write a review</Button
+		disabled>{m["sidebar.info.write-review"]()}</Button
 	><br />
 {:catch error}
-	<p>Error loading reviews: {error.message}</p>
+	<p>{m.error()}: {error.message}</p>
 {/await}

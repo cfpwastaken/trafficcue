@@ -1,4 +1,5 @@
 <script>
+	import { m } from "$lang/messages";
 	import Badge from "$lib/components/ui/badge/badge.svelte";
 
 	let { tags } = $props();
@@ -15,7 +16,7 @@
 </script>
 
 {#if matchingTags.length > 0}
-	<h3 class="text-lg font-bold mt-2">Restaurant</h3>
+	<h3 class="text-lg font-bold mt-2">{m["sidebar.info.restaurant"]()}</h3>
 	<ul class="flex gap-2 flex-wrap">
 		{#each matchingTags as tag, _index (tag)}
 			{#if tag != "no"}

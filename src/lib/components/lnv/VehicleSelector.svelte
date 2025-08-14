@@ -16,6 +16,7 @@
 		type VehicleType,
 	} from "$lib/vehicles/vehicles.svelte";
 	import AddVehicleDrawer from "./AddVehicleDrawer.svelte";
+	import { m } from "$lang/messages";
 
 	let open = $state(false);
 
@@ -48,9 +49,9 @@
 	</Drawer.Trigger>
 	<Drawer.Content>
 		<Drawer.Header>
-			<Drawer.Title>Vehicle Selector</Drawer.Title>
+			<Drawer.Title>{m["vehicles.selector.title"]()}</Drawer.Title>
 			<Drawer.Description
-				>Select your vehicle to customize routing just for you.</Drawer.Description
+				>{m["vehicles.selector.description"]()}</Drawer.Description
 			>
 		</Drawer.Header>
 		<div class="p-4 pt-0 flex flex-col gap-2">
@@ -72,7 +73,7 @@
 			<AddVehicleDrawer>
 				<Button variant="secondary" class="w-full p-5">
 					<PlusCircleIcon />
-					Add Vehicle
+					{m["vehicles.selector.add"]()}
 				</Button>
 			</AddVehicleDrawer>
 		</div>

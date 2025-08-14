@@ -19,6 +19,7 @@
 	} from "$lib/vehicles/vehicles.svelte";
 	import { location } from "../location.svelte";
 	import { saved } from "$lib/saved.svelte";
+	import { m } from "$lang/messages";
 
 	let {
 		from,
@@ -46,11 +47,11 @@
 		removeAllRoutes();
 	}}
 >
-	Route
+	{m["sidebar.route.header"]()}
 </SidebarHeader>
 
 <span
-	>Driving with <strong>{(selectedVehicle() ?? DefaultVehicle).name}</strong
+	>{m["sidebar.route.driving-with"]()} <strong>{(selectedVehicle() ?? DefaultVehicle).name}</strong
 	></span
 >
 <div class="flex flex-col gap-2 w-full mb-2">
@@ -66,9 +67,7 @@
 		<Input bind:value={toLocation} />
 	</div>
 	<span>
-		You can use <strong>current</strong> for your current location,
-		<strong>home</strong>
-		or <strong>work</strong> for saved locations.
+		{@html m["sidebar.route.help"]()}
 	</span>
 </div>
 <Button
@@ -110,7 +109,7 @@
 		}
 		drawAllRoutes(routes);
 		zoomToPoints(FROM, TO, map.value!);
-	}}>Calculate</Button
+	}}>{m["sidebar.route.calculate"]()}</Button
 >
 
 {#if routes}

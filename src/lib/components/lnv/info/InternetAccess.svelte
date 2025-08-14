@@ -1,4 +1,5 @@
 <script>
+	import { m } from "$lang/messages";
 	import Badge from "$lib/components/ui/badge/badge.svelte";
 
 	let { tags } = $props();
@@ -8,12 +9,12 @@
 </script>
 
 {#if tag != "no"}
-	<h3 class="text-lg font-bold mt-2">Internet Access</h3>
+	<h3 class="text-lg font-bold mt-2">{m["sidebar.info.internet-access"]()}</h3>
 	{#each splitter as value, _index (value)}
 		<Badge>{value}</Badge>
 	{/each}
 	{#if tags["internet_access:fee"] && tags["internet_access:fee"] != "no"}
-		<Badge>Fee: {tags["internet_access:fee"]}</Badge>
+		<Badge>{m["sidebar.info.fee"]()}: {tags["internet_access:fee"]}</Badge>
 	{/if}
 	{#if tags["internet_access:ssid"]}
 		<Badge>{tags["internet_access:ssid"]}</Badge>

@@ -21,6 +21,7 @@
 	import * as Select from "../ui/select";
 	import Input from "../ui/input/input.svelte";
 	import EvConnectorSelect from "./EVConnectorSelect.svelte";
+	import { m } from "$lang/messages";
 
 	let open = $state(false);
 
@@ -62,7 +63,7 @@
 	</Drawer.Trigger>
 	<Drawer.Content>
 		<Drawer.Header>
-			<Drawer.Title>Add Vehicle</Drawer.Title>
+			<Drawer.Title>{m["vehicles.selector.add"]()}</Drawer.Title>
 		</Drawer.Header>
 		<div class="p-4 pt-0 flex flex-col gap-2">
 			<div class="flex gap-2">
@@ -71,75 +72,75 @@
 						{@const Icon = getVehicleIcon(vehicle.type)}
 						<Icon />
 						{vehicle.type === "car"
-							? "Car"
+							? m["vehicles.types.car"]()
 							: vehicle.type === "motor_scooter"
-								? "Moped"
+								? m["vehicles.types.moped"]()
 								: "?"}
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Item value="car">
 							<CarIcon />
-							Car
+							{m["vehicles.types.car"]()}
 						</Select.Item>
 						<Select.Item value="motor_scooter">
 							<TractorIcon />
-							Moped
+							{m["vehicles.types.moped"]()}
 						</Select.Item>
 					</Select.Content>
 				</Select.Root>
 
 				<Input
 					type="text"
-					placeholder="Vehicle Name"
+					placeholder={m["vehicles.add.name"]()}
 					bind:value={vehicle.name}
 					class="w-full"
-					aria-label="Vehicle Name"
+					aria-label={m["vehicles.add.name"]()}
 					aria-required="true"
 				/>
 			</div>
 
 			<div class="flex justify-around mt-4">
-				<span>Legal Speed</span>
+				<span>{m["vehicles.add.legal-speed"]()}</span>
 				<span>/</span>
-				<span>Actual Speed</span>
+				<span>{m["vehicles.add.actual-speed"]()}</span>
 			</div>
 			<div class="flex gap-2">
 				<Input
 					type="number"
-					placeholder="Legal Speed"
+					placeholder={m["vehicles.add.legal-speed"]()}
 					bind:value={vehicle.legalMaxSpeed}
 					class="w-full text-center"
-					aria-label="Legal Max Speed"
+					aria-label={m["vehicles.add.legal-speed"]()}
 					aria-required="true"
 				/>
 				<Input
 					type="number"
-					placeholder="Actual Speed"
+					placeholder={m["vehicles.add.actual-speed"]()}
 					bind:value={vehicle.actualMaxSpeed}
 					class="w-full text-center"
-					aria-label="Actual Max Speed"
+					aria-label={m["vehicles.add.actual-speed"]()}
 					aria-required="true"
 				/>
 			</div>
 
 			<div class="flex justify-around mt-4">
-				<span>Fuel Type</span>
+				<span>{m["vehicles.add.fuel"]()}</span>
 				<span>/</span>
-				<span>Preferred Fuel</span>
+				<span>{m["vehicles.add.preferred-fuel"]()}</span>
 			</div>
 			<div class="flex gap-2">
 				<Select.Root type="single" bind:value={vehicle.fuelType}>
 					<Select.Trigger class="w-full">
 						{vehicle.fuelType === "diesel"
-							? "Diesel"
+							? m["vehicles.add.diesel"]()
 							: vehicle.fuelType === "petrol"
-								? "Petrol"
-								: "Electric"}
+								? m["vehicles.add.petrol"]()
+								: m["vehicles.add.electric"]()}
 					</Select.Trigger>
 					<Select.Content>
-						<Select.Item value="diesel">Diesel</Select.Item>
-						<Select.Item value="petrol">Petrol</Select.Item>
-						<Select.Item value="electric">Electric</Select.Item>
+						<Select.Item value="diesel">{m["vehicles.add.diesel"]()}</Select.Item>
+						<Select.Item value="petrol">{m["vehicles.add.petrol"]()}</Select.Item>
+						<Select.Item value="electric">{m["vehicles.add.electric"]()}</Select.Item>
 					</Select.Content>
 				</Select.Root>
 
@@ -165,15 +166,15 @@
 				onclick={() => {
 					open = false;
 					if (vehicle.name.trim() === "") {
-						alert("Please enter a vehicle name.");
+						alert(m["vehicles.add.errors.enter-name"]());
 						return;
 					}
 					if (vehicle.legalMaxSpeed <= 0 || vehicle.actualMaxSpeed <= 0) {
-						alert("Please enter valid speeds.");
+						alert(m["vehicles.add.errors.enter-speeds"]());
 						return;
 					}
 					if (!isValidFuel(vehicle)) {
-						alert("Please select a valid fuel type and preferred fuel.");
+						alert(m["vehicles.add.errors.select-fuel"]());
 						return;
 					}
 					setVehicles([...vehicles, vehicle]);
@@ -182,7 +183,7 @@
 				}}
 			>
 				<SaveIcon />
-				Save
+				{m.save()}
 			</Button>
 			<Button
 				variant="secondary"
@@ -191,7 +192,7 @@
 				}}
 			>
 				<XIcon />
-				Cancel
+				{m.cancel()}
 			</Button>
 		</Drawer.Footer>
 	</Drawer.Content>

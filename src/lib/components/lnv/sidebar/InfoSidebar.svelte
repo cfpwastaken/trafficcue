@@ -26,6 +26,7 @@
 	import { getDeveloperToggle } from "./settings/developer.svelte";
 	import InternetAccess from "../info/InternetAccess.svelte";
 	import RestaurantInfo from "../info/RestaurantInfo.svelte";
+	import { m } from "$lang/messages";
 
 	// let { feature }: { feature: Feature } = $props();
 
@@ -88,9 +89,9 @@
 			pin.liftPin();
 		}}
 	>
-		Dropped Pin
+		{m["sidebar.info.dropped"]()}
 	</SidebarHeader>
-	<p>Loading...</p>
+	<p>{m.loading()}</p>
 {:then res}
 	{#if res.elements.length === 0}
 		<SidebarHeader
@@ -98,7 +99,7 @@
 				pin.liftPin();
 			}}
 		>
-			Dropped Pin
+			{m["sidebar.info.dropped"]()}
 		</SidebarHeader>
 		<span style="color: #acacac;">&copy; OpenStreetMap</span>
 		<pre>{JSON.stringify(res, null, 2)}</pre>
@@ -132,7 +133,7 @@
 				}}
 			>
 				<RouteIcon />
-				Route
+				{m["sidebar.info.route"]()}
 			</Button>
 			{#if tags.email || tags["contact:email"]}
 				<Button
@@ -141,7 +142,7 @@
 					target="_blank"
 				>
 					<MailIcon />
-					Email
+					{m["sidebar.info.email"]()}
 				</Button>
 			{/if}
 			{#if tags.website || tags["contact:website"]}
@@ -151,7 +152,7 @@
 					target="_blank"
 				>
 					<GlobeIcon />
-					Website
+					{m["sidebar.info.website"]()}
 				</Button>
 			{/if}
 			{#if tags.phone || tags["contact:phone"]}
@@ -161,14 +162,14 @@
 					target="_blank"
 				>
 					<PhoneIcon />
-					Call
+					{m["sidebar.info.call"]()}
 				</Button>
 			{/if}
 			<Popover.Root>
 				<Popover.Trigger>
 					<Button variant="secondary">
 						<EllipsisIcon />
-						More
+						{m.more()}
 					</Button>
 				</Popover.Trigger>
 				<Popover.Content>
@@ -185,7 +186,7 @@
 							}}
 						>
 							<HomeIcon />
-							Set as Home
+							{m["sidebar.info.set-as"]({ name: m["saved.home"]() })}
 						</Button>
 						<Button
 							variant="outline"
@@ -195,7 +196,7 @@
 							}}
 						>
 							<SchoolIcon />
-							Set as School
+							{m["sidebar.info.set-as"]({ name: m["saved.school"]() })}
 						</Button>
 						<Button
 							variant="outline"
@@ -209,7 +210,7 @@
 							}}
 						>
 							<BriefcaseIcon />
-							Set as Work
+							{m["sidebar.info.set-as"]({ name: m["saved.work"]() })}
 						</Button>
 						{#if dev.current}
 							<Button
@@ -255,7 +256,7 @@
 
 		<!-- any payment:* tag -->
 		{#if Object.keys(tags).some((key) => key.startsWith("payment:"))}
-			<h3 class="text-lg font-bold mt-2">Payment Methods</h3>
+			<h3 class="text-lg font-bold mt-2">{m["sidebar.info.payment-methods"]()}</h3>
 			<ul style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
 				{#each Object.entries(tags).filter( ([key]) => key.startsWith("payment:"), ) as [key, value] (key)}
 					<Badge

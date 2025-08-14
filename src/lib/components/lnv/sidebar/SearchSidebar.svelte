@@ -6,6 +6,7 @@
 	import type { Feature } from "$lib/services/Search";
 	import SidebarHeader from "./SidebarHeader.svelte";
 	import { searchbar } from "../view.svelte";
+	import { m } from "$lang/messages";
 
 	let {
 		results,
@@ -21,7 +22,7 @@
 		searchbar.text = "";
 	}}
 >
-	Search Results for "{query}"
+	{m["sidebar.search.header"]()} "{query}"
 </SidebarHeader>
 <div
 	id="results"

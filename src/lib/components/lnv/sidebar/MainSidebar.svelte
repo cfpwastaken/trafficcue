@@ -22,12 +22,12 @@
 		onclick={() => {
 			const loc = saved.home;
 			if (!loc) {
-				alert(m["saved.no-location"](m["saved.home"]));
+				alert(m["saved.no-location"]({ name: m["saved.home"]() }));
 				return;
 			}
 			const { lat, lon } = loc;
 			if (!lat || !lon) {
-				alert(m["saved.no-location"](m["saved.home"]));
+				alert(m["saved.no-location"]({ name: m["saved.home"]() }));
 				return;
 			}
 			pin.dropPin(lat, lon);
@@ -48,12 +48,12 @@
 			console.log(saved);
 			const loc = saved.school;
 			if (!loc) {
-				alert(m["saved.no-location"](m["saved.school"]));
+				alert(m["saved.no-location"]({ name: m["saved.school"]() }));
 				return;
 			}
 			const { lat, lon } = loc;
 			if (!lat || !lon) {
-				alert(m["saved.no-location"](m["saved.school"]));
+				alert(m["saved.no-location"]({ name: m["saved.school"]() }));
 				return;
 			}
 			pin.dropPin(lat, lon);
@@ -73,12 +73,12 @@
 		onclick={() => {
 			const loc = saved.work;
 			if (!loc) {
-				alert(m["saved.no-location"](m["saved.work"]));
+				alert(m["saved.no-location"]({ name: m["saved.work"]() }));
 				return;
 			}
 			const { lat, lon } = loc;
 			if (!lat || !lon) {
-				alert(m["saved.no-location"](m["saved.work"]));
+				alert(m["saved.no-location"]({ name: m["saved.work"]() }));
 				return;
 			}
 			pin.dropPin(lat, lon);

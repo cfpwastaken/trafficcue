@@ -31,6 +31,7 @@
 	import AboutSidebar from "./sidebar/settings/AboutSidebar.svelte";
 	import OfflineMapsSidebar from "./sidebar/settings/OfflineMapsSidebar.svelte";
 	import DeveloperSidebar from "./sidebar/settings/DeveloperSidebar.svelte";
+	import { m } from "$lang/messages";
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const views: Record<string, Component<any>> = {
@@ -188,10 +189,10 @@
 							location.toggleLock();
 						}}
 					>
-						{location.locked ? "Unlock Location" : "Lock Location"}
+						{location.locked ? m["location.unlock"]() : m["location.unlock"]()}
 					</Button>
 					{#if location.code}
-						<span>Advertise code: {location.code}</span>
+						<span>{m["location.code"]()}: {location.code}</span>
 					{/if}
 					<Button
 						variant="outline"
@@ -199,7 +200,7 @@
 							advertiseRemoteLocation();
 						}}
 					>
-						Advertise Location
+						{m["location.start"]()}
 					</Button>
 					<Button
 						variant="outline"
@@ -207,7 +208,7 @@
 							remoteLocation(prompt("Code?") || "");
 						}}
 					>
-						Join Remote Location
+						{m["location.join"]()}
 					</Button>
 				</div>
 			</Popover.Content>

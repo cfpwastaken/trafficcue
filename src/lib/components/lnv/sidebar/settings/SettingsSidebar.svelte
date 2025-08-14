@@ -9,34 +9,35 @@
 	import SidebarHeader from "../SidebarHeader.svelte";
 	import SettingsButton from "./SettingsButton.svelte";
 	import { getDeveloperToggle } from "./developer.svelte";
+	import { m } from "$lang/messages";
 
 	const dev = getDeveloperToggle();
 </script>
 
-<SidebarHeader>Settings</SidebarHeader>
+<SidebarHeader>{m["sidebar.settings.header"]()}</SidebarHeader>
 
 <div id="sections">
 	<section>
-		<h2>General</h2>
-		<SettingsButton icon={LanguagesIcon} text="Language" disabled />
+		<h2>{m["sidebar.settings.general"]()}</h2>
+		<SettingsButton icon={LanguagesIcon} text={m["sidebar.language.header"]()} disabled />
 	</section>
 
 	<section>
-		<h2>Map</h2>
-		<SettingsButton icon={MapIcon} text="Offline Maps" view="offline-maps" />
-		<SettingsButton icon={PaintbrushIcon} text="Map Style" disabled />
+		<h2>{m["sidebar.settings.map"]()}</h2>
+		<SettingsButton icon={MapIcon} text={m["sidebar.offline-maps.header"]()} view="offline-maps" />
+		<SettingsButton icon={PaintbrushIcon} text={m["sidebar.map-style.header"]()} disabled />
 	</section>
 
 	<section>
-		<h2>About</h2>
+		<h2>{m["sidebar.about.header"]()}</h2>
 		{#if dev.current == "true"}
 			<SettingsButton
 				icon={CodeIcon}
-				text="Developer Settings"
+				text={m["sidebar.developer.header"]()}
 				view="dev-options"
 			/>
 		{/if}
-		<SettingsButton icon={InfoIcon} text="About" view="about" />
+		<SettingsButton icon={InfoIcon} text={m["sidebar.about.header"]()} view="about" />
 	</section>
 </div>
 

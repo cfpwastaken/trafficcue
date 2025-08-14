@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { m } from "$lang/messages";
 	import Badge from "$lib/components/ui/badge/badge.svelte";
 	import opening_hours from "opening_hours";
 
@@ -18,11 +19,11 @@
 </script>
 
 <h3 class="text-lg font-bold mt-2">
-	Opening Hours
+	{m["sidebar.info.opening-hours"]()}
 	{#if oh.getState()}
-		<Badge>Open</Badge>
+		<Badge>{m["sidebar.info.open"]()}</Badge>
 	{:else}
-		<Badge variant="destructive">Closed</Badge>
+		<Badge variant="destructive">{m["sidebar.info.closed"]()}</Badge>
 	{/if}
 </h3>
 

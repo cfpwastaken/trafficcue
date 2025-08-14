@@ -1,4 +1,5 @@
 <script>
+	import { m } from "$lang/messages";
 	import SidebarHeader from "../SidebarHeader.svelte";
 	import { getDeveloperToggle } from "./developer.svelte";
 
@@ -6,7 +7,7 @@
 	const dev = getDeveloperToggle();
 </script>
 
-<SidebarHeader>About</SidebarHeader>
+<SidebarHeader>{m["sidebar.about.header"]()}</SidebarHeader>
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -21,9 +22,9 @@
 >
 	TrafficCue
 </h1>
-<span>Powered by:</span>
+<span>{m["sidebar.about.powered-by"]()}:</span>
 <ul>
-	<li>© OpenStreetMap contributors</li>
+	<li>© OpenStreetMap {m["sidebar.about.contributors"]()}</li>
 	<li>Natural Earth</li>
 	<li>MapLibre</li>
 	<li>OpenMapTiles</li>

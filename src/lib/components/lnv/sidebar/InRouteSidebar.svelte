@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { m } from "$lang/messages";
 	import { Button } from "$lib/components/ui/button";
 	import {
 		decodePolyline,
@@ -122,7 +123,7 @@
 	});
 </script>
 
-{fullDistanceText} left
+{fullDistanceText} {m["sidebar.in-route.left"]()}
 
 <Button
 	onclick={() => {
@@ -133,12 +134,12 @@
 <Button
 	onclick={() => {
 		stopNavigation();
-	}}>End Trip</Button
+	}}>{m["sidebar.in-route.end-trip"]()}</Button
 >
 
 <div class="flex flex-col gap-2 mt-5">
 	{#if location.code}
-		<span>Share Code: {location.code}</span>
+		<span>{m["sidebar.in-route.share-code"]()}: {location.code}</span>
 		<Button
 			variant="secondary"
 			onclick={() => {
@@ -147,7 +148,7 @@
 				location.code = null;
 			}}
 		>
-			Stop Sharing Location
+			{m["sidebar.in-route.stop-sharing"]()}
 		</Button>
 	{:else}
 		<Button
@@ -156,7 +157,7 @@
 				advertiseRemoteLocation();
 			}}
 		>
-			Share Trip Status & Location
+			{m["sidebar.in-route.share-location"]()}
 		</Button>
 	{/if}
 </div>

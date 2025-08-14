@@ -1,4 +1,5 @@
 <script>
+	import { m } from "$lang/messages";
 	import Badge from "$lib/components/ui/badge/badge.svelte";
 	import { getStations } from "$lib/services/MTSK";
 	import RequiresCapability from "../RequiresCapability.svelte";
@@ -6,7 +7,7 @@
 	let { tags, lat, lng } = $props();
 </script>
 
-<h3 class="text-lg font-bold mt-2">Fuel Types</h3>
+<h3 class="text-lg font-bold mt-2">{m["sidebar.info.fuel-types"]()}</h3>
 <ul class="flex gap-2 flex-wrap">
 	{#each Object.entries(tags).filter( ([key]) => key.startsWith("fuel:"), ) as [key, tag] (key)}
 		<!-- <li>{key.replace("fuel:", "")}: {tag}</li> -->
@@ -19,9 +20,9 @@
 </ul>
 
 <RequiresCapability capability="fuel">
-	<h3 class="text-lg font-bold mt-2">Prices</h3>
+	<h3 class="text-lg font-bold mt-2">{m["sidebar.info.prices"]()}</h3>
 	{#await getStations(lat, lng)}
-		<p>Loading fuel prices...</p>
+		<p>{m.loading()}</p>
 	{:then stations}
 		{#if stations.stations.length > 0}
 			{@const station = stations.stations[0]}
@@ -35,9 +36,9 @@
 				<p>E5: {station.e5}</p>
 			{/if}
 		{:else}
-			<p>No fuel prices available.</p>
+			<p>{m["sidebar.info.no-prices"]()}</p>
 		{/if}
 	{:catch err}
-		<p>Error loading fuel prices: {err.message}</p>
+		<p>{m["sidebar.info.error-loading-prices"]()}: {err.message}</p>
 	{/await}
 </RequiresCapability>
