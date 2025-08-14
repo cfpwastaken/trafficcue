@@ -8,6 +8,7 @@
 	import Post from "../Post.svelte";
 	import RequiresCapability from "../RequiresCapability.svelte";
 	import { saved } from "$lib/saved.svelte";
+	import { m } from "$lang/messages";
 </script>
 
 <div
@@ -21,12 +22,12 @@
 		onclick={() => {
 			const loc = saved.home;
 			if (!loc) {
-				alert("No home location saved.");
+				alert(m["saved.no-location"](m["saved.home"]));
 				return;
 			}
 			const { lat, lon } = loc;
 			if (!lat || !lon) {
-				alert("No home location saved.");
+				alert(m["saved.no-location"](m["saved.home"]));
 				return;
 			}
 			pin.dropPin(lat, lon);
@@ -38,7 +39,7 @@
 		}}
 	>
 		<HomeIcon />
-		Home
+		{m["saved.home"]()}
 	</Button>
 	<Button
 		variant="secondary"
@@ -47,12 +48,12 @@
 			console.log(saved);
 			const loc = saved.school;
 			if (!loc) {
-				alert("No school location saved.");
+				alert(m["saved.no-location"](m["saved.school"]));
 				return;
 			}
 			const { lat, lon } = loc;
 			if (!lat || !lon) {
-				alert("No school location saved.");
+				alert(m["saved.no-location"](m["saved.school"]));
 				return;
 			}
 			pin.dropPin(lat, lon);
@@ -64,7 +65,7 @@
 		}}
 	>
 		<SchoolIcon />
-		School
+		{m["saved.school"]()}
 	</Button>
 	<Button
 		variant="secondary"
@@ -72,12 +73,12 @@
 		onclick={() => {
 			const loc = saved.work;
 			if (!loc) {
-				alert("No work location saved.");
+				alert(m["saved.no-location"](m["saved.work"]));
 				return;
 			}
 			const { lat, lon } = loc;
 			if (!lat || !lon) {
-				alert("No work location saved.");
+				alert(m["saved.no-location"](m["saved.work"]));
 				return;
 			}
 			pin.dropPin(lat, lon);
@@ -89,7 +90,7 @@
 		}}
 	>
 		<BriefcaseIcon />
-		Work
+		{m["saved.work"]()}
 	</Button>
 </div>
 

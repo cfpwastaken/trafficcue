@@ -1,0 +1,9 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "saved": {
+    "home": "Home",
+    "school": "School",
+    "work": "Work",
+    "no-location": "No {name} location saved."
+  }
+}

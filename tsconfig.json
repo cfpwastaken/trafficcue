@@ -8,7 +8,10 @@
 		"baseUrl": ".",
 		"paths": {
 			"$lib": ["./src/lib"],
-			"$lib/*": ["./src/lib/*"]
-		}
+			"$lib/*": ["./src/lib/*"],
+			"$lang": ["./src/paraglide"],
+			"$lang/*": ["./src/paraglide/*"]
+		},
+		"allowJs": true
 	}
 }
