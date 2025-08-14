@@ -1,5 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
+  "language": "English",
   "save": "Save",
   "cancel": "Cancel",
   "loading": "Loading...",

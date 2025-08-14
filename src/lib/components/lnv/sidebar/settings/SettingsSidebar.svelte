@@ -19,7 +19,7 @@
 <div id="sections">
 	<section>
 		<h2>{m["sidebar.settings.general"]()}</h2>
-		<SettingsButton icon={LanguagesIcon} text={m["sidebar.language.header"]()} disabled />
+		<SettingsButton icon={LanguagesIcon} text={m["sidebar.language.header"]()} view="language" />
 	</section>
 
 	<section>

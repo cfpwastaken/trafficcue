@@ -32,6 +32,7 @@
 	import OfflineMapsSidebar from "./sidebar/settings/OfflineMapsSidebar.svelte";
 	import DeveloperSidebar from "./sidebar/settings/DeveloperSidebar.svelte";
 	import { m } from "$lang/messages";
+	import LanguageSidebar from "./sidebar/settings/LanguageSidebar.svelte";
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const views: Record<string, Component<any>> = {
@@ -45,6 +46,7 @@
 		about: AboutSidebar,
 		"offline-maps": OfflineMapsSidebar,
 		"dev-options": DeveloperSidebar,
+		language: LanguageSidebar
 	};
 
 	let isDragging = false;
