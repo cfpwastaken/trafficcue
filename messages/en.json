@@ -11,7 +11,8 @@
 		"home": "Home",
 		"school": "School",
 		"work": "Work",
-		"no-location": "No {name} location saved."
+		"no-location": "No {name} location saved.",
+		"saved-routes": "Saved Routes"
 	},
 	"location": {
 		"unlock": "Unlock Location",
@@ -130,5 +131,6 @@
 			"choose-lang": "Choose your language",
 			"first-vehicle": "Let's create your first vehicle."
 		}
-	}
+	},
+	"unsave": "Unsave"
 }

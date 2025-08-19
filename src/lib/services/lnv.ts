@@ -80,12 +80,23 @@ export async function refreshToken() {
 	localStorage.setItem("lnv-refresh", data.refresh_token);
 }
 
-export async function authFetch(url: string, params: RequestInit): ReturnType<typeof fetch> {
-	let res = await fetch(url, params);
-	if(res.status == 401) {
-		await refreshToken();
+export async function authFetch(url: string, params?: RequestInit): ReturnType<typeof fetch> {
+	let res = await fetch(url, {
+		headers: {
+			"Authorization": "Bearer " + localStorage.getItem("lnv-token")
+		},
+		...params
+	});
+	if(res.status != 401) {
+		return res;
 	}
-	res = await fetch(url, params);
+	await refreshToken();
+	res = await fetch(url, {
+		headers: {
+			"Authorization": "Bearer " + localStorage.getItem("lnv-token")
+		},
+		...params
+	});
 	if(res.status == 401) {
 		console.error("Server is misconfigured.");
 	}
@@ -159,4 +170,35 @@ export async function ai(query: string, location?: WorldLocation) {
 		throw new Error(`Failed to get AI response: ${res.statusText}`);
 	}
 	return await res.text();
+}
+
+export function getSaved(): Promise<{ name: string; data: string; }[]> {
+	return authFetch(LNV_SERVER + "/saved").then(res => res.json());
+}
+
+export function putSaved(name: string, data: object) {
+	return authFetch(LNV_SERVER + "/saved", {
+		method: "PUT",
+		body: JSON.stringify({
+			name,
+			data: JSON.stringify(data)
+		})
+	}).then(res => res.json());
+}
+
+export function deleteSaved(name: string) {
+	return authFetch(LNV_SERVER + "/saved", {
+		method: "DELETE",
+		body: JSON.stringify({
+			name
+		})
+	}).then(res => res.text());
+}
+
+export async function isSaved(data: Trip) {
+	const res = await getSaved();
+	console.log(res, data);
+	const filtered = res.filter(s => JSON.parse(s.data).legs[0].shape == data.legs[0].shape);
+	if(filtered.length == 0) return false;
+	return filtered[0].name;
 }

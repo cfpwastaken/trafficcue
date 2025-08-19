@@ -9,6 +9,8 @@
 	import RequiresCapability from "../RequiresCapability.svelte";
 	import { saved } from "$lib/saved.svelte";
 	import { m } from "$lang/messages";
+	import { getSaved } from "$lib/services/lnv";
+	import { view } from "../view.svelte";
 </script>
 
 <div
@@ -95,6 +97,22 @@
 </div>
 
 <VehicleSelector />
+
+{#await getSaved() then saved}
+	{#if saved.length != 0}
+		<div>
+			<h2 style="margin: 5px; margin-left: 0; font-size: 1.2em;">Saved Routes</h2>
+
+			<div style="display: flex; flex-direction: column; gap: 10px;">
+				{#each saved as save}
+					<Button variant="secondary" onclick={() => {
+						view.switch("trip", { route: JSON.parse(save.data) })
+					}}>{save.name}</Button>
+				{/each}
+			</div>
+		</div>
+	{/if}
+{/await}
 
 <RequiresCapability capability="post">
 	<div>

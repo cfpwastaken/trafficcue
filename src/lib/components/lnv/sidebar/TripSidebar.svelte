@@ -10,6 +10,8 @@
 	import { RouteIcon, SaveIcon, SendIcon } from "@lucide/svelte";
 	import { map } from "../map.svelte";
 	import { m } from "$lang/messages";
+	import { deleteSaved, isSaved, putSaved } from "$lib/services/lnv";
+	import { view } from "../view.svelte";
 
 	let {
 		route,
@@ -43,10 +45,21 @@
 		<RouteIcon />
 		{m["sidebar.trip.start"]()}
 	</Button>
-	<Button variant="secondary" disabled>
-		<SaveIcon />
-		{m["sidebar.trip.save"]()}
-	</Button>
+	{#await isSaved($state.snapshot(route)) then saved}
+		<Button variant="secondary" onclick={async () => {
+			if(saved) {
+				await deleteSaved(saved);
+				view.back();
+			} else {
+				const name = prompt("Trip name?");
+				if(!name) return;
+				await putSaved(name, route);
+			}
+		}}>
+			<SaveIcon />
+			{saved ? m.unsave() : m["sidebar.trip.save"]()}
+		</Button>
+	{/await}
 	<Button variant="secondary" disabled>
 		<SendIcon />
 		{m["sidebar.trip.send"]()}
