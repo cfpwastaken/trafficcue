@@ -1,7 +1,7 @@
 import { LNV_SERVER } from "./hosts";
 import type { OIDCUser } from "./oidc";
 
-export type Capabilities = ("auth" | "reviews" | "ai" | "fuel" | "post")[];
+export type Capabilities = ("auth" | "reviews" | "ai" | "fuel" | "post" | "saved-routes")[];
 export let capabilities: Capabilities = [];
 export let oidcConfig: {
 	AUTH_URL: string;
