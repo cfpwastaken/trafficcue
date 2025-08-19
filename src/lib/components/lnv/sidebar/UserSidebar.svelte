@@ -5,6 +5,7 @@
 	import { getAuthURL, getOIDCUser } from "$lib/services/oidc";
 	import * as Avatar from "$lib/components/ui/avatar";
 	import { m } from "$lang/messages";
+	import { refreshToken } from "$lib/services/lnv";
 
 	interface OIDCUser {
 		sub: string;
@@ -68,6 +69,9 @@
 		</Avatar.Root>
 		{user.name || user.preferred_username}
 	</SidebarHeader>
+	<button onclick={() => {
+		refreshToken();
+	}}>refresh</button>
 	<pre>{user.sub}</pre>
 	{JSON.stringify(user, null, 2)}
 {/if}

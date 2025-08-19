@@ -1,4 +1,5 @@
 import { LNV_SERVER } from "./hosts";
+import type { OIDCUser } from "./oidc";
 
 export type Capabilities = ("auth" | "reviews" | "ai" | "fuel" | "post")[];
 export let capabilities: Capabilities = [];
@@ -50,6 +51,45 @@ export async function hasCapability(
 ): Promise<boolean> {
 	const caps = await getCapabilities();
 	return caps.includes(capability);
+}
+
+export async function refreshToken() {
+	const config = await getOIDCConfig();
+	if(!config) throw new Error("Server does not support OIDC.");
+	const refresh_token = localStorage.getItem("lnv-refresh");
+	if(!refresh_token) throw new Error("No refresh token.")
+	const params = new URLSearchParams();
+	params.append("grant_type", "refresh_token");
+	params.append("refresh_token", refresh_token);
+	params.append("client_id", config.CLIENT_ID);
+	const res = await fetch(config.TOKEN_URL, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		body: params
+	});
+	const data = (await res.json()) as OIDCUser;
+	if(!res.ok) {
+		console.error("Refreshing token: " + res.status + " " + res.statusText)
+		console.error(data);
+	}
+	console.log(data);
+	localStorage.setItem("lnv-id", data.id_token);
+	localStorage.setItem("lnv-token", data.access_token);
+	localStorage.setItem("lnv-refresh", data.refresh_token);
+}
+
+export async function authFetch(url: string, params: RequestInit): ReturnType<typeof fetch> {
+	let res = await fetch(url, params);
+	if(res.status == 401) {
+		await refreshToken();
+	}
+	res = await fetch(url, params);
+	if(res.status == 401) {
+		console.error("Server is misconfigured.");
+	}
+	return res;
 }
 
 export interface Review {

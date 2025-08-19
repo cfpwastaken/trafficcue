@@ -17,7 +17,7 @@ export async function getAuthURL() {
 	const state = generateRandomString(16);
 
 	return {
-		url: `${AUTH_URL}?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${window.location.origin}/login/callback&scope=openid%20profile&code_challenge=${pkce.codeChallenge}&code_challenge_method=S256&state=${state}`,
+		url: `${AUTH_URL}?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${window.location.origin}/oidc&scope=openid%20profile&code_challenge=${pkce.codeChallenge}&code_challenge_method=S256&state=${state}`,
 		codeVerifier: pkce.codeVerifier,
 		state,
 	};
@@ -60,6 +60,14 @@ async function sha256(input: string | undefined): Promise<ArrayBuffer> {
 	return await window.crypto.subtle.digest("SHA-256", data);
 }
 
+export type OIDCUser = {
+	access_token: string;
+	token_type: string;
+	refresh_token: string;
+	expires_in: number;
+	id_token: string;
+}
+
 export async function getOIDCUser(code: string, codeVerifier: string) {
 	if (!(await hasCapability("auth"))) {
 		throw new Error("Server does not support OIDC authentication");
@@ -75,7 +83,7 @@ export async function getOIDCUser(code: string, codeVerifier: string) {
 	params.append("code", code);
 	params.append("client_id", CLIENT_ID);
 	params.append("code_verifier", codeVerifier);
-	params.append("redirect_uri", window.location.origin + "/login/callback");
+	params.append("redirect_uri", window.location.origin + "/oidc");
 
 	const res = await fetch(TOKEN_URL, {
 		method: "POST",
@@ -85,6 +93,6 @@ export async function getOIDCUser(code: string, codeVerifier: string) {
 		body: params,
 	}).then((res) => res.json());
 
-	return res;
+	return res as OIDCUser;
 	// return JSON.parse(atob(id_token.split(".")[1]));
 }

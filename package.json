@@ -56,6 +56,7 @@
 		"eslint": "^9.29.0",
 		"eslint-plugin-svelte": "^3.9.3",
 		"globals": "^16.2.0",
+		"jsonwebtoken": "^9.0.2",
 		"libsodium-wrappers": "^0.7.15",
 		"opening_hours": "^3.8.0",
 		"pako": "^2.1.0",

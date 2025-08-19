@@ -2,7 +2,7 @@ import { mount } from "svelte";
 import "./app.css";
 import App from "./App.svelte";
 
-if (location.href.includes("/login/callback")) {
+if (location.href.includes("/oidc")) {
 	const url = new URL(location.href);
 	const code = url.searchParams.get("code");
 	const state = url.searchParams.get("state");
