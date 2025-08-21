@@ -132,5 +132,10 @@
 			"first-vehicle": "Let's create your first vehicle."
 		}
 	},
-	"unsave": "Unsave"
+	"unsave": "Unsave",
+	"location-selector": {
+		"current": "Current Location",
+		"searching": "Searching...",
+		"no-results": "No locations found."
+	}
 }

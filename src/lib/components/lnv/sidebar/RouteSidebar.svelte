@@ -20,6 +20,7 @@
 	import { location } from "../location.svelte";
 	import { saved } from "$lib/saved.svelte";
 	import { m } from "$lang/messages";
+	import LocationSelect from "../LocationSelect.svelte";
 
 	let {
 		from,
@@ -29,7 +30,7 @@
 		to?: string;
 	} = $props();
 
-	let fromLocation = $state(from || "");
+	let fromLocation = $state(from || "current");
 	let toLocation = $state(to || "");
 
 	let routes: Trip[] | null = $state(null);
@@ -57,44 +58,37 @@
 <div class="flex flex-col gap-2 w-full mb-2">
 	<div class="flex gap-2 items-center w-full">
 		<CircleDotIcon />
-		<Input bind:value={fromLocation} />
+		<LocationSelect bind:value={fromLocation} />
 	</div>
 	<div class="flex items-center justify-center w-full">
 		<CircleArrowDown />
 	</div>
 	<div class="flex gap-2 items-center w-full">
 		<CircleDotIcon />
-		<Input bind:value={toLocation} />
+		<LocationSelect bind:value={toLocation} />
 	</div>
-	<span>
-		<!-- eslint-disable-next-line -->
-		{@html m["sidebar.route.help"]()}
-	</span>
 </div>
 <Button
 	onclick={async () => {
+		console.log(fromLocation, toLocation);
 		const FROM: WorldLocation =
 			fromLocation == "current"
 				? { lat: location.lat, lon: location.lng }
-				: fromLocation == "home"
-					? saved.home
-					: fromLocation == "work"
-						? saved.work
-						: {
-								lat: parseFloat(fromLocation.split(",")[0]),
-								lon: parseFloat(fromLocation.split(",")[1]),
-							};
+				: saved[fromLocation]
+					? saved[fromLocation]
+					: {
+							lat: parseFloat(fromLocation.split(",")[0]),
+							lon: parseFloat(fromLocation.split(",")[1]),
+						};
 		const TO: WorldLocation =
 			toLocation == "current"
 				? { lat: location.lat, lon: location.lng }
-				: toLocation == "home"
-					? saved.home
-					: toLocation == "work"
-						? saved.work
-						: {
-								lat: parseFloat(toLocation.split(",")[0]),
-								lon: parseFloat(toLocation.split(",")[1]),
-							};
+				: saved[toLocation]
+					? saved[toLocation]
+					: {
+							lat: parseFloat(toLocation.split(",")[0]),
+							lon: parseFloat(toLocation.split(",")[1]),
+						};
 		const req = createValhallaRequest(selectedVehicle() ?? DefaultVehicle, [
 			FROM,
 			TO,

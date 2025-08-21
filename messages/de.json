@@ -130,5 +130,11 @@
 			"choose-lang": "Wählen Sie Ihre Sprache",
 			"first-vehicle": "Erstellen wir Ihr erstes Fahrzeug."
 		}
-	}
+	},
+	"location-selector": {
+		"current": "Mein Standort",
+		"searching": "Suchen...",
+		"no-results": "Keine Orte gefunden."
+	},
+	"unsave": "Löschen"
 }
