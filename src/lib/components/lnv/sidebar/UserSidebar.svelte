@@ -5,7 +5,7 @@
 	import { getAuthURL, getOIDCUser } from "$lib/services/oidc";
 	import * as Avatar from "$lib/components/ui/avatar";
 	import { m } from "$lang/messages";
-	import { refreshToken } from "$lib/services/lnv";
+	import { refreshToken, uploadID } from "$lib/services/lnv";
 
 	interface OIDCUser {
 		sub: string;
@@ -58,6 +58,7 @@
 				user = JSON.parse(
 					atob((localStorage.getItem("lnv-id") || "").split(".")[1]),
 				);
+				await uploadID();
 			});
 		}}>{m["sidebar.user.login"]()}</Button
 	>

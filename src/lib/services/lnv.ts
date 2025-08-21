@@ -53,6 +53,21 @@ export async function hasCapability(
 	return caps.includes(capability);
 }
 
+export async function uploadID() {
+	const res = await fetch(LNV_SERVER + "/user", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			token: localStorage.getItem("lnv-id")
+		})
+	});
+	if(!res.ok) {
+		alert("Failed to upload user data.");
+	}
+}
+
 export async function refreshToken() {
 	const config = await getOIDCConfig();
 	if(!config) throw new Error("Server does not support OIDC.");
@@ -78,6 +93,7 @@ export async function refreshToken() {
 	localStorage.setItem("lnv-id", data.id_token);
 	localStorage.setItem("lnv-token", data.access_token);
 	localStorage.setItem("lnv-refresh", data.refresh_token);
+	await uploadID();
 }
 
 export async function authFetch(url: string, params?: RequestInit): ReturnType<typeof fetch> {
