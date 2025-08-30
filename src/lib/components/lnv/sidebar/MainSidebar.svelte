@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BriefcaseIcon, HomeIcon, SchoolIcon } from "@lucide/svelte";
+	import { BriefcaseIcon, DownloadIcon, HomeIcon, SchoolIcon } from "@lucide/svelte";
 	import { Button } from "../../ui/button";
 	import { fly } from "svelte/transition";
 	import { circInOut } from "svelte/easing";
@@ -11,6 +11,7 @@
 	import { m } from "$lang/messages";
 	import { getSaved } from "$lib/services/lnv";
 	import { view } from "../view.svelte";
+	import * as Card from "$lib/components/ui/card";
 </script>
 
 <div
@@ -97,6 +98,29 @@
 </div>
 
 <VehicleSelector />
+
+{#if !window.__TAURI__}
+	<Card.Root style="margin-top: 1rem;">
+		<Card.Header>
+			<Card.Title>{m["sidebar.main.download-app.title"]()}</Card.Title>
+		</Card.Header>
+		<Card.Content>
+			{m["sidebar.main.download-app.description"]()}
+		</Card.Content>
+		<Card.Footer>
+			<a
+				href="/trafficcue.apk"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<Button>
+					<DownloadIcon />
+					{m["sidebar.main.download-app.button"]()}
+				</Button>
+			</a>
+		</Card.Footer>
+	</Card.Root>
+{/if}
 
 <RequiresCapability capability="saved-routes">
 	{#await getSaved() then saved}

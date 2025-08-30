@@ -130,6 +130,13 @@
 			"skip": "Skip Onboarding",
 			"choose-lang": "Choose your language",
 			"first-vehicle": "Let's create your first vehicle."
+		},
+		"main": {
+			"download-app": {
+				"title": "Download the app!",
+				"description": "TrafficCue is available on Android. Get it for the best experience!",
+				"button": "Get it"
+			}
 		}
 	},
 	"unsave": "Unsave",

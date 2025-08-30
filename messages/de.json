@@ -129,6 +129,13 @@
 			"skip": "Onboarding überspringen",
 			"choose-lang": "Wählen Sie Ihre Sprache",
 			"first-vehicle": "Erstellen wir Ihr erstes Fahrzeug."
+		},
+		"main": {
+			"download-app": {
+				"title": "App herunterladen!",
+				"description": "TrafficCue ist auf Android verfügbar. Holen Sie es sich für das beste Erlebnis!",
+				"button": "Runterladen"
+			}
 		}
 	},
 	"location-selector": {
