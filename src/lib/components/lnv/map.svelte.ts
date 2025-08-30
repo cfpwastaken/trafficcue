@@ -8,8 +8,9 @@ import { view } from "./view.svelte";
 export const map = $state({
 	value: undefined as maplibregl.Map | undefined,
 	zoom: 0,
+	ignorePadding: false,
 	updateMapPadding: () => {
-		if (document.querySelector<HTMLDivElement>("#sidebar") == null) {
+		if (document.querySelector<HTMLDivElement>("#sidebar") == null || map.ignorePadding) {
 			map._setPadding({
 				top: 0,
 				right: 0,
