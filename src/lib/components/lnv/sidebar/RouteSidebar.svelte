@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { CircleArrowDown, CircleDotIcon, StarIcon } from "@lucide/svelte";
-	import Input from "$lib/components/ui/input/input.svelte";
 	import SidebarHeader from "./SidebarHeader.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { createValhallaRequest } from "$lib/vehicles/ValhallaVehicles";

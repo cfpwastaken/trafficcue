@@ -1,7 +1,14 @@
 import { LNV_SERVER } from "./hosts";
 import type { OIDCUser } from "./oidc";
 
-export type Capabilities = ("auth" | "reviews" | "ai" | "fuel" | "post" | "saved-routes")[];
+export type Capabilities = (
+	| "auth"
+	| "reviews"
+	| "ai"
+	| "fuel"
+	| "post"
+	| "saved-routes"
+)[];
 export let capabilities: Capabilities = [];
 export let oidcConfig: {
 	AUTH_URL: string;
@@ -57,22 +64,22 @@ export async function uploadID() {
 	const res = await fetch(LNV_SERVER + "/user", {
 		method: "POST",
 		headers: {
-			"Content-Type": "application/json"
+			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({
-			token: localStorage.getItem("lnv-id")
-		})
+			token: localStorage.getItem("lnv-id"),
+		}),
 	});
-	if(!res.ok) {
+	if (!res.ok) {
 		alert("Failed to upload user data.");
 	}
 }
 
 export async function refreshToken() {
 	const config = await getOIDCConfig();
-	if(!config) throw new Error("Server does not support OIDC.");
+	if (!config) throw new Error("Server does not support OIDC.");
 	const refresh_token = localStorage.getItem("lnv-refresh");
-	if(!refresh_token) throw new Error("No refresh token.")
+	if (!refresh_token) throw new Error("No refresh token.");
 	const params = new URLSearchParams();
 	params.append("grant_type", "refresh_token");
 	params.append("refresh_token", refresh_token);
@@ -80,13 +87,13 @@ export async function refreshToken() {
 	const res = await fetch(config.TOKEN_URL, {
 		method: "POST",
 		headers: {
-			"Content-Type": "application/x-www-form-urlencoded"
+			"Content-Type": "application/x-www-form-urlencoded",
 		},
-		body: params
+		body: params,
 	});
 	const data = (await res.json()) as OIDCUser;
-	if(!res.ok) {
-		console.error("Refreshing token: " + res.status + " " + res.statusText)
+	if (!res.ok) {
+		console.error("Refreshing token: " + res.status + " " + res.statusText);
 		console.error(data);
 	}
 	console.log(data);
@@ -96,24 +103,27 @@ export async function refreshToken() {
 	await uploadID();
 }
 
-export async function authFetch(url: string, params?: RequestInit): ReturnType<typeof fetch> {
+export async function authFetch(
+	url: string,
+	params?: RequestInit,
+): ReturnType<typeof fetch> {
 	let res = await fetch(url, {
 		headers: {
-			"Authorization": "Bearer " + localStorage.getItem("lnv-token")
+			Authorization: "Bearer " + localStorage.getItem("lnv-token"),
 		},
-		...params
+		...params,
 	});
-	if(res.status != 401) {
+	if (res.status != 401) {
 		return res;
 	}
 	await refreshToken();
 	res = await fetch(url, {
 		headers: {
-			"Authorization": "Bearer " + localStorage.getItem("lnv-token")
+			Authorization: "Bearer " + localStorage.getItem("lnv-token"),
 		},
-		...params
+		...params,
 	});
-	if(res.status == 401) {
+	if (res.status == 401) {
 		console.error("Server is misconfigured.");
 	}
 	return res;
@@ -188,8 +198,8 @@ export async function ai(query: string, location?: WorldLocation) {
 	return await res.text();
 }
 
-export function getSaved(): Promise<{ name: string; data: string; }[]> {
-	return authFetch(LNV_SERVER + "/saved").then(res => res.json());
+export function getSaved(): Promise<{ name: string; data: string }[]> {
+	return authFetch(LNV_SERVER + "/saved").then((res) => res.json());
 }
 
 export function putSaved(name: string, data: object) {
@@ -197,24 +207,26 @@ export function putSaved(name: string, data: object) {
 		method: "PUT",
 		body: JSON.stringify({
 			name,
-			data: JSON.stringify(data)
-		})
-	}).then(res => res.json());
+			data: JSON.stringify(data),
+		}),
+	}).then((res) => res.json());
 }
 
 export function deleteSaved(name: string) {
 	return authFetch(LNV_SERVER + "/saved", {
 		method: "DELETE",
 		body: JSON.stringify({
-			name
-		})
-	}).then(res => res.text());
+			name,
+		}),
+	}).then((res) => res.text());
 }
 
 export async function isSaved(data: Trip) {
 	const res = await getSaved();
 	console.log(res, data);
-	const filtered = res.filter(s => JSON.parse(s.data).legs[0].shape == data.legs[0].shape);
-	if(filtered.length == 0) return false;
+	const filtered = res.filter(
+		(s) => JSON.parse(s.data).legs[0].shape == data.legs[0].shape,
+	);
+	if (filtered.length == 0) return false;
 	return filtered[0].name;
 }

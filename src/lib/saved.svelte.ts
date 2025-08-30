@@ -10,11 +10,11 @@ export function saveLocations() {
 
 export async function geocode(name: string) {
 	const loc = saved[name];
-	if(!loc) return;
+	if (!loc) return;
 	const geocode = await reverseGeocode(loc);
-	if(geocode.length == 0) {
+	if (geocode.length == 0) {
 		return;
 	}
 	const feature = geocode[0];
-	return `${feature.properties.street}${feature.properties.housenumber ? (" " + feature.properties.housenumber) : ""}, ${feature.properties.city}`;
+	return `${feature.properties.street}${feature.properties.housenumber ? " " + feature.properties.housenumber : ""}, ${feature.properties.city}`;
 }

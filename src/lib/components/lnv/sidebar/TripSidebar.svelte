@@ -48,16 +48,19 @@
 	</Button>
 	<RequiresCapability capability="saved-routes">
 		{#await isSaved($state.snapshot(route)) then saved}
-			<Button variant="secondary" onclick={async () => {
-				if(saved) {
-					await deleteSaved(saved);
-					view.back();
-				} else {
-					const name = prompt("Trip name?");
-					if(!name) return;
-					await putSaved(name, route);
-				}
-			}}>
+			<Button
+				variant="secondary"
+				onclick={async () => {
+					if (saved) {
+						await deleteSaved(saved);
+						view.back();
+					} else {
+						const name = prompt("Trip name?");
+						if (!name) return;
+						await putSaved(name, route);
+					}
+				}}
+			>
 				<SaveIcon />
 				{saved ? m.unsave() : m["sidebar.trip.save"]()}
 			</Button>

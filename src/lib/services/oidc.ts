@@ -60,7 +60,7 @@ async function sha256(input: string | undefined): Promise<ArrayBuffer> {
 	return await window.crypto.subtle.digest("SHA-256", data);
 }
 
-export type OIDCUser = {
+export interface OIDCUser {
 	access_token: string;
 	token_type: string;
 	refresh_token: string;

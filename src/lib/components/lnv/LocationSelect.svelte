@@ -7,7 +7,13 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { cn } from "$lib/utils.js";
 	import { m } from "$lang/messages";
-	import { BriefcaseIcon, HomeIcon, LocateIcon, MapPinIcon, SchoolIcon } from "@lucide/svelte";
+	import {
+		BriefcaseIcon,
+		HomeIcon,
+		LocateIcon,
+		MapPinIcon,
+		SchoolIcon,
+	} from "@lucide/svelte";
 	import { geocode } from "$lib/saved.svelte";
 	import { reverseGeocode, search, type Feature } from "$lib/services/Search";
 
@@ -15,26 +21,26 @@
 		{
 			value: "current",
 			label: m["location-selector.current"](),
-			icon: LocateIcon
+			icon: LocateIcon,
 		},
 		{
 			value: "home",
 			label: m["saved.home"](),
 			subtext: geocode("home"),
-			icon: HomeIcon
+			icon: HomeIcon,
 		},
 		{
 			value: "school",
 			label: m["saved.school"](),
 			subtext: geocode("school"),
-			icon: SchoolIcon
+			icon: SchoolIcon,
 		},
 		{
 			value: "work",
 			label: m["saved.work"](),
 			subtext: geocode("work"),
-			icon: BriefcaseIcon
-		}
+			icon: BriefcaseIcon,
+		},
 	];
 
 	let open = $state(false);
@@ -47,14 +53,22 @@
 
 	async function getCoordLabel(value: `${number},${number}`) {
 		const splitter = value.split(",");
-		const res = await reverseGeocode({ lat: parseFloat(splitter[0]), lon: parseFloat(splitter[1]) })
-		if(res.length == 0) return "<unknown>";
+		const res = await reverseGeocode({
+			lat: parseFloat(splitter[0]),
+			lon: parseFloat(splitter[1]),
+		});
+		if (res.length == 0) return "<unknown>";
 		const feature = res[0];
 		return feature.properties.name;
 	}
 
 	const selectedValue = $derived(
-		new Promise(async r => { r(locations.find((f) => f.value === value)?.label || await getCoordLabel(value)) })
+		new Promise((r) => {
+			r(
+				locations.find((f) => f.value === value)?.label ||
+					getCoordLabel(value).then((v) => r(v)),
+			);
+		}),
 	);
 
 	// We want to refocus the trigger button when the user selects
@@ -126,7 +140,7 @@
 				</Command.Empty>
 				<Command.Group>
 					{#if searchbarText == ""}
-						{#each locations as location}
+						{#each locations as location, _index (location.value)}
 							<Command.Item
 								value={location.value}
 								onSelect={() => {
@@ -135,17 +149,15 @@
 								}}
 								style="flex-direction: column; align-items: start;"
 							>
-								<div style="display: flex; align-items: center; gap: 5px; width: 100%;">
-									<location.icon
-										class={cn(
-											"mr-2 size-4"
-										)}
-									/>
+								<div
+									style="display: flex; align-items: center; gap: 5px; width: 100%;"
+								>
+									<location.icon class={cn("mr-2 size-4")} />
 									{location.label}
 									<CheckIcon
 										class={cn(
 											"mr-2 size-4 ml-auto",
-											value !== location.value && "text-transparent"
+											value !== location.value && "text-transparent",
 										)}
 									/>
 								</div>
@@ -158,8 +170,11 @@
 						{/each}
 					{/if}
 
-					{#each searchResults as result}
-						{@const resultValue = result.geometry.coordinates[1] + "," + result.geometry.coordinates[0]}
+					{#each searchResults as result, _index (result.properties.osm_id)}
+						{@const resultValue =
+							result.geometry.coordinates[1] +
+							"," +
+							result.geometry.coordinates[0]}
 						<Command.Item
 							value={resultValue}
 							onSelect={() => {
@@ -168,21 +183,23 @@
 							}}
 							style="flex-direction: column; align-items: start;"
 						>
-							<div style="display: flex; align-items: center; gap: 5px; width: 100%;">
-								<MapPinIcon
-									class={cn(
-										"mr-2 size-4"
-									)}
-								/>
+							<div
+								style="display: flex; align-items: center; gap: 5px; width: 100%;"
+							>
+								<MapPinIcon class={cn("mr-2 size-4")} />
 								{result.properties.name}
 								<CheckIcon
 									class={cn(
 										"mr-2 size-4 ml-auto",
-										value !== resultValue && "text-transparent"
+										value !== resultValue && "text-transparent",
 									)}
 								/>
 							</div>
-							<span>{result.properties.street}{result.properties.housenumber ? " " + result.properties.housenumber : ""}, {result.properties.city}</span>
+							<span
+								>{result.properties.street}{result.properties.housenumber
+									? " " + result.properties.housenumber
+									: ""}, {result.properties.city}</span
+							>
 						</Command.Item>
 					{/each}
 				</Command.Group>

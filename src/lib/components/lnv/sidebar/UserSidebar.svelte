@@ -70,9 +70,11 @@
 		</Avatar.Root>
 		{user.name || user.preferred_username}
 	</SidebarHeader>
-	<button onclick={() => {
-		refreshToken();
-	}}>refresh</button>
+	<button
+		onclick={() => {
+			refreshToken();
+		}}>refresh</button
+	>
 	<pre>{user.sub}</pre>
 	{JSON.stringify(user, null, 2)}
 {/if}

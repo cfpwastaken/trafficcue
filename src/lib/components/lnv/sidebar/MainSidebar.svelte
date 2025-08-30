@@ -102,13 +102,18 @@
 	{#await getSaved() then saved}
 		{#if saved.length != 0}
 			<div>
-				<h2 style="margin: 5px; margin-left: 0; font-size: 1.2em;">Saved Routes</h2>
+				<h2 style="margin: 5px; margin-left: 0; font-size: 1.2em;">
+					Saved Routes
+				</h2>
 
 				<div style="display: flex; flex-direction: column; gap: 10px;">
-					{#each saved as save}
-						<Button variant="secondary" onclick={() => {
-							view.switch("trip", { route: JSON.parse(save.data) })
-						}}>{save.name}</Button>
+					{#each saved as save, _index (save.name)}
+						<Button
+							variant="secondary"
+							onclick={() => {
+								view.switch("trip", { route: JSON.parse(save.data) });
+							}}>{save.name}</Button
+						>
 					{/each}
 				</div>
 			</div>

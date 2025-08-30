@@ -48,7 +48,10 @@
 	let CurrentView: Component = $state(LoadingSidebar);
 	const modules = import.meta.glob("./sidebar/**/*.svelte");
 	$effect(() => {
-		const path = modules[`./sidebar/${views[view.current.type] || "InvalidSidebar"}.svelte`];
+		const path =
+			modules[
+				`./sidebar/${views[view.current.type] || "InvalidSidebar"}.svelte`
+			];
 		if (!path) {
 			// Invalid view
 			import("./sidebar/InvalidSidebar.svelte").then((m) => {
