@@ -3,11 +3,13 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import path from "path";
+import lucidePreprocess from "vite-plugin-lucide-preprocess";
 
 const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig({
 	plugins: [
+		lucidePreprocess(),
 		paraglideVitePlugin({
 			project: "./project.inlang",
 			outdir: "./src/paraglide",
