@@ -85,7 +85,7 @@
 		const fullHeight = window.innerHeight - 20 - 40 - 10;
 		if (fullscreen[view.current.type]) {
 			if(sidebarHeight != fullHeight) {
-				hideSearch = true;
+				if(window.__TAURI__) hideSearch = true;
 				previousHeight = sidebarHeight;
 				sidebarHeight = fullHeight;
 				requestAnimationFrame(() => { map.updateMapPadding(); } );
