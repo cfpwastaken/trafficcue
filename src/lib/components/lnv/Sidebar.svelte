@@ -40,10 +40,28 @@
 		"onboarding-vehicles": "onboarding/OnboardingVehiclesSidebar",
 	};
 
+	const fullscreen: Record<string, boolean> = {
+		main: false,
+		info: false,
+		route: true,
+		trip: true,
+		search: false,
+		user: false,
+		settings: true,
+		about: true,
+		"offline-maps": true,
+		"dev-options": true,
+		language: true,
+		onboarding: true,
+		"onboarding-vehicles": true,
+	};
+
 	let isDragging = false;
 	let startY = 0;
 	let startHeight = 0;
 	let sidebarHeight = $state(200);
+	let previousHeight = 200;
+	let hideSearch = $state(false);
 
 	let CurrentView: Component = $state(LoadingSidebar);
 	const modules = import.meta.glob("./sidebar/**/*.svelte");
@@ -54,14 +72,31 @@
 			];
 		if (!path) {
 			// Invalid view
-			import("./sidebar/InvalidSidebar.svelte").then((m) => {
-				CurrentView = m.default;
+			import("./sidebar/InvalidSidebar.svelte").then((v) => {
+				CurrentView = v.default;
 			});
 			return;
 		}
 		path().then((m) => {
 			CurrentView = (m as { default: Component }).default;
 		});
+	});
+	$effect(() => {
+		const fullHeight = window.innerHeight - 20 - 40 - 10;
+		if (fullscreen[view.current.type]) {
+			if(sidebarHeight != fullHeight) {
+				hideSearch = true;
+				previousHeight = sidebarHeight;
+				sidebarHeight = fullHeight;
+				requestAnimationFrame(() => { map.updateMapPadding(); } );
+			}
+		} else {
+			hideSearch = false;
+			if(sidebarHeight == fullHeight) {
+				sidebarHeight = previousHeight;
+				requestAnimationFrame(() => { map.updateMapPadding(); } );
+			}
+		}
 	});
 
 	function debounce<T>(getter: () => T, delay: number): () => T | undefined {
@@ -106,7 +141,7 @@
 	});
 </script>
 
-{#if !routing.currentTrip}
+{#if !routing.currentTrip && !hideSearch}
 	<div id="floating-search" class={mobileView ? "mobileView" : ""}>
 		<Input class="h-10" placeholder="Search..." bind:value={searchbar.text} />
 	</div>
