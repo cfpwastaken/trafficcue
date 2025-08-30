@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { type Component } from "svelte";
-	import InvalidSidebar from "./sidebar/InvalidSidebar.svelte";
 	import { searchbar, view } from "./view.svelte";
-	import MainSidebar from "./sidebar/MainSidebar.svelte";
-	import InfoSidebar from "./sidebar/InfoSidebar.svelte";
-	import RouteSidebar from "./sidebar/RouteSidebar.svelte";
 	import { map } from "./map.svelte";
-	import TripSidebar from "./sidebar/TripSidebar.svelte";
 	import Input from "../ui/input/input.svelte";
 	import {
 		EllipsisIcon,
@@ -16,9 +11,7 @@
 	} from "@lucide/svelte";
 	import Button from "../ui/button/button.svelte";
 	import { search, type Feature } from "$lib/services/Search";
-	import SearchSidebar from "./sidebar/SearchSidebar.svelte";
 	import RequiresCapability from "./RequiresCapability.svelte";
-	import UserSidebar from "./sidebar/UserSidebar.svelte";
 	import {
 		advertiseRemoteLocation,
 		location,
@@ -27,30 +20,24 @@
 	import * as Popover from "../ui/popover";
 	import { routing } from "$lib/services/navigation/routing.svelte";
 	import InRouteSidebar from "./sidebar/InRouteSidebar.svelte";
-	import SettingsSidebar from "./sidebar/settings/SettingsSidebar.svelte";
-	import AboutSidebar from "./sidebar/settings/AboutSidebar.svelte";
-	import OfflineMapsSidebar from "./sidebar/settings/OfflineMapsSidebar.svelte";
-	import DeveloperSidebar from "./sidebar/settings/DeveloperSidebar.svelte";
 	import { m } from "$lang/messages";
-	import LanguageSidebar from "./sidebar/settings/LanguageSidebar.svelte";
-	import OnboardingSidebar from "./sidebar/onboarding/OnboardingSidebar.svelte";
-	import OnboardingVehiclesSidebar from "./sidebar/onboarding/OnboardingVehiclesSidebar.svelte";
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const views: Record<string, Component<any>> = {
-		main: MainSidebar,
-		info: InfoSidebar,
-		route: RouteSidebar,
-		trip: TripSidebar,
-		search: SearchSidebar,
-		user: UserSidebar,
-		settings: SettingsSidebar,
-		about: AboutSidebar,
-		"offline-maps": OfflineMapsSidebar,
-		"dev-options": DeveloperSidebar,
-		language: LanguageSidebar,
-		onboarding: OnboardingSidebar,
-		"onboarding-vehicles": OnboardingVehiclesSidebar,
+	import LoadingSidebar from "./sidebar/LoadingSidebar.svelte";
+
+	const views: Record<string, string> = {
+		main: "MainSidebar",
+		info: "InfoSidebar",
+		route: "RouteSidebar",
+		trip: "TripSidebar",
+		search: "SearchSidebar",
+		user: "UserSidebar",
+		settings: "settings/SettingsSidebar",
+		about: "settings/AboutSidebar",
+		"offline-maps": "settings/OfflineMapsSidebar",
+		"dev-options": "settings/DeveloperSidebar",
+		language: "settings/LanguageSidebar",
+		onboarding: "onboarding/OnboardingSidebar",
+		"onboarding-vehicles": "onboarding/OnboardingVehiclesSidebar",
 	};
 
 	let isDragging = false;
@@ -58,7 +45,21 @@
 	let startHeight = 0;
 	let sidebarHeight = $state(200);
 
-	let CurrentView = $derived(views[view.current.type] || InvalidSidebar);
+	let CurrentView: Component = $state(LoadingSidebar);
+	const modules = import.meta.glob("./sidebar/**/*.svelte");
+	$effect(() => {
+		const path = modules[`./sidebar/${views[view.current.type] || "InvalidSidebar"}.svelte`];
+		if (!path) {
+			// Invalid view
+			import("./sidebar/InvalidSidebar.svelte").then((m) => {
+				CurrentView = m.default;
+			});
+			return;
+		}
+		path().then((m) => {
+			CurrentView = (m as { default: Component }).default;
+		});
+	});
 
 	function debounce<T>(getter: () => T, delay: number): () => T | undefined {
 		let value = $state<T>();

@@ -17,7 +17,7 @@
 		"git-format-staged": "^3.1.1",
 		"husky": "^9.1.7",
 		"prettier-plugin-svelte": "^3.4.0",
-		"svelte": "^5.34.7",
+		"svelte": "^5.38.6",
 		"svelte-check": "^4.1.6",
 		"tailwind-merge": "^3.0.2",
 		"tailwind-variants": "^1.0.0",
