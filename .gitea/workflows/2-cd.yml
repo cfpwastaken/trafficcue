@@ -1,0 +1,42 @@
+name: TrafficCue CI
+on:
+  push:
+    branches: [main, staging]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun i
+      - run: bun run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+      - name: Deploy build
+        env:
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PATH_MAIN: ${{ secrets.DEPLOY_PATH_MAIN }}
+          DEPLOY_PATH_STAGING: ${{ secrets.DEPLOY_PATH_STAGING }}
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_KEY" > private_key
+          chmod 600 private_key
+
+          if [ "${GITEA_REF##*/}" = "main" ]; then
+            TARGET_PATH=$DEPLOY_PATH_MAIN
+          else
+            TARGET_PATH=$DEPLOY_PATH_STAGING
+          fi
+
+          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" dist/ $DEPLOY_USER@$DEPLOY_HOST:$TARGET_PATH/
+
+          rm private_key
