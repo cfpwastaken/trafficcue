@@ -8,5 +8,5 @@ export const LNV_SERVER =
 	location.hostname == "localhost" && location.protocol == "http:"
 		? "http://localhost:3000/api"
 		: location.hostname.includes("staging")
-		? "https://staging-trafficcue-api.picoscratch.de/api"
-		: "https://trafficcue-api.picoscratch.de/api";
+			? "https://staging-trafficcue-api.picoscratch.de/api"
+			: "https://trafficcue-api.picoscratch.de/api";

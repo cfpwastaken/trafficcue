@@ -84,21 +84,25 @@
 	$effect(() => {
 		const fullHeight = window.innerHeight - 20 - 40 - 10;
 		if (fullscreen[view.current.type]) {
-			if(sidebarHeight != fullHeight) {
-				if(window.innerWidth < 768) {
+			if (sidebarHeight != fullHeight) {
+				if (window.innerWidth < 768) {
 					hideSearch = true;
 					map.ignorePadding = true;
 				}
 				previousHeight = sidebarHeight;
 				sidebarHeight = fullHeight;
-				requestAnimationFrame(() => { map.updateMapPadding(); } );
+				requestAnimationFrame(() => {
+					map.updateMapPadding();
+				});
 			}
 		} else {
 			hideSearch = false;
-			if(sidebarHeight == fullHeight) {
+			if (sidebarHeight == fullHeight) {
 				map.ignorePadding = false;
 				sidebarHeight = previousHeight;
-				requestAnimationFrame(() => { map.updateMapPadding(); } );
+				requestAnimationFrame(() => {
+					map.updateMapPadding();
+				});
 			}
 		}
 	});

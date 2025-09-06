@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { BriefcaseIcon, DownloadIcon, HomeIcon, SchoolIcon } from "@lucide/svelte";
+	import {
+		BriefcaseIcon,
+		DownloadIcon,
+		HomeIcon,
+		SchoolIcon,
+	} from "@lucide/svelte";
 	import { Button } from "../../ui/button";
 	import { fly } from "svelte/transition";
 	import { circInOut } from "svelte/easing";
@@ -108,11 +113,7 @@
 			{m["sidebar.main.download-app.description"]()}
 		</Card.Content>
 		<Card.Footer>
-			<a
-				href="/trafficcue.apk"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
+			<a href="/trafficcue.apk" target="_blank" rel="noopener noreferrer">
 				<Button>
 					<DownloadIcon />
 					{m["sidebar.main.download-app.button"]()}
