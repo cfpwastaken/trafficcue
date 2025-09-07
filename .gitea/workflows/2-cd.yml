@@ -80,11 +80,26 @@ jobs:
           echo "Keystore properties created."
           cd ../../.. # Go back to root
       - name: Build app bundle
-        run: bun tauri android build -v --apk
+        run: |
+          if [ "${GITEA_REF##*/}" = "main" ]; then
+            bun tauri android build -v --apk
+          elif [ "${GITEA_REF##*/}" = "staging" ]; then
+            bun tauri android build -v --apk -d
+          else
+            echo "Branch not main or staging, skipping build."
+          fi
         env:
           NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.0.11902837
       - name: Upload apk
+        if: ${{ endsWith(GITEA_REF, '/main') }}
         uses: actions/upload-artifact@v3
         with:
           name: trafficcue.apk
           path: ./src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk
+
+      - name: Upload apk
+        if: ${{ endsWith(GITEA_REF, '/staging') }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: trafficcue-staging.apk
+          path: ./src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk
