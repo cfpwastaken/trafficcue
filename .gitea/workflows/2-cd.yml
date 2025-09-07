@@ -33,7 +33,7 @@ jobs:
           echo "$SSH_KEY" > private_key
           chmod 600 private_key
 
-          if [ "${gitea.ref_name##*/}" = "main" ]; then
+          if [ "${{ gitea.ref_name }}" = "main" ]; then
             TARGET_PATH=$DEPLOY_PATH_MAIN
           else
             TARGET_PATH=$DEPLOY_PATH_STAGING
@@ -81,24 +81,23 @@ jobs:
           cd ../../.. # Go back to root
       - name: Build app bundle
         run: |
-          if [ "${gitea.ref_name##*/}" = "main" ]; then
+          if [ "${{ gitea.ref_name }}" = "main" ]; then
             bun tauri android build -v --apk
-          elif [ "${gitea.ref_name##*/}" = "staging" ]; then
+          elif [ "${{ gitea.ref_name }}" = "staging" ]; then
             bun tauri android build -v --apk -d
           else
             echo "Branch not main or staging, skipping build."
           fi
         env:
           NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.0.11902837
-      - name: Upload apk
-        if: ${{ endsWith(gitea.ref_name, 'main') }}
+      - name: Upload release apk
+        if: ${{ gitea.ref_name == "main" }}
         uses: actions/upload-artifact@v3
         with:
           name: trafficcue.apk
           path: ./src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk
-
-      - name: Upload apk
-        if: ${{ endsWith(gitea.ref_name, 'staging') }}
+      - name: Upload debug apk
+        if: ${{ gitea.ref_name == "staging" }}
         uses: actions/upload-artifact@v3
         with:
           name: trafficcue-staging.apk
