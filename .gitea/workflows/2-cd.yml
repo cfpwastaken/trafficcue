@@ -56,6 +56,12 @@ jobs:
         with:
           distribution: "zulu"
           java-version: "17"
+      - name: Cache NDK
+        uses: actions/cache@v4
+        with:
+          # Path where NDK version 27.0.11902837 is expected to be installed by setup-android
+          path: /usr/local/lib/android/sdk/ndk/27.0.11902837
+          key: ndk-${{ runner.os }}-27.0.11902837
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
       - name: Install NDK
@@ -64,10 +70,12 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+      - name: Cache Rust dependencies
+        uses: swatinem/rust-cache@v2
       - name: Setup Android signing
         run: |
           cd src-tauri/gen/android
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" > keystore.properties
+          echo "keyAlias=$(echo ${{ secrets.ANDROID_KEY_ALIAS }} | base64 -d)" > keystore.properties
           echo "password=${{ secrets.ANDROID_KEY_PASSWORD }}" >> keystore.properties
           base64 -d <<< "${{ secrets.ANDROID_KEY_BASE64 }}" > $RUNNER_TEMP/keystore.jks
           echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
