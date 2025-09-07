@@ -91,13 +91,13 @@ jobs:
         env:
           NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.0.11902837
       - name: Upload release apk
-        if: ${{ gitea.ref_name == "main" }}
+        if: gitea.ref_name == "main"
         uses: actions/upload-artifact@v3
         with:
           name: trafficcue.apk
           path: ./src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk
       - name: Upload debug apk
-        if: ${{ gitea.ref_name == "staging" }}
+        if: gitea.ref_name == "staging"
         uses: actions/upload-artifact@v3
         with:
           name: trafficcue-staging.apk
