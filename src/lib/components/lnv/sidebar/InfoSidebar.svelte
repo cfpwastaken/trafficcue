@@ -212,7 +212,7 @@
 							<BriefcaseIcon />
 							{m["sidebar.info.set-as"]({ name: m["saved.work"]() })}
 						</Button>
-						{#if dev.current}
+						{#if dev.current == "true"}
 							<Button
 								variant="outline"
 								onclick={() => {
