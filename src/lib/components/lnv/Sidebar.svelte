@@ -21,8 +21,9 @@
 	import { routing } from "$lib/services/navigation/routing.svelte";
 	import InRouteSidebar from "./sidebar/InRouteSidebar.svelte";
 	import { m } from "$lang/messages";
-
 	import LoadingSidebar from "./sidebar/LoadingSidebar.svelte";
+	import { Tween } from "svelte/motion";
+	import { quintOut } from "svelte/easing";
 
 	const views: Record<string, string> = {
 		main: "MainSidebar",
@@ -59,7 +60,17 @@
 	let isDragging = false;
 	let startY = 0;
 	let startHeight = 0;
-	let sidebarHeight = $state(200);
+	let sidebarHeight = new Tween(200, {
+		duration: 500,
+		easing: quintOut
+	});
+	let lastSidebarHeight = 0;
+	$effect(() => {
+		if (lastSidebarHeight != sidebarHeight.current) {
+			lastSidebarHeight = sidebarHeight.current;
+			map.updateMapPadding();
+		}
+	});
 	let previousHeight = 200;
 	let hideSearch = $state(false);
 
@@ -84,22 +95,22 @@
 	$effect(() => {
 		const fullHeight = window.innerHeight - 20 - 40 - 10;
 		if (fullscreen[view.current.type]) {
-			if (sidebarHeight != fullHeight) {
+			if (sidebarHeight.target != fullHeight) {
 				if (window.innerWidth < 768) {
 					hideSearch = true;
 					map.ignorePadding = true;
 				}
-				previousHeight = sidebarHeight;
-				sidebarHeight = fullHeight;
+				previousHeight = sidebarHeight.target;
+				sidebarHeight.target = fullHeight;
 				requestAnimationFrame(() => {
 					map.updateMapPadding();
 				});
 			}
 		} else {
 			hideSearch = false;
-			if (sidebarHeight == fullHeight) {
+			if (sidebarHeight.target == fullHeight) {
 				map.ignorePadding = false;
-				sidebarHeight = previousHeight;
+				sidebarHeight.target = previousHeight;
 				requestAnimationFrame(() => {
 					map.updateMapPadding();
 				});
@@ -157,7 +168,7 @@
 <div
 	id="sidebar"
 	class={mobileView ? "mobileView" : ""}
-	style={(mobileView ? `height: ${sidebarHeight}px;` : "") +
+	style={(mobileView ? `height: ${sidebarHeight.current}px;` : "") +
 		(routing.currentTrip ? "bottom: 0 !important;" : "")}
 >
 	{#if mobileView}
@@ -168,7 +179,7 @@
 			ontouchstart={(e) => {
 				isDragging = true;
 				startY = e.touches[0].clientY;
-				startHeight = sidebarHeight;
+				startHeight = sidebarHeight.target;
 			}}
 			ontouchmove={(e) => {
 				if (!isDragging) return;
@@ -181,7 +192,7 @@
 				if (Math.abs(newHeight - snapPoint) < snapThreshold) {
 					newHeight = snapPoint;
 				}
-				sidebarHeight = newHeight;
+				sidebarHeight.target = newHeight;
 
 				map.updateMapPadding();
 			}}
