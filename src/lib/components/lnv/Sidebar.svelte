@@ -40,6 +40,7 @@
 		onboarding: "onboarding/OnboardingSidebar",
 		"onboarding-vehicles": "onboarding/OnboardingVehiclesSidebar",
 		"nearby-poi": "NearbyPOISidebar",
+		licenses: "settings/LicensesSidebar",
 	};
 
 	const fullscreen: Record<string, boolean> = {
@@ -57,6 +58,7 @@
 		onboarding: true,
 		"onboarding-vehicles": true,
 		"nearby-poi": false,
+		licenses: true,
 	};
 
 	let isDragging = false;

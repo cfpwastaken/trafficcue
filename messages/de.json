@@ -52,7 +52,8 @@
 		"about": {
 			"header": "Über",
 			"powered-by": "Angetrieben von",
-			"contributors": "Mitwirkende"
+			"contributors": "Mitwirkende",
+			"licenses": "Open Source Lizenzen"
 		},
 		"developer": {
 			"header": "Entwicklereinstellungen"

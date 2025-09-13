@@ -1,7 +1,9 @@
 <script>
 	import { m } from "$lang/messages";
+	import { ScaleIcon } from "@lucide/svelte";
 	import SidebarHeader from "../SidebarHeader.svelte";
 	import { getDeveloperToggle } from "./developer.svelte";
+	import SettingsButton from "./SettingsButton.svelte";
 
 	let count = 5;
 	const dev = getDeveloperToggle();
@@ -33,3 +35,9 @@
 	<li>Photon</li>
 	<li>Overpass</li>
 </ul>
+
+<SettingsButton
+	icon={ScaleIcon}
+	text={m["sidebar.about.licenses"]()}
+	view="licenses"
+/>
