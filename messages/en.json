@@ -137,6 +137,11 @@
 				"description": "TrafficCue is available on Android. Get it for the best experience!",
 				"button": "Get it"
 			}
+		},
+		"nearby-poi": {
+			"header": "Nearby Points of Interest",
+			"no-poi": "No points of interest found nearby.",
+			"loading": "Loading nearby points of interest..."
 		}
 	},
 	"unsave": "Unsave",
@@ -144,5 +149,10 @@
 		"current": "Current Location",
 		"searching": "Searching...",
 		"no-results": "No locations found."
+	},
+	"unnamed": "Unnamed",
+	"poi": {
+		"fuel": "Fuel Station",
+		"parking": "Parking"
 	}
 }

@@ -39,6 +39,7 @@
 		language: "settings/LanguageSidebar",
 		onboarding: "onboarding/OnboardingSidebar",
 		"onboarding-vehicles": "onboarding/OnboardingVehiclesSidebar",
+		"nearby-poi": "NearbyPOISidebar",
 	};
 
 	const fullscreen: Record<string, boolean> = {
@@ -55,6 +56,7 @@
 		language: true,
 		onboarding: true,
 		"onboarding-vehicles": true,
+		"nearby-poi": false,
 	};
 
 	let isDragging = false;
@@ -62,7 +64,7 @@
 	let startHeight = 0;
 	let sidebarHeight = new Tween(200, {
 		duration: 500,
-		easing: quintOut
+		easing: quintOut,
 	});
 	let lastSidebarHeight = 0;
 	$effect(() => {

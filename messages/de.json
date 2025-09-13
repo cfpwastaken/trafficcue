@@ -5,7 +5,8 @@
 		"home": "Heim",
 		"school": "Schule",
 		"work": "Arbeit",
-		"no-location": "Kein {name} Speicherort gespeichert."
+		"no-location": "Kein {name} Speicherort gespeichert.",
+		"saved-routes": "Gespeicherte Routen"
 	},
 	"location": {
 		"unlock": "Standort entsperren",
@@ -136,6 +137,11 @@
 				"description": "TrafficCue ist auf Android verfügbar. Holen Sie es sich für das beste Erlebnis!",
 				"button": "Runterladen"
 			}
+		},
+		"nearby-poi": {
+			"header": "POIs in der Nähe",
+			"no-poi": "Keine POIs in der Nähe gefunden.",
+			"loading": "POIs in der Nähe werden geladen …"
 		}
 	},
 	"location-selector": {
@@ -143,5 +149,10 @@
 		"searching": "Suchen...",
 		"no-results": "Keine Orte gefunden."
 	},
-	"unsave": "Löschen"
+	"unsave": "Löschen",
+	"unnamed": "Unbenannt",
+	"poi": {
+		"fuel": "Tankstelle",
+		"parking": "Parken"
+	}
 }

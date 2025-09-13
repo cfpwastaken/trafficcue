@@ -2,7 +2,9 @@
 	import {
 		BriefcaseIcon,
 		DownloadIcon,
+		FuelIcon,
 		HomeIcon,
+		ParkingSquareIcon,
 		SchoolIcon,
 	} from "@lucide/svelte";
 	import { Button } from "../../ui/button";
@@ -103,6 +105,40 @@
 </div>
 
 <VehicleSelector />
+
+<div
+	style="display: flex; gap: 0.5rem; justify-content: space-evenly;"
+	class="mt-2"
+>
+	<Button
+		variant="secondary"
+		size="lg"
+		style="flex: 1;"
+		onclick={() => {
+			view.switch("nearby-poi", {
+				tags: "amenity=fuel",
+			});
+		}}
+	>
+		<FuelIcon />
+		<!-- TODO: hide if no space -->
+		{m["poi.fuel"]()}
+	</Button>
+	<Button
+		variant="secondary"
+		size="lg"
+		style="flex: 1;"
+		onclick={() => {
+			view.switch("nearby-poi", {
+				tags: "amenity=parking",
+			});
+		}}
+	>
+		<ParkingSquareIcon />
+		<!-- TODO: hide if no space -->
+		{m["poi.parking"]()}
+	</Button>
+</div>
 
 {#if !window.__TAURI__}
 	<Card.Root style="margin-top: 1rem;">
