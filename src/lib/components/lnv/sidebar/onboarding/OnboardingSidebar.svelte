@@ -19,10 +19,10 @@
 			text={m.language({}, { locale })}
 			icon={LanguagesIcon}
 			onclick={() => {
+				setOnboardingState("vehicles");
 				if (locale != getLocale()) {
 					setLocale(locale);
 				} else {
-					setOnboardingState("vehicles");
 					view.switch("onboarding-vehicles");
 				}
 			}}
