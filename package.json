@@ -40,13 +40,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@capacitor-community/keep-awake": "^7.1.0",
-		"@capacitor-community/native-audio": "^7.0.0",
-		"@capacitor-community/sqlite": "^7.0.0",
-		"@capacitor-community/text-to-speech": "^6.0.0",
-		"@capacitor/android": "^7.3.0",
-		"@capacitor/cli": "^7.3.0",
-		"@capacitor/core": "^7.3.0",
 		"@diffusionstudio/vits-web": "^1.0.3",
 		"@eslint/js": "^9.29.0",
 		"@tauri-apps/plugin-fs": "~2",
